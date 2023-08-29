@@ -57,7 +57,7 @@ updateCamera :: proc(oldCam: Camera, deltaTime: f32, mouseMovement: glm.vec2, wi
     newCam.right = glm.normalize(glm.cross(newCam.front, glm.vec3{0.0, 1.0, 0.0}))
     newCam.up = glm.normalize(glm.cross(newCam.right, newCam.front))
 
-    fmt.println(newCam.front)
+    fmt.println(newCam.yaw)
 
     return newCam;
 }

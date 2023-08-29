@@ -50,7 +50,6 @@ main :: proc() {
     defer gl.DeleteProgram(program);
 	gl.UseProgram(program);   
 	uniform_infos := gl.get_uniforms_from_program(program);
-    fmt.println(uniform_infos);
 
 	vertices := []f32 {
         -0.5, -0.5, -0.5,  0.0, 0.0,
@@ -140,7 +139,7 @@ main :: proc() {
 	camera.up = glm.vec3{0.0, 1.0, 0.0};
 	camera.front = glm.vec3{0.0, 0.0, 1.0};
 	camera.right = glm.vec3{1.0, 0.0, 0.0};
-	camera.pitch = 0.0;
+	camera.pitch = 45.0;
 	camera.yaw = 90.0;
 	camera.speed = 1.0;
 	camera.sensitivity = 0.25;
@@ -156,7 +155,7 @@ main :: proc() {
 		view = getCameraViewMatrix(camera);
 
 		glfw.PollEvents();
-		gl.ClearColor(0.2, 0.3, 0.3, 1.0);
+		gl.ClearColor(1.0, 1.0, 1.0, 1.0);
 		gl.Clear(gl.COLOR_BUFFER_BIT);
 
 		gl.UseProgram(program);   
@@ -169,6 +168,8 @@ main :: proc() {
 		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &model[0][0]);
 
 		gl.DrawArrays(gl.TRIANGLES, 0, 36);
+
+		drawGrid();
 
 		glfw.SwapBuffers((window))
 	}
