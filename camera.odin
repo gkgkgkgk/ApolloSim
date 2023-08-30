@@ -37,6 +37,12 @@ updateCamera :: proc(oldCam: Camera, deltaTime: f32, mouseMovement: glm.vec2, wi
     if(glfw.GetKey(window, glfw.KEY_A) == glfw.PRESS){
         movement += newCam.right * -newCam.speed;
     }
+    if(glfw.GetKey(window, glfw.KEY_Q) == glfw.PRESS){
+        movement += newCam.up * -newCam.speed;
+    }
+    if(glfw.GetKey(window, glfw.KEY_E) == glfw.PRESS){
+        movement += newCam.up * newCam.speed;
+    }
  
     newCam.pos = oldCam.pos + movement * deltaTime;
 
@@ -56,8 +62,6 @@ updateCamera :: proc(oldCam: Camera, deltaTime: f32, mouseMovement: glm.vec2, wi
 
     newCam.right = glm.normalize(glm.cross(newCam.front, glm.vec3{0.0, 1.0, 0.0}))
     newCam.up = glm.normalize(glm.cross(newCam.right, newCam.front))
-
-    fmt.println(newCam.yaw)
 
     return newCam;
 }

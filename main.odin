@@ -48,8 +48,16 @@ main :: proc() {
 	
 	program, shader_success := gl.load_shaders("shaders/shader.vertshader", "shaders/shader.fragshader");
     defer gl.DeleteProgram(program);
-	gl.UseProgram(program);   
+
+	grid_program, grid_shader_success := gl.load_shaders("shaders/grid.vertshader", "shaders/grid.fragshader");
+    defer gl.DeleteProgram(grid_program);
+
+	gl.UseProgram(program);
 	uniform_infos := gl.get_uniforms_from_program(program);
+
+	gl.Enable(gl.DEPTH_TEST);
+	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+	gl.Enable(gl.BLEND)
 
 	vertices := []f32 {
         -0.5, -0.5, -0.5,  0.0, 0.0,
@@ -141,7 +149,7 @@ main :: proc() {
 	camera.right = glm.vec3{1.0, 0.0, 0.0};
 	camera.pitch = 45.0;
 	camera.yaw = 90.0;
-	camera.speed = 1.0;
+	camera.speed = 5.0;
 	camera.sensitivity = 0.25;
 
 	view = getCameraViewMatrix(camera);
@@ -157,6 +165,7 @@ main :: proc() {
 		glfw.PollEvents();
 		gl.ClearColor(1.0, 1.0, 1.0, 1.0);
 		gl.Clear(gl.COLOR_BUFFER_BIT);
+		gl.Clear(gl.DEPTH_BUFFER_BIT);
 
 		gl.UseProgram(program);   
 		uniform_infos := gl.get_uniforms_from_program(program);
@@ -167,9 +176,14 @@ main :: proc() {
 		gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
 		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &model[0][0]);
 
+
 		gl.DrawArrays(gl.TRIANGLES, 0, 36);
 
-		drawGrid();
+		gl.UseProgram(grid_program)
+		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &projection[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &model[0][0]);
+		drawGrid(100);
 
 		glfw.SwapBuffers((window))
 	}
