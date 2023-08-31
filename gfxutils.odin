@@ -6,6 +6,16 @@ import "vendor:glfw"
 import "core:math"
 import "core:fmt"
 
+GFXEngine :: struct {
+    window : glfw.WindowHandle
+}
+
+initializeGFXEngine :: proc() -> GFXEngine {
+    engine : GFXEngine
+
+    return engine
+}
+
 drawGrid :: proc($gridSize: int) {
     vertices : [6 * 2 * (gridSize+ 1)]f32;
 
