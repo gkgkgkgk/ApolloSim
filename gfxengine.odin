@@ -15,6 +15,13 @@ GL_MINOR_VERSION :: 6;
 height : i32 = 720;
 width : i32 = 1280;
 
+identityModel := glm.mat4 {
+		1.0, 0.0, 0.0, 0.0,
+		0.0, 1.0, 0.0, 0.0,
+		0.0, 0.0, 1.0, 0.0,
+		0.0, 0.0, 0.0, 1.0,
+};
+
 GFXEngine :: struct {
     window : glfw.WindowHandle,
     camera: Camera,
@@ -85,13 +92,6 @@ loopGFXEngine :: proc(engine: GFXEngine) {
     engine := engine
     view : glm.mat4
 
-    model := glm.mat4 {
-		1.0, 0.0, 0.0, 0.0,
-		0.0, 1.0, 0.0, 0.0,
-		0.0, 0.0, 1.0, 0.0,
-		0.0, 0.0, 0.0, 1.0,
-	};
-
     for (!glfw.WindowShouldClose(engine.window) && running) {
 		process_mouse(engine.window);
 		currentFrame := cast(f32)glfw.GetTime();
@@ -112,7 +112,7 @@ loopGFXEngine :: proc(engine: GFXEngine) {
         uniform_infos := gl.get_uniforms_from_program(engine.shaders[1]);
 		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
 		gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
-		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &model[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);
 		drawGrid(100);
 
 		glfw.SwapBuffers((engine.window))

@@ -1,8 +1,11 @@
 package main 
 import "core:fmt"
+import gl "vendor:OpenGL"
+import glm "core:math/linalg/glsl"
 
 Geometry :: struct {
     vertices: [dynamic]f32, 
+    model : glm.mat4
 }
 
 createCube :: proc () -> Geometry {
