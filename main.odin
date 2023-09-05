@@ -19,7 +19,9 @@ main :: proc() {
 		return
 	}
 
-	loopGFXEngine(gfxEngine);
+	simEngine := initializeSimEngine();
+
+	loopGFXEngine(gfxEngine, simEngine);
 }
 
 key_callback :: proc "c" (window: glfw.WindowHandle, key, scancode, action, mods: i32) {

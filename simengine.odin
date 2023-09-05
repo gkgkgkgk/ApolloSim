@@ -1,4 +1,5 @@
 package main
+import "core:fmt"
 
 SimEngine :: struct {
     steps : int
@@ -13,6 +14,10 @@ initializeSimEngine :: proc () -> SimEngine {
     return engine
 }
 
-stepSimEngine :: proc (engine : SimEngine) {
-   
+stepSimEngine :: proc (engine : SimEngine) -> SimEngine{
+    engine := engine
+    fmt.printf("Performed step %s", engine.steps)
+
+    engine.steps = engine.steps + 1
+    return engine
 }

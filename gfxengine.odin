@@ -6,6 +6,7 @@ import "vendor:glfw"
 import "core:math"
 import "core:c"
 import "core:fmt"
+import "core:thread"
 
 PROGRAMNAME :: "Program"
 
@@ -84,7 +85,7 @@ initializeGFXEngine :: proc() -> Maybe(GFXEngine) {
     return engine
 }
 
-loopGFXEngine :: proc(engine: GFXEngine) {
+loopGFXEngine :: proc(engine: GFXEngine, simEgnine: SimEngine) {
     defer glfw.Terminate()
 	defer glfw.DestroyWindow(engine.window)
     defer destroyShaders(engine)
