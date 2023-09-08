@@ -1,8 +1,68 @@
+## Background Information
+### Paper #1: [Virtual laser scanning with HELIOS++: A novel take on ray tracing-based simulation of topographic full-waveform 3D laser scanning](https://arxiv.org/pdf/2101.09154.pdf)
+#### Summary
+HELIOS++ is an open-source, general purpose laser-scanning simulation tool. HELIOS++ is capable of performing static and mobile terrestrial LiDAR simulation and UAV and airborne LiDAR scanning. The authors have managed to get their software to perform well enough to run simulations with it, and have proved that LiDAR simulation software is useful for the four following reasons: data acquisition, method evaluation, method training, and sensing experimentation. The simulation relies on two premises in order to be effective: there exists an adequate 3D model of the scene and the scanner, and the world to beam interactions can be reduced to a computationally feasible yet physically realistic process. HELIOS++ supports sensors for static tripods, ground vehicles, multicopters, and airplanes. There are a number of virtual laser scanning softwares that already exist for various platforms, including satellites, airborne laser simulation, mobile laser simulation, terrestrial laser simulation, UAV laser simulation, and more.
+#### Takeaways
+Some interesting features to look at are including satellite, material simulation, ROS integration. Overall, they give an extensive background to the field and why this is a useful piece of software. In terms of evaluation, they mostly use proven simulation methods, but do concede that no simulation that is fast will also be accurate, and that is solely dependent on the complexity of the scene. The evaluation was mostly focused on crude data output within a certain timeframe.
+### Paper #2: LiDARsim: Realistic LiDAR Simulation by Leveraging the Real World
+#### Summary
+The main problem this paper aims to fix is that LiDAR simulations are not inherently accurate. Many aspects of the real world are not present in simulation, and using a deep neural network, they are able to produce deviations to the simulation to further the accuracy of the simulation. This paper mainly focuses on self driving vehicles. A problem they point out is that most simulation software focuses on the trajectory and controls, but not the synthetic sensory input. Accurate sensor input would allow for end to end testing in simulation. They discuss the process of simulating a real sensor, which is prone to “ray dropping” and other various forms of noise that depend on materials and more. They evaluate their model with the KITTI Vision benchmark suite.
+#### Takeaways
+A data driven solution is actually relatively successful. Evaluation methods are out there, such as the KITTI data set, allowing simulations to easily be checked for their accuracy. An interesting application would be to integrate some sort of (data driven model or not) noise to the simulation.
+
+### Paper #3: Simulation of a Geiger-Mode Imaging LADAR System for Performance Assessment
+#### Summary
+This paper proposes a method for simulating a Geiger-mode LiDAR. Older LiDARs use linear-mode technology. Geiger-mode has the ability to shoot single photons instead of a beam, which lowers power usage and can increase data density and speed. This is particularly useful for systems collecting geographic data, as they require much more data at faster speeds.This paper discusses in depth how they utilize a Gaussian beam profile in order to simulate the laser beam. They break up the simulation into three parts: geometric modeling, radiometric modeling, and detection modeling. Geometric modeling is determining the point on geometry at which the laser pulse reflects. As LiDAR sensors typically move while scanning the data, it is important to keep in mind where the laser is coming from. They perform various geometric transformations in order to properly position the point. Next is radiometric modeling, which is the model used to calculate the number of incident photons that enter the sensor. The radiometric models deal with various noise sources as well, such as the sun. Because of how the light is generated, the beam is typically of non-uniform intensity. A Gaussian beam profile is used to simulate this. The authors also take into account the reflectance of the surface which affects the scattering properties of the beam. Finally, detection modeling is implemented, which determines the amount of time that passes before the sensor detects its first returning photon. This is more specific to the Geiger-mode sensor, which is saturated as soon as the first photon is returned, but a probability model is used to determine if the sensor successfully detects the photons. That way, an accurate time can be provided. The simulation was written in C++ and implements these three systems. They provided a 3D model of a city, and then were able to provide parameters to the simulation for the LiDAR. They showed that their simulations generally matched the reference data they had.
+#### Takeaways
+This paper gave a great outline for structuring a simulation. It does not work in real time, as it is a much more detailed and accurate simulation. They do, however, use the same beam model as HELIOS++ (Carlsson, T.; Steinvall, O.; Letalick, D. Signature Simulation and Signal Analysis for 3-D Laser Radar; FOI-R-0163-SE; FOI-Swedish Defence Research Agency: Linköping, Sweden, 2001.). Their evaluation was for a very specific use case of topographic data collection, so it was easier to find reference to compare to.
+### Paper #4: DART-Lux: An unbiased and rapid Monte Carlo radiative transfer method for simulating remote sensing images
+#### Summary
+DART (discrete anisotropic radiative transfer) is a radiative transfer model, which was designed for modeling the interactions between the Earth’s atmosphere and remote sensors. DART-Lux is a new model that integrates a Monte Carlo method into DART in order to increase the efficiency for simulating remote sensors such as LiDAR. These methods allow for both urban and natural sensing. 
+#### Takeaways
+This paper showed me that taking an existing model for something and applying it elsewhere can be very effective. DART is not necessarily made for LiDAR systems, but using a ray-tracing method it can be adapted for LiDARs in space. The advantage of DART is that it provides physical accuracy to the simulation.
+### Paper #5: Lidar Simulation for Robotic Application Development: Modeling and Evaluation
+#### Summary
+This is a PHD paper that discusses a LiDAR and robotics simulator built for a course at Carnegie Mellon. They break up their simulator into three parts: sensor modeling, scene generation, and simulator evaluation. They take a parametric approach to the sensor modeling, and tune the parameters in order to match real-world data as closely as possible. However, tuning these sensors is useless unless the virtual world closely resembles the real world. In order to get a decent model, they use a data driven approach- by adjusting certain parameters and measuring against a data set, they can calculate proper parameters. The future work of this paper includes a few interesting things. This includes non-parametric modeling, which  is basically the use of neural-networks and trained models for the LiDAR model. They explain that a parametric model is sufficient for deciding on features or proper environments to use them in. However, for complex robotics simulations, non-parametric models may come in handy.
+
+### Paper #6: NeRF-LiDAR: Generating Realistic LiDAR Point Clouds with Neural Radiance Fields
+#### Summary
+NeRFs, or neural radiance fields, are a cutting edge way of converting images to 3D models (original paper here). This paper explores the idea of using NeRFs to generate point cloud data. They use a parametric model for the LiDAR, and simulate raydrop by learning it from the original LiDAR data in the nuScenes dataset. Then, as an evaluation, they showed that the 3D segmentation models performed similarly on real-world data and the simulated data.
+#### Takeaways
+NeRFs are a great way to get realistic virtual environments. While it's not as customizable, it can be a great tool for evaluation, as there are plenty of datasets that include real LiDAR data and photographic data to generate LiDAR and environment pairings. 
+
+### Paper #7: Learning to Simulate Realistic LiDARs
+#### Summary
+This paper created LiDAR data generation using a neural network that is able to generate point clouds based on just a picture. 
+#### Takeaways
+It mentions that simulators like CARLA do not drop rays based on material properties, but on just random models. Additionally, no simulators offer intensity data, which can be useful.
+
+### Paper #8: [Discrete Anisotropic Radiative Transfer (DART 5) for Modeling Airborne and Satellite Spectroradiometer and LIDAR Acquisitions of Natural and Urban Landscapes](https://www.mdpi.com/2072-4292/7/2/1667)
+#### Summary
+DART is a 3D model that computes radiation propagation through the Earth atmosphere system. It simulates the radiative budget and relfectance of various landscapes. DART is comprised of four processing modules: Direction, Phase, Maket and Dart. Direction is the direction the light propogates, the phase function computes the scattering of light for all elements in the scene, maket builds the spatial arrangement of elements in a scene, and Dart computes the radiation propogation using a Ray tracing or Ray-Carlo approach (Ray-Carlo is ray tracing with the Monte-Carlo technique of casting multiple stochastic rays). The original DART algorithm can be applied to modeling a LiDAR signal. The Monte-Carlo photon tracing method is often used for simulating LiDAR signals, but is computationally expensive. DART volumes are divided into boxes with their own scattering properties to reduce the computation time.
+
+#### Takeaways
+DART5 contains a few equations and theories that can be very important for building a LiDAR simulation. The idea to use a Ray-Carlo technique for simulating the light rays is great, and with GPU acceleration can be made to be much faster. It would also allow me to implement BRDFs easily.
+
+### Paper #9: [Range determination with waveform recording laser systems using a Wiener Filter](https://www.sciencedirect.com/science/article/pii/S0924271606001080)
+#### Summary
+The backscattered waveform from a laser pulse depends on the transmitted waveform. In order to model the backscattered pulse, the transmitted pulse, spatial energy distribution and material properties of the surface must be specified. Various shapes, such as Gaussian, exponential, and rectangles can be used for the pulse. Pulses also have sptial energy distributions, which is how intense the laser is over the shape of the pulse. And finally, the backscattering can depend on the material and reflective properties of the object, as well as the atmospheric transmission of the wave. In this paper, a Wiener filter is used to estimate the surface function of the object in order to generate a backscatter waveform. 
+
+#### Takeaways
+LiDAR pulse shape has an affect on the laser and how it behaves, and different shapes can be implemented in the simulation depending on the sensor that is being simulated.
+
+
+## Notes & Annotations
 ### Scan Patterns
 According to the Helios paper, there are many types of scan patterns that depend on the deflector in the simulation. A rotating mirror creates many parallel lines with even point density, a fibre-optic scanner creates a similar pattern but without moving parts (the laser is spread through many evenly spaced fibre-optic cables), an oscillating mirror creates a sig-zag pattern, with high point densities at the extrema, and the palmer scanner (a slanted oscillating mirror) creates circular scan patterns.
 
 ### LiDAR Pulses
 In order to sense the environment around itself, a LiDAR sends out pulses of light. Sending out a constant beam would make it really difficult to know how long it took for the light to come back to the sensor, so a pulse is sent out and the sensor waits for the pulse to come back. These pulses can be configured to do many different things. The pulse shape is the temporal profile of the pulse- how long does it take to rise and fall? How long is the pulse itxelf? What is its peak intensity? There are many things to consider when picking a pulse shape. For example, a longer pulse requires more energy, so they require higher power levels. Additionally, a longer pulse will travel further, but sacrifice resolution, as a shorter pulse will be more exact. 
+
+### Temporal Resolution
+The temporal resolution of a LiDAR depends on many things. The pulse rate, scanning pattern, field of view, rotation speed, and processing time all affect how quickly a LiDAR can process new data. The VLP-16 has 16 laser/detector pairs, and can rotate at 5Hz to 20Hz, allowing it to generate up to 300,000 points per second. 
+
+### Return Mode
+Single return mode means the sensor records and processes the first return of the laser pulse, while dual return mode means it records and processes the first and last returns of the laser pulse. 
 
 ### What is a simulation step?
 #### According to the [Carlsson Paper](https://www.foi.se/rest-api/report/FOI-R--0163--SE)
@@ -10,4 +70,6 @@ A simulation step projects the 3D view to a depth buffer, with normal data. Each
 
 #### According to [HELIOS++](https://arxiv.org/pdf/2101.09154.pdf)
 HELIOS+ structures each scene with the platform, which is where the sensor is attached, waypoints, which define the path of movment for the sensor, and parts, which are items in the virtual world that could obstruct the sensor. Each step can be visualized in real time. Various scan deflectors can be selected, which will define the pattern that the sensor will emit the lasers in (see section above). Finally, the waveforms themselves are formed by a central ray and many subrays, as specified by the Carlsson paper. Beam divergence (the subrays) are calculated using a Gaussian power distribution. Each subray is assigned its respective intensity and cast into the scene, and the total power returned depends on all of the subrays and their intersections. Various subray configurations and densities can be configured as well. Finally, the pulse shape, which is the temportal profile of the beam, is approximated according to the Carlsson paper with a specific power equation. For each pulse, the subrays are collected as a full waveform, and the power is a sum of the subray's waveforms, shifted according to their respective ranges depending on their power. 
-#### According to [PHD Paper by Tallavajhula](https://icave2.cse.buffalo.edu/resources/sensor-modeling/Lidar%20Simulation%20for%20Robotic%20Application.pdf)
+
+## Questions / Thoughts
+* Should each simulation step be a snapshot moment in time? Maybe it should be a complete (or part) rotation of the sensor? And then in order to reconstruct the point cloud data, each snapshot will be linked to a moment in time and then stitched together?
