@@ -93,6 +93,9 @@ loopGFXEngine :: proc(engine: GFXEngine, simEgnine: SimEngine) {
     engine := engine
     view : glm.mat4
 
+    c := createCylinder()
+    c.model = identityModel * glm.mat4Scale(glm.vec3{0.0556, 0.043, 0.0556})
+
     for (!glfw.WindowShouldClose(engine.window) && running) {
 		process_mouse(engine.window);
 		currentFrame := cast(f32)glfw.GetTime();
@@ -107,10 +110,16 @@ loopGFXEngine :: proc(engine: GFXEngine, simEgnine: SimEngine) {
 		gl.Clear(gl.COLOR_BUFFER_BIT);
 		gl.Clear(gl.DEPTH_BUFFER_BIT);
 
-		gl.DrawArrays(gl.TRIANGLES, 0, 36);
+        gl.UseProgram(engine.shaders[0]);   
+		uniform_infos := gl.get_uniforms_from_program(engine.shaders[0]);
+
+		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &c.model[0][0]);
+		drawGeometryWithIndices(c);
 
 		gl.UseProgram(engine.shaders[1])
-        uniform_infos := gl.get_uniforms_from_program(engine.shaders[1]);
+        uniform_infos = gl.get_uniforms_from_program(engine.shaders[1]);
 		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
 		gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
 		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);

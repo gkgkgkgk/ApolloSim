@@ -3,7 +3,7 @@ package main
 Sensor :: struct {
     sensorType: SensorType,
     dataDimensions: DataDimensions,
-    workingRange: [2]f32
+    workingRange: [2]f32,
     geometry : Geometry
 }
 

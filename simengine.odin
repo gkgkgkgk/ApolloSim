@@ -2,7 +2,7 @@ package main
 import "core:fmt"
 
 SimEngine :: struct {
-    steps : int
+    steps : int,
     sensor : Sensor
 }
 
