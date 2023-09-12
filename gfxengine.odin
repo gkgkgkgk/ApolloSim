@@ -60,13 +60,13 @@ initializeGFXEngine :: proc() -> Maybe(GFXEngine) {
 	gl.load_up_to(int(GL_MAJOR_VERSION), GL_MINOR_VERSION, glfw.gl_set_proc_address) 
 
     camera : Camera
-	camera.pos = glm.vec3{0.0, 5.0, -3.0};
+	camera.pos = glm.vec3{0.0, 1.0, -1.0};
 	camera.up = glm.vec3{0.0, 1.0, 0.0};
 	camera.front = glm.vec3{0.0, 0.0, 1.0};
 	camera.right = glm.vec3{1.0, 0.0, 0.0};
 	camera.pitch = 45.0;
-	camera.yaw = 90.0;
-	camera.speed = 5.0;
+	camera.yaw = 0.0;
+	camera.speed = 1.0;
 	camera.sensitivity = 0.25;
 
     engine.camera = camera;
