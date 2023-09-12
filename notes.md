@@ -76,3 +76,6 @@ HELIOS+ structures each scene with the platform, which is where the sensor is at
 
 ## Questions / Thoughts
 * Each step of the simulation should be a moment in time- pick a fixed timestep to move the simulation, and then calculate the sensors response. The time it takes for the laser to propogate is too small for the sensor to process. Additionally, keep an eye on the RPLiDAR S3 for testing purposes. In terms of evaluation, setting up the most basic environment possible and checking the results would be a great first step. Then, you can compare the parametric model with noise, without noise, and the real data.
+
+## Why ApolloSim?
+First of all, Helios, the Greek god of the sun (specifically the rays of the sun) was taken. I'm also using a language called Odin for the first time, so I wanted to stick with the theme of a god's name; so I went with Apollo, the god of truth and prophecy, because people use simulations to see the future. 
