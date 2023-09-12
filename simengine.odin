@@ -16,7 +16,9 @@ initializeSimEngine :: proc () -> SimEngine {
 
 stepSimEngine :: proc (engine : SimEngine) -> SimEngine{
     engine := engine
-    fmt.printf("Performed step %s", engine.steps)
+    fmt.printf("Performed step %d to gather %f points. \n", engine.steps, engine.sensor.sampleFrequency / engine.sensor.scanFrequency)
+
+    // At this point, the calculation should be handed off to a compute shader for parellel processing.
 
     engine.steps = engine.steps + 1
     return engine

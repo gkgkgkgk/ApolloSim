@@ -85,12 +85,13 @@ initializeGFXEngine :: proc() -> Maybe(GFXEngine) {
     return engine
 }
 
-loopGFXEngine :: proc(engine: GFXEngine, simEgnine: SimEngine) {
+loopGFXEngine :: proc(engine: GFXEngine, simEngine: SimEngine) {
     defer glfw.Terminate()
 	defer glfw.DestroyWindow(engine.window)
     defer destroyShaders(engine)
 
     engine := engine
+    simEngine := simEngine
     view : glm.mat4
 
     c := createCylinder()
@@ -126,6 +127,8 @@ loopGFXEngine :: proc(engine: GFXEngine, simEgnine: SimEngine) {
 		drawGrid(100);
 
 		glfw.SwapBuffers((engine.window))
+
+        simEngine = stepSimEngine(simEngine);
 	}
 }
 
