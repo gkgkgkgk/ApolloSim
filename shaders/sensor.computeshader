@@ -1,0 +1,17 @@
+#version 430
+
+layout(binding = 0, rgba32f) buffer InputBuffer {
+    float inputValue;
+};
+
+layout(binding = 1, rgba32f) buffer OutputBuffer {
+    float outputValue;
+};
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+void main() {
+    float inputValue = inputValue;
+    float doubledValue = inputValue * 2.0;
+    outputValue = doubledValue;
+}
