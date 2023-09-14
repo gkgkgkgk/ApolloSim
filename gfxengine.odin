@@ -82,6 +82,7 @@ initializeGFXEngine :: proc() -> Maybe(GFXEngine) {
     engine.deltaTime = 0.0
     engine.lastFrame = 0.0
 
+    fmt.println("Successfully initialized graphics engine.");
     return engine
 }
 

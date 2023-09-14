@@ -19,7 +19,12 @@ main :: proc() {
 		return
 	}
 
-	simEngine := initializeSimEngine();
+	simEngine, simEngineSuccess := initializeSimEngine().?;
+
+	if !simEngineSuccess {
+		fmt.println("Failed to initialize Simulation Engine.")
+		return
+	}
 
 	loopGFXEngine(gfxEngine, simEngine);
 }

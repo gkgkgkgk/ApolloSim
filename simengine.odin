@@ -1,6 +1,8 @@
 package main
 import "core:fmt"
 import gl "vendor:OpenGL"
+import "core:os"
+import "core:strings"
 
 SimEngine :: struct {
     steps : int,
@@ -8,15 +10,23 @@ SimEngine :: struct {
     computeShader : u32
 }
 
-initializeSimEngine :: proc () -> SimEngine {
+initializeSimEngine :: proc () -> Maybe(SimEngine) {
     engine : SimEngine
     engine.steps = 0
     engine.sensor = initializeSensor();
 
-    engine.computeShader = gl.CreateShader(gl.COMPUTE_SHADER);
-    gl.ShaderSource(engine.computeShader, 1, )
+    computeShaderSource, computeShaderError := os.read_entire_file("./shaders/sensor.computeshader")    
+    if !computeShaderError {
+        fmt.println("Failed to initialize compute shader for the simulation engine.");
+        return nil
+    }
+    computeShaderSourceString : cstring = cstring(raw_data(computeShaderSource));
 
-    program, shader_success := gl.load_shaders("shaders/shader.vertshader", "shaders/shader.fragshader");
+    computeShader := gl.CreateShader(gl.COMPUTE_SHADER);
+    gl.ShaderSource(computeShader, 1, &computeShaderSourceString, nil);
+    gl.CompileShader(computeShader);
+
+    fmt.println("Successfully initialized simulation engine.");
 
     return engine
 }
