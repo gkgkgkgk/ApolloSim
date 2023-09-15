@@ -1,13 +1,13 @@
 package main
 import "core:fmt"
-import gl "vendor:OpenGL"
 import "core:os"
 import "core:strings"
+import gl "vendor:OpenGL"
 
 SimEngine :: struct {
     steps : int,
     sensor : Sensor,
-    computeShader : u32
+    computeShaderProgram : u32
 }
 
 initializeSimEngine :: proc () -> Maybe(SimEngine) {
@@ -20,14 +20,19 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
         fmt.println("Failed to initialize compute shader for the simulation engine.");
         return nil
     }
-    computeShaderSourceString : cstring = cstring(raw_data(computeShaderSource));
+    computeShaderSourceString := cstring(raw_data(computeShaderSource));
 
     computeShader := gl.CreateShader(gl.COMPUTE_SHADER);
     gl.ShaderSource(computeShader, 1, &computeShaderSourceString, nil);
     gl.CompileShader(computeShader);
 
-    fmt.println("Successfully initialized simulation engine.");
+    computeShaderProgram := gl.CreateProgram();
+    gl.AttachShader(computeShaderProgram, computeShader);
+    gl.LinkProgram(computeShaderProgram)
 
+    engine.computeShaderProgram = computeShaderProgram;
+
+    fmt.println("Successfully initialized simulation engine.");
     return engine
 }
 
