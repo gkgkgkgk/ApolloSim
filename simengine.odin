@@ -15,7 +15,7 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     engine.steps = 0
     engine.sensor = initializeSensor();
 
-    computeShaderSource, computeShaderError := os.read_entire_file("./shaders/sensor.computeshader")    
+    computeShaderSource, computeShaderError := os.read_entire_file("./shaders/sensor.computeshader.glsl")    
     if !computeShaderError {
         fmt.println("Failed to initialize compute shader for the simulation engine.");
         return nil
@@ -36,7 +36,7 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     return engine
 }
 
-stepSimEngine :: proc (engine : SimEngine) -> SimEngine{
+stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     engine := engine
     // fmt.printf("Performed step %d to gather %f points. \n", engine.steps, engine.sensor.sampleFrequency / engine.sensor.scanFrequency)
 

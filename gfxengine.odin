@@ -135,10 +135,10 @@ loopGFXEngine :: proc(engine: GFXEngine, simEngine: SimEngine) {
 
 initializeShaders :: proc(engine: GFXEngine) -> [dynamic]u32{
     shaders : [dynamic]u32
-    program, shader_success := gl.load_shaders("shaders/shader.vertshader", "shaders/shader.fragshader");
+    program, shader_success := gl.load_shaders("shaders/shader.vertshader.glsl", "shaders/shader.fragshader.glsl");
     append(&shaders, program)
 
-    grid_program, grid_shader_success := gl.load_shaders("shaders/grid.vertshader", "shaders/grid.fragshader");
+    grid_program, grid_shader_success := gl.load_shaders("shaders/grid.vertshader.glsl", "shaders/grid.fragshader.glsl");
     append(&shaders, grid_program)
 
     return shaders
