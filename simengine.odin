@@ -39,9 +39,29 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
 stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     engine := engine
     // fmt.printf("Performed step %d to gather %f points. \n", engine.steps, engine.sensor.sampleFrequency / engine.sensor.scanFrequency)
-
     // At this point, the calculation should be handed off to a compute shader for parellel processing.
 
+    inputData := [3]int{1, 2, 3};
+    outputData : int;
+
+    inputBuffer, outputBuffer: u32;
+    gl.GenBuffers(1, &inputBuffer); defer gl.DeleteBuffers(1, &inputBuffer);
+	gl.GenBuffers(1, &outputBuffer); defer gl.DeleteBuffers(1, &outputBuffer);
+    
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 0, inputBuffer);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, 3 * size_of(int), &inputData[0], gl.STATIC_DRAW);
+
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 1, outputBuffer);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(int), &outputData, gl.STATIC_DRAW);
+
+    gl.UseProgram(engine.computeShaderProgram);
+    gl.DispatchCompute(10, 1, 1);
+    gl.MemoryBarrier(gl.SHADER_STORAGE_BARRIER_BIT);
+
+    gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, outputBuffer);
+    gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, size_of(uint), &outputData)
+
+    fmt.println(inputData, outputData);
 
     engine.steps = engine.steps + 1
     return engine
