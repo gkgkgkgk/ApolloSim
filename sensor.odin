@@ -1,4 +1,5 @@
 package main
+import glm "core:math/linalg/glsl"
 
 Sensor :: struct {
     sensorType: SensorType,
@@ -26,6 +27,10 @@ initializeSensor :: proc () -> Sensor {
     sensor.workingRange = [2]f32 {0.1, 100}
     sensor.scanFrequency = 10;
     sensor.sampleFrequency = 32000;
+
+    c := createCylinder()
+    c.model = identityModel * glm.mat4Scale(glm.vec3{0.0556, 0.043, 0.0556})
+    sensor.geometry = c;
 
     return sensor
 }

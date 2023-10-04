@@ -3,11 +3,13 @@ import "core:fmt"
 import "core:os"
 import "core:strings"
 import gl "vendor:OpenGL"
+import glm "core:math/linalg/glsl"
 
 SimEngine :: struct {
     steps : int,
     sensor : Sensor,
-    computeShaderProgram : u32
+    computeShaderProgram : u32,
+    scene : [dynamic]Geometry
 }
 
 initializeSimEngine :: proc () -> Maybe(SimEngine) {
@@ -32,6 +34,10 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
 
     engine.computeShaderProgram = computeShaderProgram;
 
+    cube := createCube();
+    cube.model = identityModel * glm.mat4Translate({1.0, 0.0, 0.0});
+    append(&engine.scene, cube)
+
     fmt.println("Successfully initialized simulation engine.");
     return engine
 }
@@ -42,7 +48,7 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     // At this point, the calculation should be handed off to a compute shader for parellel processing.
 
     inputData :=  [3]i32{1, 2, 3};
-    outputData :=  make([]i32, 3);
+    outputData :=  make([]glm.vec3, 2);
 
     inputBuffer, outputBuffer: u32;
     gl.GenBuffers(1, &inputBuffer); defer gl.DeleteBuffers(1, &inputBuffer);
@@ -52,16 +58,16 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, 3 * size_of(i32), &inputData[0], gl.STATIC_DRAW);
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 1, outputBuffer);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, 3 * size_of(i32), &outputData[0], gl.STATIC_DRAW);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, 2 * size_of(glm.vec3), &outputData[0], gl.STATIC_DRAW);
 
     gl.UseProgram(engine.computeShaderProgram);
-    gl.DispatchCompute(3, 1, 1);
+    gl.DispatchCompute(2, 1, 1);
     gl.MemoryBarrier(gl.ALL_BARRIER_BITS);
 
     gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, outputBuffer);
-    gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, 3 * size_of(i32), &outputData[0])
+    gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, 2 * size_of(glm.vec3), &outputData[0])
 
-    fmt.println(inputData, outputData);
+    fmt.println(outputData);
 
     engine.steps = engine.steps + 1
     return engine
