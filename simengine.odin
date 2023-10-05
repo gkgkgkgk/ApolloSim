@@ -46,26 +46,33 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     engine := engine
     // fmt.printf("Performed step %d to gather %f points. \n", engine.steps, engine.sensor.sampleFrequency / engine.sensor.scanFrequency)
     // At this point, the calculation should be handed off to a compute shader for parellel processing.
+    outputData :=  make([]glm.vec4, 3);
+    sg := make([]SimpleGeometry, len(engine.scene));
 
-    inputData :=  [3]i32{1, 2, 3};
-    outputData :=  make([]glm.vec3, 2);
+    for i := 0; i < len(engine.scene); i+=1 {
+        sgTemp : SimpleGeometry
+        sgTemp.model = engine.scene[i].model
+        sgTemp.gType = engine.scene[i].gType
+        sg[i] = sgTemp
+    }
 
     inputBuffer, outputBuffer: u32;
     gl.GenBuffers(1, &inputBuffer); defer gl.DeleteBuffers(1, &inputBuffer);
 	gl.GenBuffers(1, &outputBuffer); defer gl.DeleteBuffers(1, &outputBuffer);
-    
+
+    // Load in scene geometry
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 0, inputBuffer);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, 3 * size_of(i32), &inputData[0], gl.STATIC_DRAW);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(SimpleGeometry), &sg[0], gl.STATIC_DRAW);
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 1, outputBuffer);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, 2 * size_of(glm.vec3), &outputData[0], gl.STATIC_DRAW);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, 3 * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);
 
     gl.UseProgram(engine.computeShaderProgram);
-    gl.DispatchCompute(2, 1, 1);
+    gl.DispatchCompute(16, 1, 1);
     gl.MemoryBarrier(gl.ALL_BARRIER_BITS);
 
     gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, outputBuffer);
-    gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, 2 * size_of(glm.vec3), &outputData[0])
+    gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, 3 * size_of(glm.vec4), &outputData[0])
 
     fmt.println(outputData);
 

@@ -4,10 +4,23 @@ import gl "vendor:OpenGL"
 import "core:math"
 import glm "core:math/linalg/glsl"
 
+GeometryType:: enum {
+    cube,
+    sphere,
+    cylinder,
+    custom
+}
+
 Geometry :: struct {
     vertices: [dynamic]f32,
     indices: [dynamic]u16,
-    model : glm.mat4
+    model : glm.mat4,
+    gType : int
+}
+
+SimpleGeometry :: struct {
+    model : glm.mat4,
+    gType : int
 }
 
 createCube :: proc () -> Geometry {
@@ -44,6 +57,8 @@ createCube :: proc () -> Geometry {
         7, 6, 2
     };
 
+    cube.gType = 6;
+
     return cube;
 }
 
@@ -76,6 +91,8 @@ createCylinder :: proc () -> Geometry {
 
     cylinder.vertices = vertices
     cylinder.indices = indices
+
+    cylinder.gType = 1;
 
     return cylinder;
 }
