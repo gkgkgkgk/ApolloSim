@@ -9,7 +9,8 @@ SimEngine :: struct {
     steps : int,
     sensor : Sensor,
     computeShaderProgram : u32,
-    scene : [dynamic]Geometry
+    scene : [dynamic]Geometry,
+    outputData : []glm.vec4
 }
 
 initializeSimEngine :: proc () -> Maybe(SimEngine) {
@@ -46,7 +47,7 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     engine := engine
     // fmt.printf("Performed step %d to gather %f points. \n", engine.steps, engine.sensor.sampleFrequency / engine.sensor.scanFrequency)
     // At this point, the calculation should be handed off to a compute shader for parellel processing.
-    outputData :=  make([]glm.vec4, 3);
+    outputData := make([]glm.vec4, 3);
     sg := make([]SimpleGeometry, len(engine.scene));
 
     for i := 0; i < len(engine.scene); i+=1 {
@@ -74,8 +75,7 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, outputBuffer);
     gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, 3 * size_of(glm.vec4), &outputData[0])
 
-    fmt.println(outputData);
-
+    engine.outputData = outputData
     engine.steps = engine.steps + 1
     return engine
 }

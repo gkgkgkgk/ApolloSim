@@ -127,6 +127,13 @@ loopGFXEngine :: proc(engine: GFXEngine, simEngine: SimEngine) {
 		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);
 		drawGrid(100);
 
+        gl.UseProgram(engine.shaders[2])
+        uniform_infos = gl.get_uniforms_from_program(engine.shaders[2]);
+		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);
+		drawLasers(simEngine);
+
 		glfw.SwapBuffers((engine.window))
 
         simEngine = stepSimEngine(simEngine);
@@ -141,15 +148,20 @@ initializeShaders :: proc(engine: GFXEngine) -> [dynamic]u32{
     grid_program, grid_shader_success := gl.load_shaders("shaders/grid.vertshader.glsl", "shaders/grid.fragshader.glsl");
     append(&shaders, grid_program)
 
+    laser_program, laser_shader_success := gl.load_shaders("shaders/laser.vertshader.glsl", "shaders/laser.fragshader.glsl");
+    append(&shaders, laser_program)
+
     return shaders
 }
 
 destroyShaders :: proc (engine: GFXEngine) {
     gl.DeleteProgram(engine.shaders[0]);
     gl.DeleteProgram(engine.shaders[1]);
+    gl.DeleteProgram(engine.shaders[2]);
 }
 
 drawGrid :: proc($gridSize: int) {
+    gl.LineWidth(1.0);
     vertices : [6 * 2 * (gridSize+ 1)]f32;
 
     for i := 0; i < gridSize + 1; i += 1 {
@@ -175,7 +187,7 @@ drawGrid :: proc($gridSize: int) {
         vertices[index + 11] = offset;
     }
 
-    vbo, vao, ebo: u32;
+    vbo, vao: u32;
     gl.GenVertexArrays(1, &vao); defer gl.DeleteVertexArrays(1, &vao);
 	gl.GenBuffers(1, &vbo); defer gl.DeleteBuffers(1, &vbo);
 
@@ -187,4 +199,41 @@ drawGrid :: proc($gridSize: int) {
 	gl.EnableVertexAttribArray(0);
 
     gl.DrawArrays(gl.LINES, 0, (cast(i32)gridSize + 1) * 4);
+}
+
+drawLasers:: proc(engine: SimEngine) {
+    lasers := engine.outputData;
+    laserCount : int = len(lasers);
+
+    if(laserCount == 0){
+        return;
+    }
+
+    vertices : [dynamic]f32;
+
+    for i := 0; i < len(lasers); i += 1 {
+        index := i * 6
+
+        append(&vertices, lasers[i].x)
+        append(&vertices, lasers[i].y)
+        append(&vertices, lasers[i].z)
+
+        append(&vertices, 0)
+        append(&vertices, 0)
+        append(&vertices, 0)
+    }
+
+    vbo, vao: u32;
+    gl.GenVertexArrays(1, &vao); defer gl.DeleteVertexArrays(1, &vao);
+	gl.GenBuffers(1, &vbo); defer gl.DeleteBuffers(1, &vbo);
+
+	gl.BindVertexArray(vao)
+	gl.BindBuffer(gl.ARRAY_BUFFER, vbo);
+    gl.BufferData(gl.ARRAY_BUFFER, len(vertices) * size_of(f32), &vertices[0], gl.STATIC_DRAW);
+
+    gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, 3 * size_of(f32), 0);
+	gl.EnableVertexAttribArray(0);
+    gl.LineWidth(5.0);
+
+    gl.DrawArrays(gl.LINES, 0, cast(i32)len(lasers));
 }

@@ -19,30 +19,49 @@ struct IntersectionResult {
     vec3 point;
 };
 
-IntersectionResult rayIntersectsCube(vec3 rayOrigin, vec3 rayDirection, vec3 cubeMin, vec3 cubeMax) {
-    IntersectionResult result;
-    result.intersects = false;
-    result.point = vec3(0.0);
+vec3 rayBoxIntersection(vec3 rayOrigin, vec3 rayDir, mat4 modelMatrix) {
+    // Inverse of the model matrix to transform the ray to local space
+    mat4 inverseModelMatrix = inverse(modelMatrix);
 
-    vec3 t1 = (cubeMin - rayOrigin) / rayDirection;
-    vec3 t2 = (cubeMax - rayOrigin) / rayDirection;
+    // Transform the ray into local space
+    vec4 localRayOrigin = inverseModelMatrix * vec4(rayOrigin, 1.0);
+    vec4 localRayDir = inverseModelMatrix * vec4(rayDir, 0.0);
 
-    vec3 tmin = min(t1, t2);
-    vec3 tmax = max(t1, t2);
+    // Calculate the inverse of the ray direction for faster intersection tests
+    vec3 invRayDir = 1.0 / localRayDir.xyz;
 
-    float tNear = max(max(tmin.x, tmin.y), tmin.z);
-    float tFar = min(min(tmax.x, tmax.y), tmax.z);
+    // Box bounds in local space (-0.5 to 0.5 along each axis)
+    vec3 minBounds = vec3(-0.5);
+    vec3 maxBounds = vec3(0.5);
 
-    if (tNear <= tFar) {
-        result.intersects = true;
-        result.point = rayOrigin + tNear * rayDirection;
+    // Calculate intersection distances for each axis
+    vec3 tMin = (minBounds - localRayOrigin.xyz) * invRayDir;
+    vec3 tMax = (maxBounds - localRayOrigin.xyz) * invRayDir;
+
+    // Find the largest minimum intersection distance
+    float tEnter = max(max(max(tMin.x, tMin.y), tMin.z), 0.0);
+
+    // Find the smallest maximum intersection distance
+    float tExit = min(min(min(tMax.x, tMax.y), tMax.z), 1.0);
+
+    // Check if there is a valid intersection
+    if (tEnter <= tExit) {
+        // Calculate the intersection point in local space
+        vec3 intersectionPointLocal = localRayOrigin.xyz + tEnter * localRayDir.xyz;
+
+        // Transform the intersection point back to world space
+        vec4 intersectionPointWorld = modelMatrix * vec4(intersectionPointLocal, 1.0);
+
+        return intersectionPointWorld.xyz;
+    } else {
+        // No intersection
+        return vec3(-1.0); // You can return any suitable value for no intersection
     }
-
-    return result;
 }
 
 void main()
 {
     uvec3 globalID = gl_GlobalInvocationID;
-    outputData[globalID.x] = vec3(float(scene[0].gType),2,1);
+    vec3 intersection = rayBoxIntersection(vec3(0), vec3(1, 0, 0), scene[0].model);
+    outputData[globalID.x] = intersection;
 }
