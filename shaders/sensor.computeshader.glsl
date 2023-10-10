@@ -1,5 +1,5 @@
 #version 460 core
-layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (local_size_x = 16, local_size_y = 1, local_size_z = 1) in;
 
 struct SimpleGeometry
 {
@@ -10,7 +10,12 @@ struct SimpleGeometry
 layout(std430, binding = 0) buffer InputBuffer {
     SimpleGeometry scene[];
 };
-layout(std430, binding = 1) buffer OutputBuffer {
+
+layout(std430, binding = 1) buffer InputBuffer2 {
+    vec3 directions[];
+};
+
+layout(std430, binding = 2) buffer OutputBuffer {
     vec3 outputData[];
 };
 
@@ -19,7 +24,8 @@ struct IntersectionResult {
     vec3 point;
 };
 
-vec3 rayBoxIntersection(vec3 rayOrigin, vec3 rayDir, mat4 modelMatrix) {
+IntersectionResult rayBoxIntersection(vec3 rayOrigin, vec3 rayDir, mat4 modelMatrix) {
+    IntersectionResult result = IntersectionResult(false, rayOrigin);
     // Inverse of the model matrix to transform the ray to local space
     mat4 inverseModelMatrix = inverse(modelMatrix);
 
@@ -52,16 +58,22 @@ vec3 rayBoxIntersection(vec3 rayOrigin, vec3 rayDir, mat4 modelMatrix) {
         // Transform the intersection point back to world space
         vec4 intersectionPointWorld = modelMatrix * vec4(intersectionPointLocal, 1.0);
 
-        return intersectionPointWorld.xyz;
+        result.point = intersectionPointWorld.xyz;
+        result.intersects = true;
+        return result;
     } else {
-        // No intersection
-        return vec3(-1.0); // You can return any suitable value for no intersection
+        return result; // You can return any suitable value for no intersection
     }
 }
 
 void main()
 {
-    uvec3 globalID = gl_GlobalInvocationID;
-    vec3 intersection = rayBoxIntersection(vec3(0), vec3(1, 0, 0), scene[0].model);
-    outputData[globalID.x] = intersection;
+    uvec3 id = gl_LocalInvocationID;
+    IntersectionResult intersection = rayBoxIntersection(vec3(0), directions[id.x], scene[0].model);
+
+    if (intersection.intersects){
+        outputData[id.x] = intersection.point;
+    } else {
+        outputData[id.x] = vec3(0);
+    }
 }

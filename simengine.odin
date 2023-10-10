@@ -4,6 +4,7 @@ import "core:os"
 import "core:strings"
 import gl "vendor:OpenGL"
 import glm "core:math/linalg/glsl"
+import "core:math"
 
 SimEngine :: struct {
     steps : int,
@@ -29,6 +30,14 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     gl.ShaderSource(computeShader, 1, &computeShaderSourceString, nil);
     gl.CompileShader(computeShader);
 
+    status : i32;
+    gl.GetShaderiv(computeShader, gl.COMPILE_STATUS, &status);
+
+    if(status != 1){
+        fmt.println("Failed to compile the compute shader for the simulation engine.");
+        return nil;
+    }
+
     computeShaderProgram := gl.CreateProgram();
     gl.AttachShader(computeShaderProgram, computeShader);
     gl.LinkProgram(computeShaderProgram)
@@ -45,9 +54,7 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
 
 stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     engine := engine
-    // fmt.printf("Performed step %d to gather %f points. \n", engine.steps, engine.sensor.sampleFrequency / engine.sensor.scanFrequency)
-    // At this point, the calculation should be handed off to a compute shader for parellel processing.
-    outputData := make([]glm.vec4, 3);
+
     sg := make([]SimpleGeometry, len(engine.scene));
 
     for i := 0; i < len(engine.scene); i+=1 {
@@ -57,23 +64,38 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
         sg[i] = sgTemp
     }
 
-    inputBuffer, outputBuffer: u32;
+    directions := make([]glm.vec4, 16)
+
+    for i := 0; i < 16; i+=1 {
+        angle : f32 = ((2 * math.PI)/16.0) * cast(f32)i
+        directions[i] = glm.vec4{math.cos(angle), 0.0, math.sin(angle), 0.0}
+    }
+
+    outputData := make([]glm.vec4, 16);
+
+    inputBuffer, inputBuffer2, outputBuffer: u32;
     gl.GenBuffers(1, &inputBuffer); defer gl.DeleteBuffers(1, &inputBuffer);
+    gl.GenBuffers(1, &inputBuffer2); defer gl.DeleteBuffers(1, &inputBuffer2);
 	gl.GenBuffers(1, &outputBuffer); defer gl.DeleteBuffers(1, &outputBuffer);
 
     // Load in scene geometry
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 0, inputBuffer);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(SimpleGeometry), &sg[0], gl.STATIC_DRAW);
 
-    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 1, outputBuffer);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, 3 * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 1, inputBuffer2);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(glm.vec4) * len(directions), &directions[0], gl.STATIC_DRAW);
+
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 2, outputBuffer);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, 16 * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);
 
     gl.UseProgram(engine.computeShaderProgram);
-    gl.DispatchCompute(16, 1, 1);
+    gl.DispatchCompute(1, 1, 1);
     gl.MemoryBarrier(gl.ALL_BARRIER_BITS);
 
     gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, outputBuffer);
-    gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, 3 * size_of(glm.vec4), &outputData[0])
+    gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, 16 * size_of(glm.vec4), &outputData[0])
+
+    // fmt.println(outputData)
 
     engine.outputData = outputData
     engine.steps = engine.steps + 1
