@@ -24,52 +24,51 @@ struct IntersectionResult {
     vec3 point;
 };
 
-IntersectionResult rayBoxIntersection(vec3 rayOrigin, vec3 rayDir, mat4 modelMatrix) {
+IntersectionResult rayBoxIntersection(vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix) {
     IntersectionResult result = IntersectionResult(false, rayOrigin);
-    // Inverse of the model matrix to transform the ray to local space
-    mat4 inverseModelMatrix = inverse(modelMatrix);
+    vec3 position = modelMatrix[3].xyz;
+    float cubeHalfSize = length(modelMatrix[0].xyz) * 0.5;
+    
+    vec3 minExtents = position - vec3(cubeHalfSize);
+    vec3 maxExtents = position + vec3(cubeHalfSize);
 
-    // Transform the ray into local space
-    vec4 localRayOrigin = inverseModelMatrix * vec4(rayOrigin, 1.0);
-    vec4 localRayDir = inverseModelMatrix * vec4(rayDir, 0.0);
+    float tMin = 0.0;
+    float tMax = 1e30;
 
-    // Calculate the inverse of the ray direction for faster intersection tests
-    vec3 invRayDir = 1.0 / localRayDir.xyz;
+    for (int i = 0; i < 3; i++) {
+        if (abs(rayDirection[i]) < 1e-6) {
+            if (rayOrigin[i] < minExtents[i] || rayOrigin[i] > maxExtents[i]) {
+                return result;
+            }
+        } else {
+            // Ray is not parallel
+            float t0 = (minExtents[i] - rayOrigin[i]) / rayDirection[i];
+            float t1 = (maxExtents[i] - rayOrigin[i]) / rayDirection[i];
 
-    // Box bounds in local space (-0.5 to 0.5 along each axis)
-    vec3 minBounds = vec3(-0.5);
-    vec3 maxBounds = vec3(0.5);
+            if (t0 > t1) {
+                float temp = t0;
+                t0 = t1;
+                t1 = temp;
+            }
 
-    // Calculate intersection distances for each axis
-    vec3 tMin = (minBounds - localRayOrigin.xyz) * invRayDir;
-    vec3 tMax = (maxBounds - localRayOrigin.xyz) * invRayDir;
+            tMin = max(t0, tMin);
+            tMax = min(t1, tMax);
 
-    // Find the largest minimum intersection distance
-    float tEnter = max(max(max(tMin.x, tMin.y), tMin.z), 0.0);
-
-    // Find the smallest maximum intersection distance
-    float tExit = min(min(min(tMax.x, tMax.y), tMax.z), 1.0);
-
-    // Check if there is a valid intersection
-    if (tEnter <= tExit) {
-        // Calculate the intersection point in local space
-        vec3 intersectionPointLocal = localRayOrigin.xyz + tEnter * localRayDir.xyz;
-
-        // Transform the intersection point back to world space
-        vec4 intersectionPointWorld = modelMatrix * vec4(intersectionPointLocal, 1.0);
-
-        result.point = intersectionPointWorld.xyz;
-        result.intersects = true;
-        return result;
-    } else {
-        return result; // You can return any suitable value for no intersection
+            if (tMin > tMax) {
+                return result;
+            }
+        }
     }
+
+    result.point = rayOrigin + rayDirection * tMin;
+    result.intersects = true;
+    return result;
 }
 
 void main()
 {
     uvec3 id = gl_LocalInvocationID;
-    IntersectionResult intersection = rayBoxIntersection(vec3(0), directions[id.x], scene[0].model);
+    IntersectionResult intersection = rayBoxIntersection(vec3(0), normalize(directions[id.x]), scene[0].model);
 
     if (intersection.intersects){
         outputData[id.x] = intersection.point;

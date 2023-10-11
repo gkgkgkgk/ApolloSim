@@ -233,7 +233,7 @@ drawLasers:: proc(engine: SimEngine) {
 	gl.BindVertexArray(vao)
     gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, 3 * size_of(f32), 0);
 	gl.EnableVertexAttribArray(0);
-    gl.LineWidth(5.0);
+    gl.LineWidth(3.0);
 
     gl.DrawArrays(gl.LINES, 0, cast(i32)len(lasers) * 2);
 }
