@@ -96,7 +96,7 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, 16 * size_of(glm.vec4), &outputData[0])
 
     cube := engine.scene[0]
-    cube.model = identityModel * glm.mat4Translate({1.0, 0.0, math.cos(cast(f32)engine.steps * 0.05)});
+    cube.model = identityModel * glm.mat4Translate({2 * math.cos(cast(f32)engine.steps * 0.05), 0.0, 2 * math.sin(cast(f32)engine.steps * 0.05)});
     engine.scene[0] = cube
 
     engine.outputData = outputData
