@@ -1,5 +1,5 @@
 #version 460 core
-layout (local_size_x = 16, local_size_y = 1, local_size_z = 1) in;
+layout (local_size_x = 32, local_size_y = 10, local_size_z = 3) in;
 
 struct SimpleGeometry
 {
@@ -68,6 +68,7 @@ IntersectionResult rayBoxIntersection(vec3 rayOrigin, vec3 rayDirection, mat4 mo
 void main()
 {
     uvec3 id = gl_LocalInvocationID;
+    // int index = id.x + 32 * (id.y + 10 * id.z);
     IntersectionResult intersection = rayBoxIntersection(vec3(0), normalize(directions[id.x]), scene[0].model);
 
     if (intersection.intersects){
