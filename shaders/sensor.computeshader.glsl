@@ -1,5 +1,5 @@
 #version 460 core
-layout (local_size_x = 32, local_size_y = 10, local_size_z = 3) in;
+layout (local_size_x = 16, local_size_y = 1, local_size_z = 1) in;
 
 struct SimpleGeometry
 {
@@ -68,12 +68,21 @@ IntersectionResult rayBoxIntersection(vec3 rayOrigin, vec3 rayDirection, mat4 mo
 void main()
 {
     uvec3 id = gl_LocalInvocationID;
-    // int index = id.x + 32 * (id.y + 10 * id.z);
-    IntersectionResult intersection = rayBoxIntersection(vec3(0), normalize(directions[id.x]), scene[0].model);
+    for(int i = 0; i < 200; i++){
+        IntersectionResult result = IntersectionResult(false, vec3(10000000.0));
 
-    if (intersection.intersects){
-        outputData[id.x] = intersection.point;
-    } else {
-        outputData[id.x] = vec3(0);
+        for(int j = 0; j < scene.length(); j++){
+            IntersectionResult newIntersection = rayBoxIntersection(vec3(0), normalize(directions[id.x * 200 + i]), scene[j].model);
+
+            if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length())) {
+                result = newIntersection;
+            }
+        }
+
+        if (result.intersects){
+            outputData[id.x * 200 + i] = result.point;
+        } else {
+            outputData[id.x * 200 + i] = vec3(0);
+        }
     }
 }

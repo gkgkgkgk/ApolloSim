@@ -117,8 +117,11 @@ loopGFXEngine :: proc(engine: GFXEngine, simEngine: SimEngine) {
 		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &(simEngine.sensor.geometry.model)[0][0]);
 		drawGeometryWithIndices(simEngine.sensor.geometry);
 
-        gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &(simEngine.scene[0].model)[0][0]);
-		drawGeometryWithIndices(simEngine.scene[0]);
+        for i := 0; i < len(simEngine.scene); i+= 1 {
+            gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &(simEngine.scene[i].model)[0][0]);
+		    drawGeometryWithIndices(simEngine.scene[i]);
+        }
+        
 
 		gl.UseProgram(engine.shaders[1])
         uniform_infos = gl.get_uniforms_from_program(engine.shaders[1]);

@@ -48,6 +48,10 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     cube.model = identityModel * glm.mat4Translate({1.0, 0.0, 0.0});
     append(&engine.scene, cube)
 
+    cube2 := createCube();
+    cube2.model = identityModel * glm.mat4Translate({0.0, 0.0, 5.0});
+    append(&engine.scene, cube2)
+
     fmt.println("Successfully initialized simulation engine.");
     return engine
 }
@@ -71,9 +75,9 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
         directions[i] = glm.vec4{math.cos(angle), 0.0, math.sin(angle), 0.0}
     }
 
-    outputData := make([]glm.vec4, 3200);
+    outputData := make([]glm.vec4, engine.sensor.packetSize);
 
-    fmt.println(gl.MAX_COMPUTE_WORK_GROUP_INVOCATIONS)
+    // fmt.println(gl.MAX_COMPUTE_WORK_GROUP_INVOCATIONS)
 
     inputBuffer, inputBuffer2, outputBuffer: u32;
     gl.GenBuffers(1, &inputBuffer); defer gl.DeleteBuffers(1, &inputBuffer);
@@ -82,20 +86,20 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
 
     // Load in scene geometry
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 0, inputBuffer);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(SimpleGeometry), &sg[0], gl.STATIC_DRAW);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(sg) * size_of(SimpleGeometry), &sg[0], gl.STATIC_DRAW);
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 1, inputBuffer2);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(glm.vec4) * len(directions), &directions[0], gl.STATIC_DRAW);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(glm.vec4) * len(engine.sensor.directions), &engine.sensor.directions[0], gl.STATIC_DRAW);
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 2, outputBuffer);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, 3200 * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);
 
     gl.UseProgram(engine.computeShaderProgram);
     gl.DispatchCompute(1, 1, 1);
     gl.MemoryBarrier(gl.ALL_BARRIER_BITS);
 
     gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, outputBuffer);
-    gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, 3200 * size_of(glm.vec4), &outputData[0])
+    gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0])
 
     cube := engine.scene[0]
     cube.model = identityModel * glm.mat4Translate({2 * math.cos(cast(f32)engine.steps * 0.05), 0.0, 2 * math.sin(cast(f32)engine.steps * 0.05)});

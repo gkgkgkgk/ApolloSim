@@ -11,7 +11,8 @@ Sensor :: struct {
     angularRange: f32,
     workingRange: [2]f32,
     geometry : Geometry,
-    directions: []glm.vec4
+    directions: []glm.vec4,
+    packetSize: int
 }
 
 DataDimensions :: enum {
@@ -45,6 +46,7 @@ initializeSensor :: proc () -> Sensor {
     }
 
     sensor.directions = directions
+    sensor.packetSize = packetSize
 
     c := createCylinder()
     c.model = identityModel * glm.mat4Scale(glm.vec3{0.0556, 0.043, 0.0556})
