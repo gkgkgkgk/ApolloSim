@@ -68,11 +68,12 @@ IntersectionResult rayBoxIntersection(vec3 rayOrigin, vec3 rayDirection, mat4 mo
 void main()
 {
     uvec3 id = gl_LocalInvocationID;
-    for(int i = 0; i < 200; i++){
+    int count = directions.length()/16;
+    for(int i = 0; i < count; i++){
         IntersectionResult result = IntersectionResult(false, vec3(10000000.0));
 
         for(int j = 0; j < scene.length(); j++){
-            IntersectionResult newIntersection = rayBoxIntersection(vec3(0), normalize(directions[id.x * 200 + i]), scene[j].model);
+            IntersectionResult newIntersection = rayBoxIntersection(vec3(0), normalize(directions[id.x * count + i]), scene[j].model);
 
             if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length())) {
                 result = newIntersection;
@@ -80,9 +81,9 @@ void main()
         }
 
         if (result.intersects){
-            outputData[id.x * 200 + i] = result.point;
+            outputData[id.x * count + i] = result.point;
         } else {
-            outputData[id.x * 200 + i] = vec3(0);
+            outputData[id.x * count + i] = vec3(0);
         }
     }
 }
