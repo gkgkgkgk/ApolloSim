@@ -81,4 +81,4 @@ HELIOS+ structures each scene with the platform, which is where the sensor is at
 * Related Work vs Background Information: Related work is other papers and project, how is mine similar/different, what did I learn from it. Background is something you need to understand to appreciate the work.
 
 ## Why ApolloSim?
-First of all, Helios, the Greek god of the sun (specifically the rays of the sun) was taken. I'm also using a language called Odin for the first time, so I wanted to stick with the theme of a god's name; so I went with Apollo, the god of truth and prophecy, because people use simulations to see the future. 
+First of all, the name Helios, the Greek god of the sun (specifically the rays of the sun), was taken by [HELIOS++](https://arxiv.org/pdf/2101.09154.pdf). I'm using a language called Odin for the first time, so I wanted to stick with the theme of a god's name; so I went with Apollo, the god of truth and prophecy, because people use simulations to see the future. 
