@@ -214,16 +214,16 @@ drawLasers:: proc(engine: SimEngine) {
 
     vertices : [dynamic]f32;
 
-    for i := 0; i < len(lasers); i += 1 {
-        index := i * 6
-
+    for i := 0; i < laserCount; i += 1 {
         append(&vertices, 0)
         append(&vertices, 0)
         append(&vertices, 0)
+        append(&vertices, 0.5)
 
         append(&vertices, lasers[i].x)
         append(&vertices, lasers[i].y)
         append(&vertices, lasers[i].z)
+        append(&vertices, 1.0)
     }
 
     vbo, vao: u32;
@@ -234,9 +234,9 @@ drawLasers:: proc(engine: SimEngine) {
     gl.BufferData(gl.ARRAY_BUFFER, len(vertices) * size_of(f32), &vertices[0], gl.STATIC_DRAW);
 
 	gl.BindVertexArray(vao)
-    gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, 3 * size_of(f32), 0);
+    gl.VertexAttribPointer(0, 4, gl.FLOAT, gl.FALSE, 4 * size_of(f32), 0);
 	gl.EnableVertexAttribArray(0);
     gl.LineWidth(3.0);
 
-    gl.DrawArrays(gl.LINES, 0, cast(i32)len(lasers) * 2);
+    gl.DrawArrays(gl.LINES, 0, cast(i32)laserCount * 2);
 }
