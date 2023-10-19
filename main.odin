@@ -11,7 +11,6 @@ mousePos : glm.vec2 = glm.vec2{0.0, 0.0};
 mouseMovement : glm.vec2 = glm.vec2{0.0, 0.0};
 
 main :: proc() {
-
 	gfxEngine, gfxEngineSuccess := initializeGFXEngine().?;
 
 	if !gfxEngineSuccess {

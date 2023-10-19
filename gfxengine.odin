@@ -15,6 +15,7 @@ GL_MINOR_VERSION :: 6;
 
 height : i32 = 720;
 width : i32 = 1280;
+stopSign := customGeometry("./models/stopsign.obj")
 
 identityModel := glm.mat4 {
 		1.0, 0.0, 0.0, 0.0,
@@ -66,8 +67,8 @@ initializeGFXEngine :: proc() -> Maybe(GFXEngine) {
 	camera.right = glm.vec3{1.0, 0.0, 0.0};
 	camera.pitch = 45.0;
 	camera.yaw = 0.0;
-	camera.speed = 1.0;
-	camera.sensitivity = 0.25;
+	camera.speed = 5.0;
+	camera.sensitivity = 0.15;
 
     engine.camera = camera;
 
@@ -121,7 +122,9 @@ loopGFXEngine :: proc(engine: GFXEngine, simEngine: SimEngine) {
             gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &(simEngine.scene[i].model)[0][0]);
 		    drawGeometryWithIndices(simEngine.scene[i]);
         }
-        
+
+        gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &(identityModel)[0][0]);
+        drawGeometryWithIndices(stopSign);
 
 		gl.UseProgram(engine.shaders[1])
         uniform_infos = gl.get_uniforms_from_program(engine.shaders[1]);

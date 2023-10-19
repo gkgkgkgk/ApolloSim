@@ -3,6 +3,8 @@ import "core:fmt"
 import gl "vendor:OpenGL"
 import "core:math"
 import glm "core:math/linalg/glsl"
+import "core:os"
+import "core:strconv"
 
 GeometryType:: enum {
     cube,
@@ -141,4 +143,92 @@ drawGeometryWithIndices :: proc (geometry : Geometry) {
 
     gl.DrawElements(gl.TRIANGLES, cast(i32)len(geometry.indices), gl.UNSIGNED_SHORT, nil);
     gl.BindVertexArray(0);
+}
+
+/* CUSTOM GEOMETRY LOADER */
+/* Thank you to https://gist.github.com/vassvik/f4c19c35ba72ad52eaa51d1091d379d8 */
+
+stream : string
+
+is_whitespace :: proc(c: u8) -> bool {
+	switch c {
+	case ' ', '\t', '\n', '\v', '\f', '\r', '/': return true;
+	}
+	return false;
+}
+
+skip_whitespace :: proc() #no_bounds_check {
+	for stream != "" && is_whitespace(stream[0]) do stream = stream[1 : len(stream)];
+}
+
+skip_line :: proc() #no_bounds_check {
+	N := len(stream);
+	for i := 0; i < N; i += 1 {
+		if stream[0] == '\r' || stream[0] == '\n' {
+			skip_whitespace();
+			return;
+		}
+		stream = stream[1 : len(stream)];
+	}
+}
+
+next_word :: proc() -> string {
+	skip_whitespace();
+
+	for i := 0; i < len(stream); i += 1 {
+		if is_whitespace(stream[i]) || i == len(stream)-1 {
+			current_word := stream[0 : i];
+			stream = stream[i+1 : len(stream)];
+			return current_word;
+		}
+	}
+	return "";
+}
+
+customGeometry :: proc(filename: string) -> Geometry {
+    to_f32 :: strconv.parse_f32;
+    to_u16 :: proc(str: string) -> u16 { i, _ := strconv.parse_int(str); return cast(u16)i};
+    geometry : Geometry;
+
+    data, status := os.read_entire_file(filename);
+
+    if !status {
+        fmt.println("Failed to load ", filename);
+        return geometry;
+    };
+    
+    vertices: [dynamic] f32;
+    indices: [dynamic] u16;
+
+    stream = string(data);
+
+    for stream != "" {
+        current_word := next_word();
+
+        switch current_word {
+            case "v":
+                v1, _ := to_f32(next_word())
+                v2, _ := to_f32(next_word())
+                v3, _ := to_f32(next_word())
+
+                append(&vertices, v1)
+                append(&vertices, v2)
+                append(&vertices, v3)
+                append(&vertices, 0)
+                append(&vertices, 0)
+            case "f":
+                new_indices:[9]u16;
+                for i := 0; i < 9; i+= 1 {
+                    f := to_u16(next_word())
+                    new_indices[i] = f - 1;
+                }
+                append(&indices, new_indices[0], new_indices[3], new_indices[6]);
+        }
+        // skip_line();
+    }
+
+    geometry.vertices = vertices
+    geometry.indices = indices
+
+    return geometry;
 }
