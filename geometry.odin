@@ -224,7 +224,6 @@ customGeometry :: proc(filename: string) -> Geometry {
                 }
                 append(&indices, new_indices[0], new_indices[3], new_indices[6]);
         }
-        // skip_line();
     }
 
     geometry.vertices = vertices

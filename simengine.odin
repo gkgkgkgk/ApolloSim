@@ -11,6 +11,7 @@ SimEngine :: struct {
     sensor : Sensor,
     computeShaderProgram : u32,
     scene : [dynamic]Geometry,
+    complexScene : [dynamic]Geometry,
     outputData : []glm.vec4
 }
 
@@ -52,6 +53,10 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     cube2.model = identityModel * glm.mat4Translate({0.0, 0.0, 5.0});
     append(&engine.scene, cube2)
 
+    stopSign := customGeometry("./models/stopsign.obj")
+    stopSign.model = identityModel * glm.mat4Translate({2.5, 0.0, 2.5});
+    append(&engine.complexScene, stopSign)
+
     fmt.println("Successfully initialized simulation engine.");
     return engine
 }
@@ -77,11 +82,18 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
 
     outputData := make([]glm.vec4, engine.sensor.packetSize);
 
+    complexSceneSize := 0
+
+    for i := 0; i < len(engine.complexScene); i += 1 {
+        complexSceneSize += size_of(engine.complexScene[i])
+    }
+
     // fmt.println(gl.MAX_COMPUTE_WORK_GROUP_INVOCATIONS)
 
-    inputBuffer, inputBuffer2, outputBuffer: u32;
+    inputBuffer, inputBuffer2, inputBuffer3, outputBuffer: u32;
     gl.GenBuffers(1, &inputBuffer); defer gl.DeleteBuffers(1, &inputBuffer);
     gl.GenBuffers(1, &inputBuffer2); defer gl.DeleteBuffers(1, &inputBuffer2);
+    gl.GenBuffers(1, &inputBuffer3); defer gl.DeleteBuffers(1, &inputBuffer3);
 	gl.GenBuffers(1, &outputBuffer); defer gl.DeleteBuffers(1, &outputBuffer);
 
     // Load in scene geometry
@@ -93,6 +105,11 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 2, outputBuffer);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);
+
+
+    // There are definitely issues here with how the custom geoemtry is being loaded in... maybe pad the vertices to a fixed size? maybe struct padding?
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 3, inputBuffer3);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, complexSceneSize, &engine.complexScene[0], gl.STATIC_DRAW);
 
     gl.UseProgram(engine.computeShaderProgram);
     gl.DispatchCompute(1, 1, 1);
