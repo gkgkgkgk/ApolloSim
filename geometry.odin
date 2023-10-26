@@ -20,6 +20,13 @@ Geometry :: struct {
     gType : int
 }
 
+Geometry32 :: struct {
+    model : glm.mat4,
+    gType : int,
+    vertices: [dynamic]f32,
+    indices: [dynamic]int,
+}
+
 SimpleGeometry :: struct {
     model : glm.mat4,
     gType : int

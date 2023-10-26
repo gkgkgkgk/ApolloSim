@@ -9,10 +9,10 @@ struct SimpleGeometry
 
 struct ComplexGeometry
 {
-    float vertices[128];
-    int indices[255];
     mat4 model;
     int gType;
+    float vertices[120];
+    int indices[120];
 };
 
 layout(std430, binding = 0) buffer InputBuffer {
@@ -23,12 +23,12 @@ layout(std430, binding = 1) buffer InputBuffer2 {
     vec3 directions[];
 };
 
-layout(std430, binding = 2) buffer OutputBuffer {
-    vec3 outputData[];
+layout(std430, binding = 2) buffer InputBuffer3 {
+    ComplexGeometry complexScene[];
 };
 
-layout(std430, binding = 3) buffer InputBuffer3 {
-    ComplexGeometry complexScene[];
+layout(std430, binding = 3) buffer OutputBuffer {
+    vec3 outputData[];
 };
 
 struct IntersectionResult {
@@ -121,13 +121,15 @@ IntersectionResult complexMeshIntersection(vec3 rayOrigin, vec3 rayDirection, Co
     IntersectionResult result = IntersectionResult(false, rayOrigin);
 
     for (int i = 0; i < 256; i += 3) {
+        result.point = vec3(1.0);
+        result.intersects = true;
         int i0 = geometry.indices[i];
         int i1 = geometry.indices[i + 1];
         int i2 = geometry.indices[i + 2];
 
-        // if(i0 == i1 && i0 == i2){
-        //     break;
-        // }
+        if(i0 == i1 && i0 == i2){
+            break;
+        }
 
         vec3 v0 = vec3(geometry.vertices[i0 * 5], geometry.vertices[i0 * 5 + 1], geometry.vertices[i0 * 5 + 2]);
         vec3 v1 = vec3(geometry.vertices[i1 * 5], geometry.vertices[i1 * 5 + 1], geometry.vertices[i1 * 5 + 2]);
@@ -135,6 +137,8 @@ IntersectionResult complexMeshIntersection(vec3 rayOrigin, vec3 rayDirection, Co
 
         IntersectRayTriangle(rayOrigin, rayDirection, v0, v1, v2, result);
     }
+
+
     
     return result;
 }
@@ -146,20 +150,26 @@ void main()
     for(int i = 0; i < count; i++){
         IntersectionResult result = IntersectionResult(false, vec3(10000000.0));
 
-        // for(int j = 0; j < scene.length(); j++){
-        //     IntersectionResult newIntersection = rayBoxIntersection(vec3(0), normalize(directions[id.x * count + i]), scene[j].model);
+        for(int j = 0; j < scene.length(); j++){
+            IntersectionResult newIntersection = rayBoxIntersection(vec3(0), normalize(directions[id.x * count + i]), scene[j].model);
 
-        //     if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length())) {
-        //         result = newIntersection;
-        //     }
-        // }
+            if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length()) && scene[j].gType == 6) {
+                result = newIntersection;
+            }
+
+            // result.intersects = true;
+            // result.point = vec3(1.0);
+        }
 
         for(int j = 0; j < complexScene.length(); j++){
-            IntersectionResult newIntersection = rayBoxIntersection(vec3(0), normalize(directions[id.x * count + i]), complexScene[j].model);
+            IntersectionResult newIntersection = complexMeshIntersection(vec3(0), normalize(directions[id.x * count + i]), complexScene[j]);
 
             if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length())) {
                 result = newIntersection;
             }
+
+            // result.intersects = true;
+            // result.point = vec3(1.0);
         }
 
         if (result.intersects){

@@ -12,6 +12,7 @@ SimEngine :: struct {
     computeShaderProgram : u32,
     scene : [dynamic]Geometry,
     complexScene : [dynamic]Geometry,
+    complexScene32 : []Geometry32,
     outputData : []glm.vec4
 }
 
@@ -57,6 +58,26 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     stopSign.model = identityModel * glm.mat4Translate({2.5, 0.0, 2.5});
     append(&engine.complexScene, stopSign)
 
+    complexScene32 := make([]Geometry32, len(engine.scene));
+    for i := 0; i < len(engine.complexScene); i += 1 {
+        cg : Geometry32;
+
+        cg.vertices = engine.complexScene[i].vertices
+        indices : [dynamic]int;
+
+        for j := 0; j < len(engine.complexScene[i].indices); j += 1 {
+            append(&indices, cast(int)engine.complexScene[i].indices[j]);
+        }
+
+        cg.indices = indices;
+        cg.model = engine.complexScene[i].model;
+        cg.gType = 100;
+
+        complexScene32[i] = cg;
+    }
+
+    engine.complexScene32 = complexScene32;
+
     fmt.println("Successfully initialized simulation engine.");
     return engine
 }
@@ -73,6 +94,14 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
         sg[i] = sgTemp
     }
 
+    complexSceneSize := 0
+    for i := 0; i < len(engine.complexScene32); i += 1 {
+        complexSceneSize += size_of(f32) * len(engine.complexScene32[i].vertices)
+        complexSceneSize += size_of(int) * len(engine.complexScene32[i].indices)
+        complexSceneSize += size_of(glm.mat4)
+        complexSceneSize += size_of(int)
+    }
+
     directions := make([]glm.vec4, 16)
 
     for i := 0; i < 16; i+=1 {
@@ -81,14 +110,6 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     }
 
     outputData := make([]glm.vec4, engine.sensor.packetSize);
-
-    complexSceneSize := 0
-
-    for i := 0; i < len(engine.complexScene); i += 1 {
-        complexSceneSize += size_of(engine.complexScene[i])
-    }
-
-    // fmt.println(gl.MAX_COMPUTE_WORK_GROUP_INVOCATIONS)
 
     inputBuffer, inputBuffer2, inputBuffer3, outputBuffer: u32;
     gl.GenBuffers(1, &inputBuffer); defer gl.DeleteBuffers(1, &inputBuffer);
@@ -103,13 +124,12 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 1, inputBuffer2);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(glm.vec4) * len(engine.sensor.directions), &engine.sensor.directions[0], gl.STATIC_DRAW);
 
-    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 2, outputBuffer);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);
-
-
     // There are definitely issues here with how the custom geoemtry is being loaded in... maybe pad the vertices to a fixed size? maybe struct padding?
-    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 3, inputBuffer3);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, complexSceneSize, &engine.complexScene[0], gl.STATIC_DRAW);
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 2, inputBuffer3);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER,complexSceneSize, &engine.complexScene32[0], gl.STATIC_DRAW);
+
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 3, outputBuffer);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);
 
     gl.UseProgram(engine.computeShaderProgram);
     gl.DispatchCompute(1, 1, 1);
