@@ -76,7 +76,11 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
         complexScene32[i] = cg;
     }
 
+
     engine.complexScene32 = complexScene32;
+
+
+    fmt.println(engine.complexScene32[0].indices);
 
     fmt.println("Successfully initialized simulation engine.");
     return engine
@@ -102,19 +106,14 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
         complexSceneSize += size_of(int)
     }
 
-    directions := make([]glm.vec4, 16)
-
-    for i := 0; i < 16; i+=1 {
-        angle : f32 = ((2 * math.PI)/16.0) * cast(f32)i
-        directions[i] = glm.vec4{math.cos(angle), 0.0, math.sin(angle), 0.0}
-    }
-
     outputData := make([]glm.vec4, engine.sensor.packetSize);
 
-    inputBuffer, inputBuffer2, inputBuffer3, outputBuffer: u32;
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer: u32;
     gl.GenBuffers(1, &inputBuffer); defer gl.DeleteBuffers(1, &inputBuffer);
     gl.GenBuffers(1, &inputBuffer2); defer gl.DeleteBuffers(1, &inputBuffer2);
     gl.GenBuffers(1, &inputBuffer3); defer gl.DeleteBuffers(1, &inputBuffer3);
+    gl.GenBuffers(1, &inputBuffer4); defer gl.DeleteBuffers(1, &inputBuffer4);
+    gl.GenBuffers(1, &inputBuffer5); defer gl.DeleteBuffers(1, &inputBuffer5);
 	gl.GenBuffers(1, &outputBuffer); defer gl.DeleteBuffers(1, &outputBuffer);
 
     // Load in scene geometry
@@ -128,7 +127,13 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 2, inputBuffer3);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER,complexSceneSize, &engine.complexScene32[0], gl.STATIC_DRAW);
 
-    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 3, outputBuffer);
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 3, inputBuffer4);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(f32) * len(engine.complexScene32[0].vertices), &(engine.complexScene32[0].vertices)[0], gl.STATIC_DRAW);
+
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 4, inputBuffer5);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(int) * len(engine.complexScene32[0].indices), &(engine.complexScene32[0].indices)[0], gl.STATIC_DRAW);
+
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 5, outputBuffer);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);
 
     gl.UseProgram(engine.computeShaderProgram);

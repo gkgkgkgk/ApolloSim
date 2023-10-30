@@ -27,7 +27,15 @@ layout(std430, binding = 2) buffer InputBuffer3 {
     ComplexGeometry complexScene[];
 };
 
-layout(std430, binding = 3) buffer OutputBuffer {
+layout(std430, binding = 3) buffer InputBuffer4 {
+    float vertices[];
+};
+
+layout(std430, binding = 4) buffer InputBuffer5 {
+    int indices[];
+};
+
+layout(std430, binding = 5) buffer OutputBuffer {
     vec3 outputData[];
 };
 
@@ -77,7 +85,8 @@ IntersectionResult rayBoxIntersection(vec3 rayOrigin, vec3 rayDirection, mat4 mo
     return result;
 }
 
-bool IntersectRayTriangle(vec3 rayOrigin, vec3 rayDirection, vec3 v0, vec3 v1, vec3 v2, inout IntersectionResult result) {
+IntersectionResult IntersectRayTriangle(vec3 rayOrigin, vec3 rayDirection, vec3 v0, vec3 v1, vec3 v2) {
+    IntersectionResult result = IntersectionResult(false, rayOrigin);
     vec3 edge1 = v1 - v0;
     vec3 edge2 = v2 - v0;
     vec3 h = cross(rayDirection, edge2);
@@ -85,7 +94,7 @@ bool IntersectRayTriangle(vec3 rayOrigin, vec3 rayDirection, vec3 v0, vec3 v1, v
 
     if (abs(a) < 1e-5) {
         result.intersects = false;
-        return false;
+        return result;
     }
 
     float f = 1.0 / a;
@@ -94,7 +103,7 @@ bool IntersectRayTriangle(vec3 rayOrigin, vec3 rayDirection, vec3 v0, vec3 v1, v
 
     if (u < 0.0 || u > 1.0) {
         result.intersects = false;
-        return false;
+        return result;
     }
 
     vec3 q = cross(s, edge1);
@@ -102,7 +111,7 @@ bool IntersectRayTriangle(vec3 rayOrigin, vec3 rayDirection, vec3 v0, vec3 v1, v
 
     if (v < 0.0 || u + v > 1.0) {
         result.intersects = false;
-        return false;
+        return result;
     }
 
     float t = f * dot(edge2, q);
@@ -110,35 +119,39 @@ bool IntersectRayTriangle(vec3 rayOrigin, vec3 rayDirection, vec3 v0, vec3 v1, v
     if (t > 1e-5) {
         result.intersects = true;
         result.point = rayOrigin + rayDirection * t;
-        return true;
+        return result;
     }
 
     result.intersects = false;
-    return false;
+    return result;
 }
 
 IntersectionResult complexMeshIntersection(vec3 rayOrigin, vec3 rayDirection, ComplexGeometry geometry) {
     IntersectionResult result = IntersectionResult(false, rayOrigin);
 
-    for (int i = 0; i < 256; i += 3) {
-        result.point = vec3(1.0);
-        result.intersects = true;
-        int i0 = geometry.indices[i];
-        int i1 = geometry.indices[i + 1];
-        int i2 = geometry.indices[i + 2];
+    for (int i = 0; i < 120; i += 3) {
+        int i0 = indices[i];
+        int i1 = indices[i + 1];
+        int i2 = indices[i + 2];
+
+        i0 = 0;
+        i1 = 1;
+        i2 = 2;
 
         if(i0 == i1 && i0 == i2){
             break;
         }
 
-        vec3 v0 = vec3(geometry.vertices[i0 * 5], geometry.vertices[i0 * 5 + 1], geometry.vertices[i0 * 5 + 2]);
-        vec3 v1 = vec3(geometry.vertices[i1 * 5], geometry.vertices[i1 * 5 + 1], geometry.vertices[i1 * 5 + 2]);
-        vec3 v2 = vec3(geometry.vertices[i2 * 5], geometry.vertices[i2 * 5 + 1], geometry.vertices[i2 * 5 + 2]);
+        vec3 v0 = (geometry.model * vec4(vertices[i0 * 5], vertices[i0 * 5 + 1], vertices[i0 * 5 + 2], 1)).xyz;
+        vec3 v1 = (geometry.model * vec4(vertices[i1 * 5], vertices[i1 * 5 + 1], vertices[i1 * 5 + 2], 1)).xyz;
+        vec3 v2 = (geometry.model * vec4(vertices[i2 * 5], vertices[i2 * 5 + 1], vertices[i2 * 5 + 2], 1)).xyz;
 
-        IntersectRayTriangle(rayOrigin, rayDirection, v0, v1, v2, result);
+        IntersectionResult newIntersection = IntersectRayTriangle(rayOrigin, rayDirection, v0, v1, v2);
+
+        if(newIntersection.intersects){
+            result = newIntersection;
+        }
     }
-
-
     
     return result;
 }
