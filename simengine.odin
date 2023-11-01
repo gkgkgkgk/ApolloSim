@@ -63,10 +63,10 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
         cg : Geometry32;
 
         cg.vertices = engine.complexScene[i].vertices
-        indices : [dynamic]int;
+        indices : [dynamic]i32;
 
         for j := 0; j < len(engine.complexScene[i].indices); j += 1 {
-            append(&indices, cast(int)engine.complexScene[i].indices[j]);
+            append(&indices, cast(i32)engine.complexScene[i].indices[j]);
         }
 
         cg.indices = indices;
@@ -131,7 +131,7 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(f32) * len(engine.complexScene32[0].vertices), &(engine.complexScene32[0].vertices)[0], gl.STATIC_DRAW);
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 4, inputBuffer5);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(int) * len(engine.complexScene32[0].indices), &(engine.complexScene32[0].indices)[0], gl.STATIC_DRAW);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(i32) * len(engine.complexScene32[0].indices), &(engine.complexScene32[0].indices)[0], gl.STATIC_DRAW);
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 5, outputBuffer);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);

@@ -134,10 +134,6 @@ IntersectionResult complexMeshIntersection(vec3 rayOrigin, vec3 rayDirection, Co
         int i1 = indices[i + 1];
         int i2 = indices[i + 2];
 
-        i0 = 0;
-        i1 = 1;
-        i2 = 2;
-
         if(i0 == i1 && i0 == i2){
             break;
         }
