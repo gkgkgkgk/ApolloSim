@@ -49,6 +49,10 @@ The backscattered waveform from a laser pulse depends on the transmitted wavefor
 
 ### Paper #10 [VALIDATION OF LIDAR CALIBRATION USING A LIDAR SIMULATOR](https://isprs-archives.copernicus.org/articles/XLIII-B1-2020/39/2020/isprs-archives-XLIII-B1-2020-39-2020.pdf)
 
+### Paper #11 [Measurement and modeling of Bidirectional Reflectance Distribution Function (BRDF) on material surface](https://www.sciencedirect.com/science/article/pii/S0263224113003072)
+
+### Paper #12 [DEVELOPMENT OF LIDAR MEASUREMENT SIMULATOR CONSIDERING TARGET SURFACE REFLECTION](https://conference.sdo.esoc.esa.int/proceedings/sdc8/paper/21/SDC8-paper21.pdf)
+
 #### Takeaways
 LiDAR pulse shape has an affect on the laser and how it behaves, and different shapes can be implemented in the simulation depending on the sensor that is being simulated.
 
