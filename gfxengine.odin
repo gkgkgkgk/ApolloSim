@@ -7,6 +7,7 @@ import "core:math"
 import "core:c"
 import "core:fmt"
 import "core:thread"
+import "core:math/rand"
 
 PROGRAMNAME :: "Program"
 
@@ -222,12 +223,12 @@ drawLasers:: proc(engine: SimEngine) {
         append(&vertices, 0)
         append(&vertices, 0)
         append(&vertices, 0)
-        append(&vertices, 0.5)
+        append(&vertices, lasers[i].w)
 
         append(&vertices, lasers[i].x)
         append(&vertices, lasers[i].y)
         append(&vertices, lasers[i].z)
-        append(&vertices, 1.0)
+        append(&vertices, lasers[i].w)
     }
 
     vbo, vao: u32;

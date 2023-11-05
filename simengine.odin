@@ -54,8 +54,8 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     cube2.model = identityModel * glm.mat4Translate({0.0, 0.0, 5.0});
     append(&engine.scene, cube2)
 
-    stopSign := customGeometry("./models/stopsign.obj")
-    stopSign.model = identityModel * glm.mat4Translate({2.5, 0.0, 2.5});
+    stopSign := customGeometry("./models/stopsignscale.obj")
+    stopSign.model = identityModel * glm.mat4Translate({2.5, 0, 2.5});
     append(&engine.complexScene, stopSign)
 
     complexScene32 := make([]Geometry32, len(engine.scene));
@@ -78,9 +78,6 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
 
 
     engine.complexScene32 = complexScene32;
-
-
-    fmt.println(engine.complexScene32[0].indices);
 
     fmt.println("Successfully initialized simulation engine.");
     return engine

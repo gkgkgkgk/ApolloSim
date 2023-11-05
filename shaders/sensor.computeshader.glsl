@@ -36,7 +36,7 @@ layout(std430, binding = 4) buffer InputBuffer5 {
 };
 
 layout(std430, binding = 5) buffer OutputBuffer {
-    vec3 outputData[];
+    vec4 outputData[];
 };
 
 struct IntersectionResult {
@@ -182,9 +182,9 @@ void main()
         }
 
         if (result.intersects){
-            outputData[id.x * count + i] = result.point;
+            outputData[id.x * count + i] = vec4(result.point, 0.5);
         } else {
-            outputData[id.x * count + i] = vec3(0);
+            outputData[id.x * count + i] = vec4(0);
         }
     }
 }

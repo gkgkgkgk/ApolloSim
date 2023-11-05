@@ -20,7 +20,7 @@ This paper gave a great outline for structuring a simulation. It does not work i
 DART (discrete anisotropic radiative transfer) is a radiative transfer model, which was designed for modeling the interactions between the Earth’s atmosphere and remote sensors. DART-Lux is a new model that integrates a Monte Carlo method into DART in order to increase the efficiency for simulating remote sensors such as LiDAR. These methods allow for both urban and natural sensing. 
 #### Takeaways
 This paper showed me that taking an existing model for something and applying it elsewhere can be very effective. DART is not necessarily made for LiDAR systems, but using a ray-tracing method it can be adapted for LiDARs in space. The advantage of DART is that it provides physical accuracy to the simulation.
-### Paper #5: Lidar Simulation for Robotic Application Development: Modeling and Evaluation
+### Paper #5: [Lidar Simulation for Robotic Application Development: Modeling and Evaluation](https://icave2.cse.buffalo.edu/resources/sensor-modeling/Lidar%20Simulation%20for%20Robotic%20Application.pdf)
 #### Summary
 This is a PHD paper that discusses a LiDAR and robotics simulator built for a course at Carnegie Mellon. They break up their simulator into three parts: sensor modeling, scene generation, and simulator evaluation. They take a parametric approach to the sensor modeling, and tune the parameters in order to match real-world data as closely as possible. However, tuning these sensors is useless unless the virtual world closely resembles the real world. In order to get a decent model, they use a data driven approach- by adjusting certain parameters and measuring against a data set, they can calculate proper parameters. The future work of this paper includes a few interesting things. This includes non-parametric modeling, which  is basically the use of neural-networks and trained models for the LiDAR model. They explain that a parametric model is sufficient for deciding on features or proper environments to use them in. However, for complex robotics simulations, non-parametric models may come in handy.
 
@@ -46,6 +46,8 @@ DART5 contains a few equations and theories that can be very important for build
 ### Paper #9: [Range determination with waveform recording laser systems using a Wiener Filter](https://www.sciencedirect.com/science/article/pii/S0924271606001080)
 #### Summary
 The backscattered waveform from a laser pulse depends on the transmitted waveform. In order to model the backscattered pulse, the transmitted pulse, spatial energy distribution and material properties of the surface must be specified. Various shapes, such as Gaussian, exponential, and rectangles can be used for the pulse. Pulses also have sptial energy distributions, which is how intense the laser is over the shape of the pulse. And finally, the backscattering can depend on the material and reflective properties of the object, as well as the atmospheric transmission of the wave. In this paper, a Wiener filter is used to estimate the surface function of the object in order to generate a backscatter waveform. 
+
+### Paper #10 [VALIDATION OF LIDAR CALIBRATION USING A LIDAR SIMULATOR](https://isprs-archives.copernicus.org/articles/XLIII-B1-2020/39/2020/isprs-archives-XLIII-B1-2020-39-2020.pdf)
 
 #### Takeaways
 LiDAR pulse shape has an affect on the laser and how it behaves, and different shapes can be implemented in the simulation depending on the sensor that is being simulated.
@@ -79,6 +81,7 @@ HELIOS+ structures each scene with the platform, which is where the sensor is at
 ## Questions / Thoughts
 * Each step of the simulation should be a moment in time- pick a fixed timestep to move the simulation, and then calculate the sensors response. The time it takes for the laser to propogate is too small for the sensor to process. Additionally, keep an eye on the RPLiDAR S3 for testing purposes. In terms of evaluation, setting up the most basic environment possible and checking the results would be a great first step. Then, you can compare the parametric model with noise, without noise, and the real data.
 * Related Work vs Background Information: Related work is other papers and project, how is mine similar/different, what did I learn from it. Background is something you need to understand to appreciate the work.
+* Interesting Idea: What if I made a program to automatically calibrate sensor noise? I can develop a benchmark material, and then make sure that ray drop / intensity values line up correctly.
 
 ## Why ApolloSim?
 First of all, the name Helios, the Greek god of the sun (specifically the rays of the sun), was taken by [HELIOS++](https://arxiv.org/pdf/2101.09154.pdf). I'm using a language called Odin for the first time, so I wanted to stick with the theme of a god's name; so I went with Apollo, the god of truth and prophecy, because people use simulations to see the future. 
