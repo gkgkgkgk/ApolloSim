@@ -87,6 +87,9 @@ HELIOS+ structures each scene with the platform, which is where the sensor is at
 
 ### Writing to an LAS file: [LAS File Format](https://www.asprs.org/wp-content/uploads/2019/03/LAS_1_4_r14.pdf)
 
+### BRDFs for Materials 
+What is a BRDF? A BRDF, or Bidirectional Reflectance Distribution Function, is a four dimensional function that defines how light reflects off of an opaque surface. A BRDF is a subset of a BSDF, or Bidirectional Surface Distribution Function. We only need the BRDF because we only care about how light is reflected back into the sensor. A BRDF considers the incoming light direction and the outgoing light direction. In addition, it takes into account the incident irradiance of the light source, as well as the reflected radiance of the material. In order to use the BRDF in the simulation, I need to get the incident angle of the light (relative to the surface normal) and the observation angle (from the detectors point of view). The BRDF function will determine the amount of light that the sensor gets back. Interestingly, there are various BRDF libraries, such as [this one](https://cdfg.csail.mit.edu/wojciech/brdfdatabase).
+
 ## Questions / Thoughts
 * Each step of the simulation should be a moment in time- pick a fixed timestep to move the simulation, and then calculate the sensors response. The time it takes for the laser to propogate is too small for the sensor to process. Additionally, keep an eye on the RPLiDAR S3 for testing purposes. In terms of evaluation, setting up the most basic environment possible and checking the results would be a great first step. Then, you can compare the parametric model with noise, without noise, and the real data.
 * Related Work vs Background Information: Related work is other papers and project, how is mine similar/different, what did I learn from it. Background is something you need to understand to appreciate the work.
