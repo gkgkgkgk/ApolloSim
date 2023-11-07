@@ -13,7 +13,8 @@ SimEngine :: struct {
     scene : [dynamic]Geometry,
     complexScene : [dynamic]Geometry,
     complexScene32 : []Geometry32,
-    outputData : []glm.vec4
+    outputData : []glm.vec4,
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer: u32
 }
 
 initializeSimEngine :: proc () -> Maybe(SimEngine) {
@@ -78,6 +79,21 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
 
 
     engine.complexScene32 = complexScene32;
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer: u32
+
+    gl.GenBuffers(1, &inputBuffer);
+    gl.GenBuffers(1, &inputBuffer2);
+    gl.GenBuffers(1, &inputBuffer3);
+    gl.GenBuffers(1, &inputBuffer4);
+    gl.GenBuffers(1, &inputBuffer5);
+	gl.GenBuffers(1, &outputBuffer);
+
+    engine.inputBuffer = inputBuffer;
+    engine.inputBuffer2 = inputBuffer2;
+    engine.inputBuffer3 = inputBuffer3;
+    engine.inputBuffer4 = inputBuffer4;
+    engine.inputBuffer5 = inputBuffer5;
+    engine.outputBuffer = outputBuffer;
 
     fmt.println("Successfully initialized simulation engine.");
     return engine
@@ -105,39 +121,31 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
 
     outputData := make([]glm.vec4, engine.sensor.packetSize);
 
-    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer: u32;
-    gl.GenBuffers(1, &inputBuffer); defer gl.DeleteBuffers(1, &inputBuffer);
-    gl.GenBuffers(1, &inputBuffer2); defer gl.DeleteBuffers(1, &inputBuffer2);
-    gl.GenBuffers(1, &inputBuffer3); defer gl.DeleteBuffers(1, &inputBuffer3);
-    gl.GenBuffers(1, &inputBuffer4); defer gl.DeleteBuffers(1, &inputBuffer4);
-    gl.GenBuffers(1, &inputBuffer5); defer gl.DeleteBuffers(1, &inputBuffer5);
-	gl.GenBuffers(1, &outputBuffer); defer gl.DeleteBuffers(1, &outputBuffer);
-
     // Load in scene geometry
-    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 0, inputBuffer);
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 0, engine.inputBuffer);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(sg) * size_of(SimpleGeometry), &sg[0], gl.STATIC_DRAW);
 
-    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 1, inputBuffer2);
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 1, engine.inputBuffer2);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(glm.vec4) * len(engine.sensor.directions), &engine.sensor.directions[0], gl.STATIC_DRAW);
 
     // There are definitely issues here with how the custom geoemtry is being loaded in... maybe pad the vertices to a fixed size? maybe struct padding?
-    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 2, inputBuffer3);
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 2, engine.inputBuffer3);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER,complexSceneSize, &engine.complexScene32[0], gl.STATIC_DRAW);
 
-    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 3, inputBuffer4);
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 3, engine.inputBuffer4);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(f32) * len(engine.complexScene32[0].vertices), &(engine.complexScene32[0].vertices)[0], gl.STATIC_DRAW);
 
-    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 4, inputBuffer5);
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 4, engine.inputBuffer5);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, size_of(i32) * len(engine.complexScene32[0].indices), &(engine.complexScene32[0].indices)[0], gl.STATIC_DRAW);
 
-    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 5, outputBuffer);
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 5, engine.outputBuffer);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);
 
     gl.UseProgram(engine.computeShaderProgram);
     gl.DispatchCompute(1, 1, 1);
     gl.MemoryBarrier(gl.ALL_BARRIER_BITS);
 
-    gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, outputBuffer);
+    gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, engine.outputBuffer);
     gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0])
 
     cube := engine.scene[0]
