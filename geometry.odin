@@ -5,6 +5,8 @@ import "core:math"
 import glm "core:math/linalg/glsl"
 import "core:os"
 import "core:strconv"
+import stb "vendor:stb/image"
+import "core:strings"
 
 GeometryType:: enum {
     cube,
@@ -17,7 +19,9 @@ Geometry :: struct {
     vertices: [dynamic]f32,
     indices: [dynamic]u16,
     model : glm.mat4,
-    gType : int
+    gType : int,
+    texturePath : string,
+    texture : u32
 }
 
 Geometry32 :: struct {
@@ -148,8 +152,25 @@ drawGeometryWithIndices :: proc (geometry : Geometry) {
 
     gl.BindBuffer(gl.ARRAY_BUFFER, 0);
 
+    gl.BindTexture(gl.TEXTURE_2D, geometry.texture);
+
     gl.DrawElements(gl.TRIANGLES, cast(i32)len(geometry.indices), gl.UNSIGNED_SHORT, nil);
+
     gl.BindVertexArray(0);
+}
+
+addTexture :: proc (geometry : Geometry, path : string) -> Geometry {
+    width, height, nrChannels : i32;
+    data := stb.load(strings.clone_to_cstring(path), &width, &height, &nrChannels, 0);
+    texture : u32;
+    gl.GenTextures(1, &texture);
+    gl.BindTexture(gl.TEXTURE_2D, texture);
+    gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGB, width, height, 0, gl.RGB, gl.UNSIGNED_BYTE, data);
+    gl.GenerateMipmap(gl.TEXTURE_2D);
+    geometry := geometry;
+    geometry.texture = texture;
+
+    return geometry;
 }
 
 /* CUSTOM GEOMETRY LOADER */
