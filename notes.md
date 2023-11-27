@@ -58,6 +58,10 @@ A BRDF, or Bidirectional Reflectance Distribution Function is a parameterised de
 ### Paper #12 [DEVELOPMENT OF LIDAR MEASUREMENT SIMULATOR CONSIDERING TARGET SURFACE REFLECTION](https://conference.sdo.esoc.esa.int/proceedings/sdc8/paper/21/SDC8-paper21.pdf)
 This paper employs a LIDAR simulation to evaluate navigation algorithms of remote sensors. The reflectance of the LIDAR lasers is important to measure the intensity of the signal. This paper uses a BRDF to obtain the intensity values. The scan pattern of the LIDAR is very unique to the LIDAR model. Six materials that were commenly used on rocket bodies were selected. They were also able to detect the material based on the output data of the LIDAR.
 
+### Paper #13 [A GPU-Accelerated Framework for Simulating LiDAR Scanning](https://www.researchgate.net/publication/359804842_A_GPU-accelerated_framework_for_simulating_LiDAR_scanning)
+
+### Paper #13 [Physics-based Simulation of Continuous-Wave LIDAR for Localization, Calibration and Tracking](https://arxiv.org/abs/1912.01652)
+
 #### Takeaways
 LiDAR pulse shape has an affect on the laser and how it behaves, and different shapes can be implemented in the simulation depending on the sensor that is being simulated.
 
@@ -89,6 +93,9 @@ HELIOS+ structures each scene with the platform, which is where the sensor is at
 
 ### BRDFs for Materials 
 What is a BRDF? A BRDF, or Bidirectional Reflectance Distribution Function, is a four dimensional function that defines how light reflects off of an opaque surface. A BRDF is a subset of a BSDF, or Bidirectional Surface Distribution Function. We only need the BRDF because we only care about how light is reflected back into the sensor. A BRDF considers the incoming light direction and the outgoing light direction. In addition, it takes into account the incident irradiance of the light source, as well as the reflected radiance of the material. In order to use the BRDF in the simulation, I need to get the incident angle of the light (relative to the surface normal) and the observation angle (from the detectors point of view). The BRDF function will determine the amount of light that the sensor gets back. Interestingly, there are various BRDF libraries, such as [this one](https://cdfg.csail.mit.edu/wojciech/brdfdatabase).
+
+### Characterizing LIDAR Noise
+What defines the noise in the LIDAR data? Mainly, the intensity of the point values is what causes noise in a LIDSAR simulation. Raydrop happens when the intensity of a point is reduced to zero, which means that that inital laser beam never returns to the sensor [see LIDARsim]. Let's say we define a BRDF, which is an equation that returns the total reflectance of light given the incoming and outgoing light direction for a given material.
 
 ## Questions / Thoughts
 * Each step of the simulation should be a moment in time- pick a fixed timestep to move the simulation, and then calculate the sensors response. The time it takes for the laser to propogate is too small for the sensor to process. Additionally, keep an eye on the RPLiDAR S3 for testing purposes. In terms of evaluation, setting up the most basic environment possible and checking the results would be a great first step. Then, you can compare the parametric model with noise, without noise, and the real data.
