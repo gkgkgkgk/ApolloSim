@@ -59,8 +59,12 @@ A BRDF, or Bidirectional Reflectance Distribution Function is a parameterised de
 This paper employs a LIDAR simulation to evaluate navigation algorithms of remote sensors. The reflectance of the LIDAR lasers is important to measure the intensity of the signal. This paper uses a BRDF to obtain the intensity values. The scan pattern of the LIDAR is very unique to the LIDAR model. Six materials that were commenly used on rocket bodies were selected. They were also able to detect the material based on the output data of the LIDAR.
 
 ### Paper #13 [A GPU-Accelerated Framework for Simulating LiDAR Scanning](https://www.researchgate.net/publication/359804842_A_GPU-accelerated_framework_for_simulating_LiDAR_scanning)
+#### Summary
+This paper presents a parameterized LIDAR simulation built with OpenGL compute shaders. The goal of this simulator was specifically to generate massive datasets for neural networks. "The objective of recent work in this field is to generate visually plausible results. However, they are mainly based on perfect ray-casters [4], [19] rather than physically accurate sensors." For the virtual environment, they created their own forest scene from scratch with other people's CAD models and a custom terrain generator. They are also specifically preparing the data for models that do semantic segmentation, so the various parts of the forest need to be labeled appropriately. They use a BRDF to model the sensor errors. For each ray, there are a certain amount of pulses, which determine the total energy of the beam. This helps determine the intensity values later on. They use [this](https://cadxfem.org/inf/Fast%20MinimumStorage%20RayTriangle%20Intersection.pdf) to find the triangle and ray intersections. They used a different BRDF for each material depending on the type of material (Lambertian on water, Cook-Torrance on buildings, etc).
 
 ### Paper #13 [Physics-based Simulation of Continuous-Wave LIDAR for Localization, Calibration and Tracking](https://arxiv.org/abs/1912.01652)
+#### Summary
+This paper implements BRDF for reflections with a LIDAR simulation. They implemented the Oren-Nayar model, which is more specific than the Lambertian model, which most LIDAR models assume.
 
 #### Takeaways
 LiDAR pulse shape has an affect on the laser and how it behaves, and different shapes can be implemented in the simulation depending on the sensor that is being simulated.
@@ -94,6 +98,9 @@ HELIOS+ structures each scene with the platform, which is where the sensor is at
 ### BRDFs for Materials 
 What is a BRDF? A BRDF, or Bidirectional Reflectance Distribution Function, is a four dimensional function that defines how light reflects off of an opaque surface. A BRDF is a subset of a BSDF, or Bidirectional Surface Distribution Function. We only need the BRDF because we only care about how light is reflected back into the sensor. A BRDF considers the incoming light direction and the outgoing light direction. In addition, it takes into account the incident irradiance of the light source, as well as the reflected radiance of the material. In order to use the BRDF in the simulation, I need to get the incident angle of the light (relative to the surface normal) and the observation angle (from the detectors point of view). The BRDF function will determine the amount of light that the sensor gets back. Interestingly, there are various BRDF libraries, such as [this one](https://cdfg.csail.mit.edu/wojciech/brdfdatabase).
 
+### Oren-Nayar light model
+The Oren-Nayar light model is a diffuse relfection model that uses a Gaussian distribution to calculate the reflectance of a rough surface, given a the incoming/outgoing angles and the surface roughness.
+
 ### Characterizing LIDAR Noise
 What defines the noise in the LIDAR data? Mainly, the intensity of the point values is what causes noise in a LIDSAR simulation. Raydrop happens when the intensity of a point is reduced to zero, which means that that inital laser beam never returns to the sensor [see LIDARsim]. Let's say we define a BRDF, which is an equation that returns the total reflectance of light given the incoming and outgoing light direction for a given material.
 
@@ -101,6 +108,13 @@ What defines the noise in the LIDAR data? Mainly, the intensity of the point val
 * Each step of the simulation should be a moment in time- pick a fixed timestep to move the simulation, and then calculate the sensors response. The time it takes for the laser to propogate is too small for the sensor to process. Additionally, keep an eye on the RPLiDAR S3 for testing purposes. In terms of evaluation, setting up the most basic environment possible and checking the results would be a great first step. Then, you can compare the parametric model with noise, without noise, and the real data.
 * Related Work vs Background Information: Related work is other papers and project, how is mine similar/different, what did I learn from it. Background is something you need to understand to appreciate the work.
 * Interesting Idea: What if I made a program to automatically calibrate sensor noise? I can develop a benchmark material, and then make sure that ray drop / intensity values line up correctly.
+* How will I implement the calibration? Given a known material, I can collect the average intensity, minimum intensity, maximum intensity, the standard deviation, and more. Then, in simulation, I can detect the material and use the baseline intensity, and use the noise distribution to disperse outliers (take note of the various exceptions that must be made due to the various lighting models, particularly with glossy surfaces). Now that I can generate the data for known materials, I can attempt to generate for unknown materials by lerping between similar materials (perhaps a chalkboard is somewhere between wood and concrete).
+
+## Implementation
+### Graphcis Engine
+### Scene Generation 
+### Physics Calculation
+### Calibration
 
 ## Why ApolloSim?
 First of all, the name Helios, the Greek god of the sun (specifically the rays of the sun), was taken by [HELIOS++](https://arxiv.org/pdf/2101.09154.pdf). I'm using a language called Odin for the first time, so I wanted to stick with the theme of a god's name; so I went with Apollo, the god of truth and prophecy, because people use simulations to see the future. 
