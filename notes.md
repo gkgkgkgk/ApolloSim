@@ -109,6 +109,7 @@ What defines the noise in the LIDAR data? Mainly, the intensity of the point val
 * Related Work vs Background Information: Related work is other papers and project, how is mine similar/different, what did I learn from it. Background is something you need to understand to appreciate the work.
 * Interesting Idea: What if I made a program to automatically calibrate sensor noise? I can develop a benchmark material, and then make sure that ray drop / intensity values line up correctly.
 * How will I implement the calibration? Given a known material, I can collect the average intensity, minimum intensity, maximum intensity, the standard deviation, and more. Then, in simulation, I can detect the material and use the baseline intensity, and use the noise distribution to disperse outliers (take note of the various exceptions that must be made due to the various lighting models, particularly with glossy surfaces). Now that I can generate the data for known materials, I can attempt to generate for unknown materials by lerping between similar materials (perhaps a chalkboard is somewhere between wood and concrete).
+* Check out this book: https://www.sciencedirect.com/book/9780125444224/handbook-of-optical-constants-of-solids
 
 ## Implementation
 ### Graphcis Engine
