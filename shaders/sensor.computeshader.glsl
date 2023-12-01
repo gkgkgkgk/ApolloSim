@@ -6,6 +6,7 @@ struct Material
     float averageIntensity;
     float maxIntensity;
     float minIntensity;
+    float dropRate;
 };
 
 struct SimpleGeometry

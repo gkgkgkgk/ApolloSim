@@ -35,7 +35,8 @@ Geometry32 :: struct {
 Material :: struct {
     averageIntensity: f32,
     maxIntensity: f32,
-    minIntensity: f32
+    minIntensity: f32,
+    dropRate: f32
 }
 
 SimpleGeometry :: struct {
