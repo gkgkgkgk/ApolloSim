@@ -14,7 +14,7 @@ SimEngine :: struct {
     complexScene : [dynamic]Geometry,
     complexScene32 : []Geometry32,
     outputData : []glm.vec4,
-    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer: u32
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6: u32
 }
 
 initializeSimEngine :: proc () -> Maybe(SimEngine) {
@@ -49,11 +49,13 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
 
     cube := createCube();
     cube.model = identityModel * glm.mat4Translate({1.0, 0.0, 0.0});
+    cube.material = createMaterial(0.1, 0.75, 0.25);
     cube = addTexture(cube, "./textures/concrete.jpg");
     append(&engine.scene, cube);
 
     cube2 := createCube();
     cube2.model = identityModel * glm.mat4Translate({0.0, 0.0, 5.0});
+    cube2.material = createMaterial(0.9, 0.75, 0.25);
     append(&engine.scene, cube2)
 
     stopSign := customGeometry("./models/stopsignscale.obj")
@@ -78,9 +80,8 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
         complexScene32[i] = cg;
     }
 
-
     engine.complexScene32 = complexScene32;
-    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer: u32
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6: u32
 
     gl.GenBuffers(1, &inputBuffer);
     gl.GenBuffers(1, &inputBuffer2);
@@ -88,6 +89,7 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     gl.GenBuffers(1, &inputBuffer4);
     gl.GenBuffers(1, &inputBuffer5);
 	gl.GenBuffers(1, &outputBuffer);
+	gl.GenBuffers(1, &inputBuffer6);
 
     engine.inputBuffer = inputBuffer;
     engine.inputBuffer2 = inputBuffer2;
@@ -95,6 +97,7 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     engine.inputBuffer4 = inputBuffer4;
     engine.inputBuffer5 = inputBuffer5;
     engine.outputBuffer = outputBuffer;
+    engine.inputBuffer6 = inputBuffer6;
 
     fmt.println("Successfully initialized simulation engine.");
     return engine
@@ -104,11 +107,16 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     engine := engine
 
     sg := make([]SimpleGeometry, len(engine.scene));
+    materials := make([]Material, len(engine.scene));
 
     for i := 0; i < len(engine.scene); i+=1 {
         sgTemp : SimpleGeometry
         sgTemp.model = engine.scene[i].model
-        sgTemp.gType = engine.scene[i].gType
+        sgTemp.gType = cast(i32)engine.scene[i].gType
+
+        materials[i] = engine.scene[i].material;
+        sgTemp.material = cast(i32)i;
+
         sg[i] = sgTemp
     }
 
@@ -141,6 +149,9 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 5, engine.outputBuffer);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);
+
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 6, engine.inputBuffer6);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(materials) * size_of(Material), &materials[0], gl.STATIC_DRAW);
 
     gl.UseProgram(engine.computeShaderProgram);
     gl.DispatchCompute(1, 1, 1);

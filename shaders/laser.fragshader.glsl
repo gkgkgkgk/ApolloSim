@@ -8,5 +8,5 @@ void main() {
     float green = 1.0 - fragIntensity;
     float blue = fragIntensity;
 
-    FragColor = vec4(0, green, blue, 1.0);
+    FragColor = vec4(0, green, blue, fragIntensity);
 }

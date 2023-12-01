@@ -1,10 +1,18 @@
 #version 460 core
 layout (local_size_x = 16, local_size_y = 1, local_size_z = 1) in;
 
+struct Material 
+{
+    float averageIntensity;
+    float maxIntensity;
+    float minIntensity;
+};
+
 struct SimpleGeometry
 {
     mat4 model;
     int gType;
+    int material;
 };
 
 struct ComplexGeometry
@@ -39,14 +47,20 @@ layout(std430, binding = 5) buffer OutputBuffer {
     vec4 outputData[];
 };
 
+layout(std430, binding = 6) buffer InputBuffer6 {
+    Material materials[];
+};
+
 struct IntersectionResult {
     bool intersects;
     vec3 point;
     float intensity;
 };
 
-IntersectionResult rayBoxIntersection(vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix) {
+IntersectionResult rayBoxIntersection(vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix, int material) {
     IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0);
+    result.intensity = materials[material].averageIntensity;
+
     vec3 position = modelMatrix[3].xyz;
     float cubeHalfSize = length(modelMatrix[0].xyz) * 0.5;
     
@@ -130,7 +144,7 @@ IntersectionResult IntersectRayTriangle(vec3 rayOrigin, vec3 rayDirection, vec3 
 IntersectionResult complexMeshIntersection(vec3 rayOrigin, vec3 rayDirection, ComplexGeometry geometry) {
     IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0);
 
-    for (int i = 0; i < 120; i += 3) {
+    for (int i = 0; i < vertices.length(); i += 3) {
         int i0 = indices[i];
         int i1 = indices[i + 1];
         int i2 = indices[i + 2];
@@ -162,12 +176,12 @@ void main()
     uvec3 id = gl_LocalInvocationID;
     int count = directions.length()/16;
     for(int i = 0; i < count; i++){
-        IntersectionResult result = IntersectionResult(false, vec3(10000000.0), 0.0);
+        IntersectionResult result = IntersectionResult(false, vec3(10000000.0), 0.5);
 
         for(int j = 0; j < scene.length(); j++){
-            IntersectionResult newIntersection = rayBoxIntersection(vec3(0), normalize(directions[id.x * count + i]), scene[j].model);
+            IntersectionResult newIntersection = rayBoxIntersection(vec3(0), normalize(directions[id.x * count + i]), scene[j].model, scene[j].material);
 
-            if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length()) && scene[j].gType == 6) {
+            if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length())) {
                 result = newIntersection;
             }
         }
@@ -177,10 +191,9 @@ void main()
 
             if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length())) {
                 result = newIntersection;
+                result.intensity = 0.5;
             }
         }
-
-        result.intensity = intensity(result);
 
         if (result.intersects){
             outputData[id.x * count + i] = vec4(result.point, result.intensity);

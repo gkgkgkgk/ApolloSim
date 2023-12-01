@@ -20,8 +20,9 @@ Geometry :: struct {
     indices: [dynamic]u16,
     model : glm.mat4,
     gType : int,
+    material: Material,
     texturePath : string,
-    texture : u32
+    texture : u32,
 }
 
 Geometry32 :: struct {
@@ -31,9 +32,16 @@ Geometry32 :: struct {
     indices: [dynamic]i32,
 }
 
+Material :: struct {
+    averageIntensity: f32,
+    maxIntensity: f32,
+    minIntensity: f32
+}
+
 SimpleGeometry :: struct {
     model : glm.mat4,
-    gType : int
+    gType : i32,
+    material : i32
 }
 
 createCube :: proc () -> Geometry {
@@ -108,6 +116,15 @@ createCylinder :: proc () -> Geometry {
     cylinder.gType = 1;
 
     return cylinder;
+}
+
+createMaterial :: proc (average:f32, max:f32, min:f32) -> Material {
+    m : Material;
+    m.averageIntensity = average;
+    m.maxIntensity = max;
+    m.minIntensity = min;
+
+    return m;
 }
 
 drawGeometry :: proc (geometry : Geometry) {
