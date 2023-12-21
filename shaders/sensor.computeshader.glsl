@@ -1,6 +1,19 @@
 #version 460 core
 layout (local_size_x = 16, local_size_y = 1, local_size_z = 1) in;
 
+uniform float u_time;
+
+// RANDOM FUNCTIONS
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+bool dropsRay(vec2 co, float dropRate){
+    float randomValue = rand(co);
+    return randomValue < dropRate ? true : false;;
+}
+
+// STRUCTS
 struct Material 
 {
     float averageIntensity;
@@ -24,6 +37,13 @@ struct ComplexGeometry
     int indices[120];
 };
 
+struct IntersectionResult {
+    bool intersects;
+    vec3 point;
+    float intensity;
+};
+
+// INPUT/OUTPUT LAYOUTS
 layout(std430, binding = 0) buffer InputBuffer {
     SimpleGeometry scene[];
 };
@@ -52,15 +72,14 @@ layout(std430, binding = 6) buffer InputBuffer6 {
     Material materials[];
 };
 
-struct IntersectionResult {
-    bool intersects;
-    vec3 point;
-    float intensity;
-};
-
-IntersectionResult rayBoxIntersection(vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix, int material) {
+IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix, int material) {
     IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0);
     result.intensity = materials[material].averageIntensity;
+
+    if(dropsRay(vec2(u_time) + rayId, materials[material].dropRate)){
+        result.intensity = 0;
+    }
+
 
     vec3 position = modelMatrix[3].xyz;
     float cubeHalfSize = length(modelMatrix[0].xyz) * 0.5;
@@ -142,7 +161,7 @@ IntersectionResult IntersectRayTriangle(vec3 rayOrigin, vec3 rayDirection, vec3 
     return result;
 }
 
-IntersectionResult complexMeshIntersection(vec3 rayOrigin, vec3 rayDirection, ComplexGeometry geometry) {
+IntersectionResult complexMeshIntersection(int rayId, vec3 rayOrigin, vec3 rayDirection, ComplexGeometry geometry) {
     IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0);
 
     for (int i = 0; i < vertices.length(); i += 3) {
@@ -168,19 +187,17 @@ IntersectionResult complexMeshIntersection(vec3 rayOrigin, vec3 rayDirection, Co
     return result;
 }
 
-float intensity(IntersectionResult result){
-    return sin(result.point.x * 100.0);
-}
-
 void main()
 {
     uvec3 id = gl_LocalInvocationID;
     int count = directions.length()/16;
     for(int i = 0; i < count; i++){
+        int rayId = int(id.x) + 10*int(id.y) + 100 * int(id.z) + 1000 * i;
+
         IntersectionResult result = IntersectionResult(false, vec3(10000000.0), 0.5);
 
         for(int j = 0; j < scene.length(); j++){
-            IntersectionResult newIntersection = rayBoxIntersection(vec3(0), normalize(directions[id.x * count + i]), scene[j].model, scene[j].material);
+            IntersectionResult newIntersection = rayBoxIntersection(rayId, vec3(0), normalize(directions[id.x * count + i]), scene[j].model, scene[j].material);
 
             if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length())) {
                 result = newIntersection;
@@ -188,7 +205,7 @@ void main()
         }
 
         for(int j = 0; j < complexScene.length(); j++){
-            IntersectionResult newIntersection = complexMeshIntersection(vec3(0), normalize(directions[id.x * count + i]), complexScene[j]);
+            IntersectionResult newIntersection = complexMeshIntersection(rayId, vec3(0), normalize(directions[id.x * count + i]), complexScene[j]);
 
             if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length())) {
                 result = newIntersection;

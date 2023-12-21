@@ -119,11 +119,12 @@ createCylinder :: proc () -> Geometry {
     return cylinder;
 }
 
-createMaterial :: proc (average:f32, max:f32, min:f32) -> Material {
+createMaterial :: proc (average:f32, max:f32, min:f32, dropRate:f32) -> Material {
     m : Material;
     m.averageIntensity = average;
     m.maxIntensity = max;
     m.minIntensity = min;
+    m.dropRate = dropRate;
 
     return m;
 }

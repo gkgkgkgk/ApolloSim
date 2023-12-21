@@ -5,6 +5,7 @@ import "core:strings"
 import gl "vendor:OpenGL"
 import glm "core:math/linalg/glsl"
 import "core:math"
+import "core:time"
 
 SimEngine :: struct {
     steps : int,
@@ -49,13 +50,13 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
 
     cube := createCube();
     cube.model = identityModel * glm.mat4Translate({1.0, 0.0, 0.0});
-    cube.material = createMaterial(0.1, 0.75, 0.25);
+    cube.material = createMaterial(0.1, 0.75, 0.25, 0.5);
     cube = addTexture(cube, "./textures/concrete.jpg");
     append(&engine.scene, cube);
 
     cube2 := createCube();
     cube2.model = identityModel * glm.mat4Translate({0.0, 0.0, 5.0});
-    cube2.material = createMaterial(0.9, 0.75, 0.25);
+    cube2.material = createMaterial(0.9, 0.75, 0.25, 0.000001);
     append(&engine.scene, cube2)
 
     stopSign := customGeometry("./models/stopsignscale.obj")
@@ -153,7 +154,10 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 6, engine.inputBuffer6);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(materials) * size_of(Material), &materials[0], gl.STATIC_DRAW);
 
+    timeUniformLocation := gl.GetUniformLocation(engine.computeShaderProgram, "u_time");
+
     gl.UseProgram(engine.computeShaderProgram);
+    gl.Uniform1f(timeUniformLocation, cast(f32)(time.to_unix_nanoseconds(time.now()) % 100000));
     gl.DispatchCompute(1, 1, 1);
     gl.MemoryBarrier(gl.ALL_BARRIER_BITS);
 
@@ -161,7 +165,7 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0])
 
     cube := engine.scene[0]
-    cube.model = identityModel * glm.mat4Translate({2 * math.cos(cast(f32)engine.steps * 0.05), 0.0, 2 * math.sin(cast(f32)engine.steps * 0.05)});
+    cube.model = identityModel * glm.mat4Translate({2 * math.cos(cast(f32)engine.steps * 0.0005), 0.0, 2 * math.sin(cast(f32)engine.steps * 0.0005)});
     engine.scene[0] = cube
 
     engine.outputData = outputData
