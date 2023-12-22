@@ -10,7 +10,8 @@ float rand(vec2 co){
 
 bool dropsRay(vec2 co, float dropRate){
     float randomValue = rand(co);
-    return randomValue < dropRate ? true : false;;
+    return false;
+    return randomValue < dropRate ? true : false;
 }
 
 // STRUCTS

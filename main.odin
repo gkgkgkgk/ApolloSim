@@ -1,6 +1,7 @@
 package main
 import "core:fmt"
 import "core:c"
+import "core:os"
 import gl "vendor:OpenGL"
 import "vendor:glfw"
 import glm "core:math/linalg/glsl"
@@ -11,6 +12,20 @@ mousePos : glm.vec2 = glm.vec2{0.0, 0.0};
 mouseMovement : glm.vec2 = glm.vec2{0.0, 0.0};
 
 main :: proc() {
+	args := os.args;
+
+	if(args[1] == "calibrate"){
+		calibrate();
+	}
+
+	fmt.println("Launch Simulation? (y or n)");
+    launch := readInput(os.stdin);
+	fmt.println(launch);
+	if(launch != "y"){
+		return;
+	}
+
+
 	gfxEngine, gfxEngineSuccess := initializeGFXEngine().?;
 
 	if !gfxEngineSuccess {
