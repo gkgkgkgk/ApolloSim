@@ -5,6 +5,7 @@ import "core:os"
 import gl "vendor:OpenGL"
 import "vendor:glfw"
 import glm "core:math/linalg/glsl"
+import "core:strings"
 
 running : b32 = true;
 
@@ -14,17 +15,15 @@ mouseMovement : glm.vec2 = glm.vec2{0.0, 0.0};
 main :: proc() {
 	args := os.args;
 
-	if(args[1] == "calibrate"){
+	if len(args) > 1 && args[1] == "calibrate" {
 		calibrate();
-	}
+		fmt.println("Launch Simulation? (y or n)");
+		launch := readInput(os.stdin);
 
-	fmt.println("Launch Simulation? (y or n)");
-    launch := readInput(os.stdin);
-	fmt.println(launch);
-	if(launch != "y"){
-		return;
+		if(!strings.has_prefix(launch, "y")){
+			return;
+		}
 	}
-
 
 	gfxEngine, gfxEngineSuccess := initializeGFXEngine().?;
 

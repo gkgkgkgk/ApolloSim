@@ -1,14 +1,14 @@
 package main
 import "core:fmt"
 import "core:os"
+import "core:strings"
 
 calibrate :: proc() {
     fmt.println("Is this a real calibration (y) or a simulated one (n)?")
     real := readInput(os.stdin)
     
-    if(real == "y"){
+    if(strings.has_prefix(real, "y")){
         fmt.println("Please Enter Clibration Time")
-        readInput(os.stdin)
     }
     else {
         fmt.println("Calibration data generated.")
@@ -23,7 +23,8 @@ readInput :: proc(input: os.Handle) -> string {
 		// Handle error
 		return ""
 	}
-	str := string(buf[:n])
 
-	return str;
+	str := strings.clone_from_bytes(buf[:n]);
+
+	return strings.trim(str, "\n");
 }
