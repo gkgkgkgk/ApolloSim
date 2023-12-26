@@ -11,20 +11,18 @@ calibrate :: proc() {
         fmt.println("Please Enter Clibration Time")
     }
     else {
+        generateFakeCalibrationData();
         fmt.println("Calibration data generated.")
     }
     
 }
 
-readInput :: proc(input: os.Handle) -> string {
-	buf: [256]byte
-	n, err := os.read(os.stdin, buf[:])
-	if err < 0 {
-		// Handle error
-		return ""
-	}
+generateFakeCalibrationData :: proc() {
+    f := createBlankFile("./data.txt");
 
-	str := strings.clone_from_bytes(buf[:n]);
+    for i := 0; i < 1600; i += 1 {
+        str := "hi :)";
+        appendLine(f, str);
+    }
 
-	return strings.trim(str, "\n");
 }
