@@ -9,13 +9,24 @@ calibrate :: proc() {
     real := readInput(os.stdin)
     
     if(strings.has_prefix(real, "y")){
-        fmt.println("Please Enter Clibration Time")
+        fmt.println("Please Enter Calibration Time")
     }
     else {
         generateFakeCalibrationData();
         fmt.println("Calibration data generated.")
     }
-    
+
+    analyzeData();
+}
+
+laserData :: struct {
+    angle : f32,
+    distance : f32,
+    intensity : f32
+}
+
+analyzeData :: proc () {
+    data := getEntireFile("./data.txt")
 }
 
 generateFakeCalibrationData :: proc() {
@@ -28,7 +39,6 @@ generateFakeCalibrationData :: proc() {
         floatStr := strconv.ftoa(buf[:], angularRes * cast(f64)i, 'g', 6, 64)
 
         str := strings.join({"1.0", "0.5", floatStr}, ",");
-        fmt.println(str)
         appendLine(f, str);
     }
 

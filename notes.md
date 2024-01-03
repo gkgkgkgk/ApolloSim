@@ -69,6 +69,10 @@ This paper implements BRDF for reflections with a LIDAR simulation. They impleme
 #### Takeaways
 LiDAR pulse shape has an affect on the laser and how it behaves, and different shapes can be implemented in the simulation depending on the sensor that is being simulated.
 
+### Paper #14 [Sensor Calibration and Simulation](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=3aa4f4e761c50fc2742551cebd0fccdf76bcc18b)
+
+### Paper #15 [Blensor](https://www.blensor.org/misc/downloads/Gschwandtner11b.pdf)
+"This is in fact closely related to ray-tracing techniques in computer graphics." They use a normal distribution with a mean and a variance, which is a fair approach for me. They also take into account the BRDF of the material in the blend file.
 
 ## Notes & Annotations
 ### Scan Patterns

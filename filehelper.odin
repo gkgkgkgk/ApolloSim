@@ -28,3 +28,13 @@ createBlankFile :: proc(file : string) -> os.Handle{
 
     return f;
 }
+
+getEntireFile :: proc (file : string) -> Maybe(string) {
+	f, b := os.read_entire_file_from_filename(file)
+    
+	if (b){
+		return string(f);
+	} else {
+		return nil;
+	}
+}
