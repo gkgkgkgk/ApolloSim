@@ -3,6 +3,7 @@ import "core:fmt"
 import "core:os"
 import "core:strings"
 import "core:strconv"
+import "core:math"
 
 calibrate :: proc() {
     fmt.println("Is this a real calibration (y) or a simulated one (n)?")
@@ -28,7 +29,9 @@ laserData :: struct {
 
 materialData :: struct {
     material : string,
-    lasers : [dynamic]laserData
+    lasers : [dynamic]laserData,
+    mean : f32,
+    stdev : f32
 }
 
 parseLaser :: proc(line : string) -> Maybe(laserData) {
@@ -45,6 +48,28 @@ parseLaser :: proc(line : string) -> Maybe(laserData) {
     }
     
     return nil;
+}
+
+stdev :: proc (list : [dynamic]f32) -> f32 {
+    mean : f32 = 0.0;
+    sum : f32 = 0.0;
+    std : f32 = 0.0;
+
+    n := len(list);
+
+    for i := 0; i < n; i += 1 {
+        sum += list[i];
+    }
+
+    mean = sum / f32(n)
+
+    for i := 0; i < n; i += 1 {
+        std += math.pow(list[i] - mean, 2.0)
+    }
+
+    std = math.sqrt(std / f32(n))
+
+    return std
 }
 
 analyzeData :: proc () {
@@ -67,7 +92,7 @@ analyzeData :: proc () {
             mat.material = laser.material
             mat.lasers = {laser}
             materials[laser.material] = mat
-        } else {
+        } else if(success){
             mat := materials[laser.material]
             lasers := materials[laser.material].lasers
             append(&lasers, laser)
@@ -77,7 +102,20 @@ analyzeData :: proc () {
         
     }
 
-    fmt.println(materials)
+    for material in materials {
+        m := materials[material]
+        total : f32 = 0.0;
+        intensities : [dynamic]f32;
+
+        for laser in m.lasers {
+            total += laser.intensity;
+            append(&intensities, laser.intensity)
+        }
+
+        m.mean = total / f32(len(m.lasers));
+        m.stdev = stdev(intensities)
+        materials[material] = m
+    }
 }
 
 generateFakeCalibrationData :: proc() {
