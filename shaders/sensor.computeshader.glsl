@@ -14,6 +14,20 @@ bool dropsRay(vec2 co, float dropRate){
     return randomValue < dropRate ? true : false;
 }
 
+float sampleNormalDistribution(vec2 uv, float mean, float stdDev)
+{
+    float u1 = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
+    float u2 = fract(sin(dot(uv, vec2(93.9898, 67.345))) * 24634.6345);
+
+    u1 = u1 == 0.0 ? 0.0001 : u1;
+    float r = sqrt(-2.0 * log(u1));
+    float theta = 2.0 * 3.14159265 * u2;
+
+    float z = r * cos(theta);
+
+    return z * stdDev + mean;
+}
+
 // STRUCTS
 struct Material 
 {
