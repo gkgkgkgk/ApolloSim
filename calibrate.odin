@@ -17,6 +17,8 @@ calibrate :: proc() {
         fmt.println("Calibration data generated.")
     }
 
+    fmt.println("Data Analyzed. Found the following materials:")
+
     analyzeData();
 }
 
@@ -34,6 +36,12 @@ materialData :: struct {
     stdev : f32
 }
 
+summarizeData :: proc(materials : map[string]materialData) {
+    for material in materials {
+        fmt.printf("Material: %s \n\tMean: %f\n\tStandard Deviation: %f\n\tTotal Lasers: %d\n", material, materials[material].mean, materials[material].stdev, len(materials[material].lasers))
+    }
+}
+
 parseLaser :: proc(line : string) -> Maybe(laserData) {
     laser : laserData
     values, err := strings.split(line, ",")
@@ -42,7 +50,11 @@ parseLaser :: proc(line : string) -> Maybe(laserData) {
         laser.distance = cast(f32)strconv.atof(values[0])
         laser.intensity = cast(f32)strconv.atof(values[1])
         laser.angle = cast(f32)strconv.atof(values[2])
-        laser.material = "metal"
+        if(laser.angle < 180.0){
+            laser.material = "metal"
+        } else {
+            laser.material = "concrete"
+        }
 
         return laser;
     }
@@ -116,6 +128,8 @@ analyzeData :: proc () {
         m.stdev = stdev(intensities)
         materials[material] = m
     }
+
+    summarizeData(materials);
 }
 
 generateFakeCalibrationData :: proc() {
