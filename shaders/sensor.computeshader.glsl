@@ -93,12 +93,6 @@ layout(std430, binding = 7) buffer InputBuffer7 {
 
 IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix, int material) {
     IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0);
-    result.intensity = materials[material].averageIntensity;
-
-    if(dropsRay(vec2(u_time) + rayId, materials[material].dropRate)){
-        result.intensity = 0;
-    }
-
 
     vec3 position = modelMatrix[3].xyz;
     float cubeHalfSize = length(modelMatrix[0].xyz) * 0.5;
@@ -136,7 +130,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     result.point = rayOrigin + rayDirection * tMin;
     result.intersects = true;
-    result.intensity = sampleNormalDistribution(vec2(rayId, rayId), 0.5, 0.01);
+    result.intensity = sampleNormalDistribution(vec2(rayId, rayId), materials[material].averageIntensity, 0.1);
 
     return result;
 }
