@@ -87,6 +87,10 @@ layout(std430, binding = 6) buffer InputBuffer6 {
     Material materials[];
 };
 
+layout(std430, binding = 7) buffer InputBuffer7 {
+    float seeds[];
+};
+
 IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix, int material) {
     IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0);
     result.intensity = materials[material].averageIntensity;
@@ -132,6 +136,8 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     result.point = rayOrigin + rayDirection * tMin;
     result.intersects = true;
+    result.intensity = sampleNormalDistribution(vec2(rayId, rayId), 0.5, 0.01);
+
     return result;
 }
 
@@ -196,6 +202,7 @@ IntersectionResult complexMeshIntersection(int rayId, vec3 rayOrigin, vec3 rayDi
 
         if(newIntersection.intersects){
             result = newIntersection;
+            result.intensity = sampleNormalDistribution(vec2(rayId, rayId), 0.5, 0.0);
         }
     }
     
@@ -208,11 +215,12 @@ void main()
     int count = directions.length()/16;
     for(int i = 0; i < count; i++){
         int rayId = int(id.x) + 10*int(id.y) + 100 * int(id.z) + 1000 * i;
+        int index = int(id.x) * count + i;
 
         IntersectionResult result = IntersectionResult(false, vec3(10000000.0), 0.5);
 
         for(int j = 0; j < scene.length(); j++){
-            IntersectionResult newIntersection = rayBoxIntersection(rayId, vec3(0), normalize(directions[id.x * count + i]), scene[j].model, scene[j].material);
+            IntersectionResult newIntersection = rayBoxIntersection(index, vec3(0), normalize(directions[index]), scene[j].model, scene[j].material);
 
             if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length())) {
                 result = newIntersection;
@@ -220,11 +228,10 @@ void main()
         }
 
         for(int j = 0; j < complexScene.length(); j++){
-            IntersectionResult newIntersection = complexMeshIntersection(rayId, vec3(0), normalize(directions[id.x * count + i]), complexScene[j]);
+            IntersectionResult newIntersection = complexMeshIntersection(index, vec3(0), normalize(directions[index]), complexScene[j]);
 
             if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length())) {
                 result = newIntersection;
-                result.intensity = 0.5;
             }
         }
 

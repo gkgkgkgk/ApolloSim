@@ -5,6 +5,7 @@ import "core:strings"
 import gl "vendor:OpenGL"
 import glm "core:math/linalg/glsl"
 import "core:math"
+import "core:math/rand"
 import "core:time"
 
 SimEngine :: struct {
@@ -15,7 +16,7 @@ SimEngine :: struct {
     complexScene : [dynamic]Geometry,
     complexScene32 : []Geometry32,
     outputData : []glm.vec4,
-    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6: u32
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7: u32
 }
 
 initializeSimEngine :: proc () -> Maybe(SimEngine) {
@@ -82,7 +83,7 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     }
 
     engine.complexScene32 = complexScene32;
-    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6: u32
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7: u32
 
     gl.GenBuffers(1, &inputBuffer);
     gl.GenBuffers(1, &inputBuffer2);
@@ -91,6 +92,7 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     gl.GenBuffers(1, &inputBuffer5);
 	gl.GenBuffers(1, &outputBuffer);
 	gl.GenBuffers(1, &inputBuffer6);
+	gl.GenBuffers(1, &inputBuffer7);
 
     engine.inputBuffer = inputBuffer;
     engine.inputBuffer2 = inputBuffer2;
@@ -99,6 +101,7 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     engine.inputBuffer5 = inputBuffer5;
     engine.outputBuffer = outputBuffer;
     engine.inputBuffer6 = inputBuffer6;
+    engine.inputBuffer7 = inputBuffer7;
 
     fmt.println("Successfully initialized simulation engine.");
     return engine
@@ -131,6 +134,12 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
 
     outputData := make([]glm.vec4, engine.sensor.packetSize);
 
+    my_rand := rand.create(1)
+    seeds := make([]f32, len(engine.sensor.directions))
+    for i := 0; i < len(seeds); i += 1 {
+        seeds[i] = rand.float32(&my_rand);
+    }
+
     // Load in scene geometry
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 0, engine.inputBuffer);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(sg) * size_of(SimpleGeometry), &sg[0], gl.STATIC_DRAW);
@@ -153,6 +162,9 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 6, engine.inputBuffer6);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(materials) * size_of(Material), &materials[0], gl.STATIC_DRAW);
+
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 7, engine.inputBuffer7);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(seeds) * size_of(f32), &seeds[0], gl.STATIC_DRAW);
 
     timeUniformLocation := gl.GetUniformLocation(engine.computeShaderProgram, "u_time");
 
