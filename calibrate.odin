@@ -29,11 +29,17 @@ laserData :: struct {
     material : string
 }
 
+LightingModel :: enum {
+    OrenNayar,
+    CookTorrence
+}
+
 materialData :: struct {
     material : string,
     lasers : [dynamic]laserData,
     mean : f32,
-    stdev : f32
+    stdev : f32,
+    lightingModel : LightingModel
 }
 
 summarizeData :: proc(materials : map[string]materialData) {
@@ -50,6 +56,8 @@ parseLaser :: proc(line : string) -> Maybe(laserData) {
         laser.distance = cast(f32)strconv.atof(values[0])
         laser.intensity = cast(f32)strconv.atof(values[1])
         laser.angle = cast(f32)strconv.atof(values[2])
+
+        // TODO: This logic should be handled by a config file somewhere
         if(laser.angle < 180.0){
             laser.material = "metal"
         } else {

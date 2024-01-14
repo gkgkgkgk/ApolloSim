@@ -58,6 +58,17 @@ struct IntersectionResult {
     float intensity;
 };
 
+// BRDF Functions
+float BRDFOrenNayar(float iAngle, float rAngle){
+
+    return 1.0;
+}
+
+float BRDFCookTorrence(float iAngle, float rAngle){
+
+    return 1.0;
+}
+
 // INPUT/OUTPUT LAYOUTS
 layout(std430, binding = 0) buffer InputBuffer {
     SimpleGeometry scene[];

@@ -4,7 +4,7 @@
 HELIOS++ is an open-source, general purpose laser-scanning simulation tool. HELIOS++ is capable of performing static and mobile terrestrial LiDAR simulation and UAV and airborne LiDAR scanning. The authors have managed to get their software to perform well enough to run simulations with it, and have proved that LiDAR simulation software is useful for the four following reasons: data acquisition, method evaluation, method training, and sensing experimentation. The simulation relies on two premises in order to be effective: there exists an adequate 3D model of the scene and the scanner, and the world to beam interactions can be reduced to a computationally feasible yet physically realistic process. HELIOS++ supports sensors for static tripods, ground vehicles, multicopters, and airplanes. There are a number of virtual laser scanning softwares that already exist for various platforms, including satellites, airborne laser simulation, mobile laser simulation, terrestrial laser simulation, UAV laser simulation, and more.
 #### Takeaways
 Some interesting features to look at are including satellite, material simulation, ROS integration. Overall, they give an extensive background to the field and why this is a useful piece of software. In terms of evaluation, they mostly use proven simulation methods, but do concede that no simulation that is fast will also be accurate, and that is solely dependent on the complexity of the scene. The evaluation was mostly focused on crude data output within a certain timeframe.
-### Paper #2: LiDARsim: Realistic LiDAR Simulation by Leveraging the Real World
+### Paper #2: [LiDARsim: Realistic LiDAR Simulation by Leveraging the Real World](https://arxiv.org/pdf/2006.09348.pdf)
 #### Summary
 The main problem this paper aims to fix is that LiDAR simulations are not inherently accurate. Many aspects of the real world are not present in simulation, and using a deep neural network, they are able to produce deviations to the simulation to further the accuracy of the simulation. This paper mainly focuses on self driving vehicles. A problem they point out is that most simulation software focuses on the trajectory and controls, but not the synthetic sensory input. Accurate sensor input would allow for end to end testing in simulation. They discuss the process of simulating a real sensor, which is prone to “ray dropping” and other various forms of noise that depend on materials and more. They evaluate their model with the KITTI Vision benchmark suite.
 #### Takeaways
@@ -115,12 +115,6 @@ What defines the noise in the LIDAR data? Mainly, the intensity of the point val
 * How will I implement the calibration? Given a known material, I can collect the average intensity, minimum intensity, maximum intensity, the standard deviation, and more. Then, in simulation, I can detect the material and use the baseline intensity, and use the noise distribution to disperse outliers (take note of the various exceptions that must be made due to the various lighting models, particularly with glossy surfaces). Now that I can generate the data for known materials, I can attempt to generate for unknown materials by lerping between similar materials (perhaps a chalkboard is somewhere between wood and concrete).
 * Check out this book: https://www.sciencedirect.com/book/9780125444224/handbook-of-optical-constants-of-solids
 * Maybe I should be collecting min, max, and average for every incident angle, then I can just calculate the normal of the collision and pick a number based on a Gaussian distribution.
-
-## Implementation
-### Graphics Engine
-### Scene Generation 
-### Physics Calculation
-### Calibration
 
 ## Why ApolloSim?
 First of all, the name Helios, the Greek god of the sun (specifically the rays of the sun), was taken by [HELIOS++](https://arxiv.org/pdf/2101.09154.pdf). I'm using a language called Odin for the first time, so I wanted to stick with the theme of a god's name; so I went with Apollo, the god of truth and prophecy, because people use simulations to see the future. 
