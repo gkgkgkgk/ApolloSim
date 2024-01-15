@@ -141,7 +141,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     result.point = rayOrigin + rayDirection * tMin;
     result.intersects = true;
-    result.intensity = sampleNormalDistribution(vec2(rayId, rayId), materials[material].averageIntensity, 0.1);
+    result.intensity = sampleNormalDistribution(vec2(rayId + u_time, rayId / u_time), materials[material].averageIntensity, 0.1);
 
     return result;
 }
@@ -207,7 +207,7 @@ IntersectionResult complexMeshIntersection(int rayId, vec3 rayOrigin, vec3 rayDi
 
         if(newIntersection.intersects){
             result = newIntersection;
-            result.intensity = sampleNormalDistribution(vec2(rayId, rayId), 0.5, 0.0);
+            result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), 0.5, 0.0);
         }
     }
     
