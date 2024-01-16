@@ -1,0 +1,1320 @@
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:z="http://www.zotero.org/namespaces/export#"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/"
+ xmlns:bib="http://purl.org/net/biblio#"
+ xmlns:link="http://purl.org/rss/1.0/modules/link/"
+ xmlns:dcterms="http://purl.org/dc/terms/"
+ xmlns:prism="http://prismstandard.org/namespaces/1.2/basic/"
+ xmlns:vcard="http://nwalsh.com/rdf/vCard#">
+    <rdf:Description rdf:about="http://arxiv.org/abs/2101.09154">
+        <z:itemType>preprint</z:itemType>
+        <dc:publisher>
+           <foaf:Organization><foaf:name>arXiv</foaf:name></foaf:Organization>
+        </dc:publisher>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Winiwarter</foaf:surname>
+                        <foaf:givenName>Lukas</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Pena</foaf:surname>
+                        <foaf:givenName>Alberto Manuel Esmorís</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Weiser</foaf:surname>
+                        <foaf:givenName>Hannah</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Anders</foaf:surname>
+                        <foaf:givenName>Katharina</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Sanchez</foaf:surname>
+                        <foaf:givenName>Jorge Martínez</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Searle</foaf:surname>
+                        <foaf:givenName>Mark</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Höfle</foaf:surname>
+                        <foaf:givenName>Bernhard</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_2"/>
+        <link:link rdf:resource="#item_3"/>
+        <dc:subject>
+            <z:AutomaticTag>
+                <rdf:value>Computer Science - Computer Vision and Pattern Recognition</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+                <rdf:value>Electrical Engineering and Systems Science - Image and Video Processing</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:title>Virtual laser scanning with HELIOS++: A novel take on ray tracing-based simulation of topographic 3D laser scanning</dc:title>
+        <dcterms:abstract>Topographic laser scanning is a remote sensing method to create detailed 3D point cloud representations of the Earth's surface. Since data acquisition is expensive, simulations can complement real data given certain premises are available: i) a model of 3D scene and scanner, ii) a model of the beam-scene interaction, simplified to a computationally feasible while physically realistic level, and iii) an application for which simulated data is fit for use. A number of laser scanning simulators for different purposes exist, which we enrich by presenting HELIOS++. HELIOS++ is an open-source simulation framework for terrestrial static, mobile, UAV-based and airborne laser scanning implemented in C++. The HELIOS++ concept provides a flexible solution for the trade-off between physical accuracy (realism) and computational complexity (runtime, memory footprint), as well as ease of use and of configuration. Unique features of HELIOS++ include the availability of Python bindings (pyhelios) for controlling simulations, and a range of model types for 3D scene representation. HELIOS++ further allows the simulation of beam divergence using a subsampling strategy, and is able to create full-waveform outputs as a basis for detailed analysis. As generation and analysis of waveforms can strongly impact runtimes, the user may set the level of detail for the subsampling, or optionally disable full-waveform output altogether. A detailed assessment of computational considerations and a comparison of HELIOS++ to its predecessor, HELIOS, reveal reduced runtimes by up to 83 %. At the same time, memory requirements are reduced by up to 94 %, allowing for much larger (i.e. more complex) 3D scenes to be loaded into memory and hence to be virtually acquired by laser scanning simulation.</dcterms:abstract>
+        <dc:date>2021-01-21</dc:date>
+        <z:shortTitle>Virtual laser scanning with HELIOS++</z:shortTitle>
+        <z:libraryCatalog>arXiv.org</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://arxiv.org/abs/2101.09154</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:32:27</dcterms:dateSubmitted>
+        <dc:description>arXiv:2101.09154 [cs, eess]</dc:description>
+        <prism:number>arXiv:2101.09154</prism:number>
+    </rdf:Description>
+    <z:Attachment rdf:about="#item_2">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>arXiv Fulltext PDF</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://arxiv.org/pdf/2101.09154.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:32:29</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_3">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>arXiv.org Snapshot</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://arxiv.org/abs/2101.09154</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:32:39</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+    <bib:Article rdf:about="https://ieeexplore.ieee.org/document/9751040/">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:0196-2892,%201558-0644"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Lopez</foaf:surname>
+                        <foaf:givenName>Alfonso</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ogayar</foaf:surname>
+                        <foaf:givenName>Carlos J.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Jurado</foaf:surname>
+                        <foaf:givenName>Juan M.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Feito</foaf:surname>
+                        <foaf:givenName>Francisco R.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>A GPU-Accelerated Framework for Simulating LiDAR Scanning</dc:title>
+        <dc:date>2022</dc:date>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://ieeexplore.ieee.org/document/9751040/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:33:54</dcterms:dateSubmitted>
+        <bib:pages>1-18</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:0196-2892,%201558-0644">
+        <prism:volume>60</prism:volume>
+        <dc:title>IEEE Transactions on Geoscience and Remote Sensing</dc:title>
+        <dc:identifier>DOI 10.1109/TGRS.2022.3165746</dc:identifier>
+        <dcterms:alternative>IEEE Trans. Geosci. Remote Sensing</dcterms:alternative>
+        <dc:identifier>ISSN 0196-2892, 1558-0644</dc:identifier>
+    </bib:Journal>
+    <rdf:Description rdf:about="http://arxiv.org/abs/2006.09348">
+        <z:itemType>preprint</z:itemType>
+        <dc:publisher>
+           <foaf:Organization><foaf:name>arXiv</foaf:name></foaf:Organization>
+        </dc:publisher>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Manivasagam</foaf:surname>
+                        <foaf:givenName>Sivabalan</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Wang</foaf:surname>
+                        <foaf:givenName>Shenlong</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Wong</foaf:surname>
+                        <foaf:givenName>Kelvin</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Zeng</foaf:surname>
+                        <foaf:givenName>Wenyuan</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Sazanovich</foaf:surname>
+                        <foaf:givenName>Mikita</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Tan</foaf:surname>
+                        <foaf:givenName>Shuhan</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Yang</foaf:surname>
+                        <foaf:givenName>Bin</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ma</foaf:surname>
+                        <foaf:givenName>Wei-Chiu</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Urtasun</foaf:surname>
+                        <foaf:givenName>Raquel</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dcterms:isReferencedBy rdf:resource="#item_6"/>
+        <link:link rdf:resource="#item_7"/>
+        <link:link rdf:resource="#item_8"/>
+        <dc:subject>
+            <z:AutomaticTag>
+                <rdf:value>Computer Science - Computer Vision and Pattern Recognition</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:title>LiDARsim: Realistic LiDAR Simulation by Leveraging the Real World</dc:title>
+        <dcterms:abstract>We tackle the problem of producing realistic simulations of LiDAR point clouds, the sensor of preference for most self-driving vehicles. We argue that, by leveraging real data, we can simulate the complex world more realistically compared to employing virtual worlds built from CAD/procedural models. Towards this goal, we first build a large catalog of 3D static maps and 3D dynamic objects by driving around several cities with our self-driving fleet. We can then generate scenarios by selecting a scene from our catalog and &quot;virtually&quot; placing the self-driving vehicle (SDV) and a set of dynamic objects from the catalog in plausible locations in the scene. To produce realistic simulations, we develop a novel simulator that captures both the power of physics-based and learning-based simulation. We first utilize ray casting over the 3D scene and then use a deep neural network to produce deviations from the physics-based simulation, producing realistic LiDAR point clouds. We showcase LiDARsim's usefulness for perception algorithms-testing on long-tail events and end-to-end closed-loop evaluation on safety-critical scenarios.</dcterms:abstract>
+        <dc:date>2020-06-16</dc:date>
+        <z:shortTitle>LiDARsim</z:shortTitle>
+        <z:libraryCatalog>arXiv.org</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://arxiv.org/abs/2006.09348</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:41:45</dcterms:dateSubmitted>
+        <dc:description>arXiv:2006.09348 [cs]</dc:description>
+        <prism:number>arXiv:2006.09348</prism:number>
+    </rdf:Description>
+    <bib:Memo rdf:about="#item_6">
+       <rdf:value>Comment: CVPR 2020 (Oral)</rdf:value>
+    </bib:Memo>
+    <z:Attachment rdf:about="#item_7">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>arXiv Fulltext PDF</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://arxiv.org/pdf/2006.09348.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:41:45</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_8">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>arXiv.org Snapshot</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://arxiv.org/abs/2006.09348</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:41:50</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+    <bib:Article rdf:about="http://www.mdpi.com/1424-8220/13/7/8461">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:1424-8220"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Kim</foaf:surname>
+                        <foaf:givenName>Seongjoon</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Lee</foaf:surname>
+                        <foaf:givenName>Impyeong</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Kwon</foaf:surname>
+                        <foaf:givenName>Yong</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_10"/>
+        <dc:title>Simulation of a Geiger-Mode Imaging LADAR System for Performance Assessment</dc:title>
+        <dc:date>2013-07-03</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://www.mdpi.com/1424-8220/13/7/8461</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:42:21</dcterms:dateSubmitted>
+        <bib:pages>8461-8489</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:1424-8220">
+        <prism:volume>13</prism:volume>
+        <dc:title>Sensors</dc:title>
+        <dc:identifier>DOI 10.3390/s130708461</dc:identifier>
+        <prism:number>7</prism:number>
+        <dcterms:alternative>Sensors</dcterms:alternative>
+        <dc:identifier>ISSN 1424-8220</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_10">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>Full Text</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.mdpi.com/1424-8220/13/7/8461/pdf?version=1403329304</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:42:22</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <bib:Article rdf:about="https://linkinghub.elsevier.com/retrieve/pii/S0034425722000876">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:00344257"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Wang</foaf:surname>
+                        <foaf:givenName>Yingjie</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Kallel</foaf:surname>
+                        <foaf:givenName>Abdelaziz</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Yang</foaf:surname>
+                        <foaf:givenName>Xuebo</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Regaieg</foaf:surname>
+                        <foaf:givenName>Omar</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Lauret</foaf:surname>
+                        <foaf:givenName>Nicolas</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Guilleux</foaf:surname>
+                        <foaf:givenName>Jordan</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Chavanon</foaf:surname>
+                        <foaf:givenName>Eric</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Gastellu-Etchegorry</foaf:surname>
+                        <foaf:givenName>Jean-Philippe</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>DART-Lux: An unbiased and rapid Monte Carlo radiative transfer method for simulating remote sensing images</dc:title>
+        <dc:date>06/2022</dc:date>
+        <z:language>en</z:language>
+        <z:shortTitle>DART-Lux</z:shortTitle>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://linkinghub.elsevier.com/retrieve/pii/S0034425722000876</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:42:58</dcterms:dateSubmitted>
+        <bib:pages>112973</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:00344257">
+        <prism:volume>274</prism:volume>
+        <dc:title>Remote Sensing of Environment</dc:title>
+        <dc:identifier>DOI 10.1016/j.rse.2022.112973</dc:identifier>
+        <dcterms:alternative>Remote Sensing of Environment</dcterms:alternative>
+        <dc:identifier>ISSN 00344257</dc:identifier>
+    </bib:Journal>
+    <bib:Article rdf:about="https://kilthub.cmu.edu/articles/Lidar_Simulation_for_Robotic_Application_Development_Modeling_and_Evaluation/6720428/1">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+               <dc:identifier>DOI 10.1184/R1/6720428.V1</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                       <foaf:surname>Abhijeet  Tallavajhula</foaf:surname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:subject>
+            <z:AutomaticTag>
+                <rdf:value>80101 Adaptive Agents and Intelligent Robotics</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>FOS: Computer and information sciences</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:title>Lidar Simulation for Robotic Application Development: Modeling and Evaluation</dc:title>
+        <dcterms:abstract>Given the increase in scale and complexity of robotics, robot application development is challenging in the real world. It may be expensive, unsafe, or impractical to collect data, or test systems, in reality. Simulation provides an answer to these challenges. In simulation, data collection is relatively inexpensive, scenes can be procedurally generated, and state information is trivially available. Despite these benefits, the use of simulators is often limited to the early stages of application development. In this work, we take steps to close the gap between simulation and reality, for Lidar simulation. We adopt the perspective that the eventual purpose of a simulator is a tool for robot application development. Our framework for sensor simulation consists of three components. The first is sensor modeling, which describes how a sensor interacts with a scene. The second is scene generation, needed to construct simulated worlds corresponding to reality. The third is simulator evaluation, based on comparing real and simulated data. We formalize the intuition that application performance must be similar in simulation and reality, using an application-level loss. Our framework is broadly applicable to simulating sensors other than Lidars. We instantiate our framework for two domains. The first domain is planar Lidar simulation in indoor scenes. We construct a high-fidelity simulator using a parametric sensor model. We show how application development paths for our simulator are closer to reality, compared to a baseline. We also pose sensor modeling as a case of distribution regression, which leads to a novel application of a nonparametric method that adapts to trends in sensor data. The second domain is Lidar simulation in o -road scenes. Our approach is to build a library of terrain primitives, derived from real Lidar observations. These are shown to generalize, resulting in an expressive simulator for complex o -road scenes. For this domain as well, we quantitatively demonstrate that our simulator is better for application development, compared to a baseline. Our work suggests a generic approach to building useful simulators. We view them as predictive models, and perform thorough tests on real data. We evaluate them with an application-level loss, which supports their greater use in the development cycle.</dcterms:abstract>
+        <dc:date>2018</dc:date>
+        <z:shortTitle>Lidar Simulation for Robotic Application Development</z:shortTitle>
+        <z:libraryCatalog>DOI.org (Datacite)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://kilthub.cmu.edu/articles/Lidar_Simulation_for_Robotic_Application_Development_Modeling_and_Evaluation/6720428/1</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:44:06</dcterms:dateSubmitted>
+        <dc:rights>In Copyright</dc:rights>
+        <dc:description>Artwork Size: 14724730 Bytes
+Publisher: Carnegie Mellon University</dc:description>
+        <bib:pages>14724730 Bytes</bib:pages>
+    </bib:Article>
+    <rdf:Description rdf:about="http://arxiv.org/abs/2304.14811">
+        <z:itemType>preprint</z:itemType>
+        <dc:publisher>
+           <foaf:Organization><foaf:name>arXiv</foaf:name></foaf:Organization>
+        </dc:publisher>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Zhang</foaf:surname>
+                        <foaf:givenName>Junge</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Zhang</foaf:surname>
+                        <foaf:givenName>Feihu</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Kuang</foaf:surname>
+                        <foaf:givenName>Shaochen</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Zhang</foaf:surname>
+                        <foaf:givenName>Li</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_15"/>
+        <link:link rdf:resource="#item_16"/>
+        <dc:subject>
+            <z:AutomaticTag>
+                <rdf:value>Computer Science - Computer Vision and Pattern Recognition</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:title>NeRF-LiDAR: Generating Realistic LiDAR Point Clouds with Neural Radiance Fields</dc:title>
+        <dcterms:abstract>Labeling LiDAR point clouds for training autonomous driving is extremely expensive and difficult. LiDAR simulation aims at generating realistic LiDAR data with labels for training and verifying self-driving algorithms more efficiently. Recently, Neural Radiance Fields (NeRF) have been proposed for novel view synthesis using implicit reconstruction of 3D scenes. Inspired by this, we present NeRF-LIDAR, a novel LiDAR simulation method that leverages real-world information to generate realistic LIDAR point clouds. Different from existing LiDAR simulators, we use real images and point cloud data collected by self-driving cars to learn the 3D scene representation, point cloud generation and label rendering. We verify the effectiveness of our NeRF-LiDAR by training different 3D segmentation models on the generated LiDAR point clouds. It reveals that the trained models are able to achieve similar accuracy when compared with the same model trained on the real LiDAR data. Besides, the generated data is capable of boosting the accuracy through pre-training which helps reduce the requirements of the real labeled data.</dcterms:abstract>
+        <dc:date>2024-01-09</dc:date>
+        <z:shortTitle>NeRF-LiDAR</z:shortTitle>
+        <z:libraryCatalog>arXiv.org</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://arxiv.org/abs/2304.14811</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:44:26</dcterms:dateSubmitted>
+        <dc:description>arXiv:2304.14811 [cs]</dc:description>
+        <prism:number>arXiv:2304.14811</prism:number>
+    </rdf:Description>
+    <z:Attachment rdf:about="#item_15">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>arXiv Fulltext PDF</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://arxiv.org/pdf/2304.14811.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:44:27</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_16">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>arXiv.org Snapshot</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://arxiv.org/abs/2304.14811</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:44:31</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+    <rdf:Description rdf:about="http://arxiv.org/abs/2209.10986">
+        <z:itemType>preprint</z:itemType>
+        <dc:publisher>
+           <foaf:Organization><foaf:name>arXiv</foaf:name></foaf:Organization>
+        </dc:publisher>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Guillard</foaf:surname>
+                        <foaf:givenName>Benoit</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Vemprala</foaf:surname>
+                        <foaf:givenName>Sai</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Gupta</foaf:surname>
+                        <foaf:givenName>Jayesh K.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Miksik</foaf:surname>
+                        <foaf:givenName>Ondrej</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Vineet</foaf:surname>
+                        <foaf:givenName>Vibhav</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Fua</foaf:surname>
+                        <foaf:givenName>Pascal</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Kapoor</foaf:surname>
+                        <foaf:givenName>Ashish</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dcterms:isReferencedBy rdf:resource="#item_18"/>
+        <link:link rdf:resource="#item_19"/>
+        <link:link rdf:resource="#item_20"/>
+        <dc:subject>
+            <z:AutomaticTag>
+                <rdf:value>Computer Science - Computer Vision and Pattern Recognition</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Computer Science - Robotics</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:title>Learning to Simulate Realistic LiDARs</dc:title>
+        <dcterms:abstract>Simulating realistic sensors is a challenging part in data generation for autonomous systems, often involving carefully handcrafted sensor design, scene properties, and physics modeling. To alleviate this, we introduce a pipeline for data-driven simulation of a realistic LiDAR sensor. We propose a model that learns a mapping between RGB images and corresponding LiDAR features such as raydrop or per-point intensities directly from real datasets. We show that our model can learn to encode realistic effects such as dropped points on transparent surfaces or high intensity returns on reflective materials. When applied to naively raycasted point clouds provided by off-the-shelf simulator software, our model enhances the data by predicting intensities and removing points based on the scene's appearance to match a real LiDAR sensor. We use our technique to learn models of two distinct LiDAR sensors and use them to improve simulated LiDAR data accordingly. Through a sample task of vehicle segmentation, we show that enhancing simulated point clouds with our technique improves downstream task performance.</dcterms:abstract>
+        <dc:date>2022-09-22</dc:date>
+        <z:libraryCatalog>arXiv.org</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://arxiv.org/abs/2209.10986</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:44:46</dcterms:dateSubmitted>
+        <dc:description>arXiv:2209.10986 [cs]</dc:description>
+        <prism:number>arXiv:2209.10986</prism:number>
+    </rdf:Description>
+    <bib:Memo rdf:about="#item_18">
+       <rdf:value>Comment: IROS2022 paper</rdf:value>
+    </bib:Memo>
+    <z:Attachment rdf:about="#item_19">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>arXiv Fulltext PDF</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://arxiv.org/pdf/2209.10986.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:44:47</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_20">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>arXiv.org Snapshot</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://arxiv.org/abs/2209.10986</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:44:52</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+    <bib:Article rdf:about="http://www.mdpi.com/2072-4292/7/2/1667">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:2072-4292"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Gastellu-Etchegorry</foaf:surname>
+                        <foaf:givenName>Jean-Philippe</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Yin</foaf:surname>
+                        <foaf:givenName>Tiangang</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Lauret</foaf:surname>
+                        <foaf:givenName>Nicolas</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Cajgfinger</foaf:surname>
+                        <foaf:givenName>Thomas</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Gregoire</foaf:surname>
+                        <foaf:givenName>Tristan</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Grau</foaf:surname>
+                        <foaf:givenName>Eloi</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Feret</foaf:surname>
+                        <foaf:givenName>Jean-Baptiste</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Lopes</foaf:surname>
+                        <foaf:givenName>Maïlys</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Guilleux</foaf:surname>
+                        <foaf:givenName>Jordan</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Dedieu</foaf:surname>
+                        <foaf:givenName>Gérard</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Malenovský</foaf:surname>
+                        <foaf:givenName>Zbyněk</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Cook</foaf:surname>
+                        <foaf:givenName>Bruce</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Morton</foaf:surname>
+                        <foaf:givenName>Douglas</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Rubio</foaf:surname>
+                        <foaf:givenName>Jeremy</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Durrieu</foaf:surname>
+                        <foaf:givenName>Sylvie</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Cazanave</foaf:surname>
+                        <foaf:givenName>Gregory</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Martin</foaf:surname>
+                        <foaf:givenName>Emmanuel</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ristorcelli</foaf:surname>
+                        <foaf:givenName>Thomas</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_22"/>
+        <dc:title>Discrete Anisotropic Radiative Transfer (DART 5) for Modeling Airborne and Satellite Spectroradiometer and LIDAR Acquisitions of Natural and Urban Landscapes</dc:title>
+        <dc:date>2015-02-05</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://www.mdpi.com/2072-4292/7/2/1667</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:45:11</dcterms:dateSubmitted>
+        <bib:pages>1667-1701</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:2072-4292">
+        <prism:volume>7</prism:volume>
+        <dc:title>Remote Sensing</dc:title>
+        <dc:identifier>DOI 10.3390/rs70201667</dc:identifier>
+        <prism:number>2</prism:number>
+        <dcterms:alternative>Remote Sensing</dcterms:alternative>
+        <dc:identifier>ISSN 2072-4292</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_22">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>Full Text</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.mdpi.com/2072-4292/7/2/1667/pdf?version=1423133970</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:45:14</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <bib:Article rdf:about="https://linkinghub.elsevier.com/retrieve/pii/S0924271606001080">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:09242716"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Jutzi</foaf:surname>
+                        <foaf:givenName>Boris</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Stilla</foaf:surname>
+                        <foaf:givenName>Uwe</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Range determination with waveform recording laser systems using a Wiener Filter</dc:title>
+        <dc:date>11/2006</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://linkinghub.elsevier.com/retrieve/pii/S0924271606001080</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:45:27</dcterms:dateSubmitted>
+        <bib:pages>95-107</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:09242716">
+        <prism:volume>61</prism:volume>
+        <dc:title>ISPRS Journal of Photogrammetry and Remote Sensing</dc:title>
+        <dc:identifier>DOI 10.1016/j.isprsjprs.2006.09.001</dc:identifier>
+        <prism:number>2</prism:number>
+        <dcterms:alternative>ISPRS Journal of Photogrammetry and Remote Sensing</dcterms:alternative>
+        <dc:identifier>ISSN 09242716</dc:identifier>
+    </bib:Journal>
+    <bib:Article rdf:about="https://isprs-archives.copernicus.org/articles/XLIII-B1-2020/39/2020/">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:2194-9034"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Lee</foaf:surname>
+                        <foaf:givenName>G.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Cheon</foaf:surname>
+                        <foaf:givenName>J.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Lee</foaf:surname>
+                        <foaf:givenName>I.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_25"/>
+        <dc:title>VALIDATION OF LIDAR CALIBRATION USING A LIDAR SIMULATOR</dc:title>
+        <dcterms:abstract>Abstract. LIDAR is being widely used for mapping and modelling because it accurately scans and acquires 3D geometric information of the surrounding environment. In order to improve the accuracy of the LIDAR measurement, it is necessary to precisely estimate the intrinsic parameters as well as extrinsic parameters and eliminate the systematic errors. Many studies are conducted to eliminate these errors caused by the intrinsic parameters of LIDAR. However, when the result of intrinsic calibration is verified using actual LIDAR data, there is a problem that other error factors cannot be excluded. Therefore, in this study, the LIDAR intrinsic calibration is verified by using a LIDAR simulator that simulates the mechanism of the actual LIDAR. When constructing a LIDAR simulator, the systematic error is inserted according to the intrinsic parameter model of LIDAR. And according to the method of scanning with LIDAR, it is divided into upright scanning and tilted scanning, and the error included LIDAR simulation data is generated. After that, the intrinsic parameters are estimated by applying the plane-based intrinsic calibration. Since values of the intrinsic parameters are known, they are compared with the estimated parameters, and the results of estimate are analyzed according to the scanning method.</dcterms:abstract>
+        <dc:date>2020-08-06</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://isprs-archives.copernicus.org/articles/XLIII-B1-2020/39/2020/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:46:00</dcterms:dateSubmitted>
+        <bib:pages>39-44</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:2194-9034">
+        <prism:volume>XLIII-B1-2020</prism:volume>
+        <dc:title>The International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences</dc:title>
+        <dc:identifier>DOI 10.5194/isprs-archives-XLIII-B1-2020-39-2020</dc:identifier>
+        <dcterms:alternative>Int. Arch. Photogramm. Remote Sens. Spatial Inf. Sci.</dcterms:alternative>
+        <dc:identifier>ISSN 2194-9034</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_25">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>Full Text</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.int-arch-photogramm-remote-sens-spatial-inf-sci.net/XLIII-B1-2020/39/2020/isprs-archives-XLIII-B1-2020-39-2020.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:46:03</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <bib:Article rdf:about="https://linkinghub.elsevier.com/retrieve/pii/S0263224113003072">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:02632241"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Wang</foaf:surname>
+                        <foaf:givenName>Hongyuan</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Zhang</foaf:surname>
+                        <foaf:givenName>Wei</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Dong</foaf:surname>
+                        <foaf:givenName>Aotuo</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Measurement and modeling of Bidirectional Reflectance Distribution Function (BRDF) on material surface</dc:title>
+        <dc:date>11/2013</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://linkinghub.elsevier.com/retrieve/pii/S0263224113003072</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:46:12</dcterms:dateSubmitted>
+        <bib:pages>3654-3661</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:02632241">
+        <prism:volume>46</prism:volume>
+        <dc:title>Measurement</dc:title>
+        <dc:identifier>DOI 10.1016/j.measurement.2013.07.008</dc:identifier>
+        <prism:number>9</prism:number>
+        <dcterms:alternative>Measurement</dcterms:alternative>
+        <dc:identifier>ISSN 02632241</dc:identifier>
+    </bib:Journal>
+    <rdf:Description rdf:about="#item_27">
+        <z:itemType>conferencePaper</z:itemType>
+        <dcterms:isPartOf>
+           <bib:Journal><prism:volume>8</prism:volume></bib:Journal>
+        </dcterms:isPartOf>
+        <dc:publisher>
+            <foaf:Organization>
+               <foaf:name>ESA Space Debris Office</foaf:name>
+            </foaf:Organization>
+        </dc:publisher>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Nakajima</foaf:surname>
+                        <foaf:givenName>Yu</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Sasaki</foaf:surname>
+                        <foaf:givenName>Takahiro</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Okada</foaf:surname>
+                        <foaf:givenName>Naoki</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Yamamoto</foaf:surname>
+                        <foaf:givenName>Toru</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>LiDAR Measurement Simulator Considering Target Surface Reflection</dc:title>
+        <dc:date>2021</dc:date>
+        <bib:presentedAt>
+            <bib:Conference>
+               <dc:title>8th European Conference on Space Debris</dc:title>
+            </bib:Conference>
+        </bib:presentedAt>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://arxiv.org/abs/1912.01652">
+        <z:itemType>preprint</z:itemType>
+        <dc:publisher>
+           <foaf:Organization><foaf:name>arXiv</foaf:name></foaf:Organization>
+        </dc:publisher>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Heiden</foaf:surname>
+                        <foaf:givenName>Eric</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Liu</foaf:surname>
+                        <foaf:givenName>Ziang</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ramachandran</foaf:surname>
+                        <foaf:givenName>Ragesh K.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Sukhatme</foaf:surname>
+                        <foaf:givenName>Gaurav S.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dcterms:isReferencedBy rdf:resource="#item_29"/>
+        <link:link rdf:resource="#item_30"/>
+        <link:link rdf:resource="#item_31"/>
+        <dc:subject>
+            <z:AutomaticTag>
+                <rdf:value>Computer Science - Computer Vision and Pattern Recognition</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:subject>
+            <z:AutomaticTag>
+               <rdf:value>Computer Science - Robotics</rdf:value>
+            </z:AutomaticTag>
+        </dc:subject>
+        <dc:title>Physics-based Simulation of Continuous-Wave LIDAR for Localization, Calibration and Tracking</dc:title>
+        <dcterms:abstract>Light Detection and Ranging (LIDAR) sensors play an important role in the perception stack of autonomous robots, supplying mapping and localization pipelines with depth measurements of the environment. While their accuracy outperforms other types of depth sensors, such as stereo or time-of-flight cameras, the accurate modeling of LIDAR sensors requires laborious manual calibration that typically does not take into account the interaction of laser light with different surface types, incidence angles and other phenomena that significantly influence measurements. In this work, we introduce a physically plausible model of a 2D continuous-wave LIDAR that accounts for the surface-light interactions and simulates the measurement process in the Hokuyo URG-04LX LIDAR. Through automatic differentiation, we employ gradient-based optimization to estimate model parameters from real sensor measurements.</dcterms:abstract>
+        <dc:date>2020-03-04</dc:date>
+        <z:libraryCatalog>arXiv.org</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>http://arxiv.org/abs/1912.01652</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:52:13</dcterms:dateSubmitted>
+        <dc:description>arXiv:1912.01652 [cs]</dc:description>
+        <prism:number>arXiv:1912.01652</prism:number>
+    </rdf:Description>
+    <bib:Memo rdf:about="#item_29">
+       <rdf:value>Comment: Published at ICRA 2020</rdf:value>
+    </bib:Memo>
+    <z:Attachment rdf:about="#item_30">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>arXiv Fulltext PDF</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://arxiv.org/pdf/1912.01652.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:52:16</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <z:Attachment rdf:about="#item_31">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>arXiv.org Snapshot</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://arxiv.org/abs/1912.01652</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:52:21</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>text/html</link:type>
+    </z:Attachment>
+    <rdf:Description rdf:about="http://proceedings.spiedigitallibrary.org/proceeding.aspx?doi=10.1117/12.767901">
+        <z:itemType>conferencePaper</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+               <dc:identifier>DOI 10.1117/12.767901</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <dc:publisher>
+            <foaf:Organization>
+                <vcard:adr>
+                    <vcard:Address>
+                       <vcard:locality>San Jose, CA</vcard:locality>
+                    </vcard:Address>
+                </vcard:adr>
+            </foaf:Organization>
+        </dc:publisher>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Farrell</foaf:surname>
+                        <foaf:givenName>Joyce</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Okincha</foaf:surname>
+                        <foaf:givenName>Michael</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Parmar</foaf:surname>
+                        <foaf:givenName>Manu</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <bib:editors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>DiCarlo</foaf:surname>
+                        <foaf:givenName>Jeffrey M.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Rodricks</foaf:surname>
+                        <foaf:givenName>Brian G.</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:editors>
+        <dc:title>Sensor calibration and simulation</dc:title>
+        <dc:date>2008-2-14</dc:date>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://proceedings.spiedigitallibrary.org/proceeding.aspx?doi=10.1117/12.767901</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:52:53</dcterms:dateSubmitted>
+        <bib:pages>68170R</bib:pages>
+        <bib:presentedAt>
+            <bib:Conference>
+               <dc:title>Electronic Imaging 2008</dc:title>
+            </bib:Conference>
+        </bib:presentedAt>
+    </rdf:Description>
+    <bib:BookSection rdf:about="urn:isbn:978-3-642-24030-0%20978-3-642-24031-7">
+        <z:itemType>bookSection</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Book>
+                <prism:volume>6939</prism:volume>
+                <dc:identifier>ISBN 978-3-642-24030-0 978-3-642-24031-7</dc:identifier>
+                <dc:title>Advances in Visual Computing</dc:title>
+            </bib:Book>
+        </dcterms:isPartOf>
+        <dc:publisher>
+            <foaf:Organization>
+                <vcard:adr>
+                    <vcard:Address>
+                       <vcard:locality>Berlin, Heidelberg</vcard:locality>
+                    </vcard:Address>
+                </vcard:adr>
+                <foaf:name>Springer Berlin Heidelberg</foaf:name>
+            </foaf:Organization>
+        </dc:publisher>
+        <bib:editors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Bebis</foaf:surname>
+                        <foaf:givenName>George</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Boyle</foaf:surname>
+                        <foaf:givenName>Richard</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Parvin</foaf:surname>
+                        <foaf:givenName>Bahram</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Koracin</foaf:surname>
+                        <foaf:givenName>Darko</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Wang</foaf:surname>
+                        <foaf:givenName>Song</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Kyungnam</foaf:surname>
+                        <foaf:givenName>Kim</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Benes</foaf:surname>
+                        <foaf:givenName>Bedrich</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Moreland</foaf:surname>
+                        <foaf:givenName>Kenneth</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Borst</foaf:surname>
+                        <foaf:givenName>Christoph</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>DiVerdi</foaf:surname>
+                        <foaf:givenName>Stephen</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Yi-Jen</foaf:surname>
+                        <foaf:givenName>Chiang</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ming</foaf:surname>
+                        <foaf:givenName>Jiang</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:editors>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Gschwandtner</foaf:surname>
+                        <foaf:givenName>Michael</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Kwitt</foaf:surname>
+                        <foaf:givenName>Roland</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Uhl</foaf:surname>
+                        <foaf:givenName>Andreas</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Pree</foaf:surname>
+                        <foaf:givenName>Wolfgang</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>BlenSor: Blender Sensor Simulation Toolbox</dc:title>
+        <dc:date>2011</dc:date>
+        <z:language>en</z:language>
+        <z:shortTitle>BlenSor</z:shortTitle>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>http://link.springer.com/10.1007/978-3-642-24031-7_20</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:53:37</dcterms:dateSubmitted>
+        <dc:description>Series Title: Lecture Notes in Computer Science
+DOI: 10.1007/978-3-642-24031-7_20</dc:description>
+        <bib:pages>199-208</bib:pages>
+    </bib:BookSection>
+    <bib:Article rdf:about="https://www.mdpi.com/1424-8220/20/24/7186">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>20</prism:volume>
+                <dc:title>Sensors</dc:title>
+                <dc:identifier>DOI 10.3390/s20247186</dc:identifier>
+                <prism:number>24</prism:number>
+                <dcterms:alternative>Sensors</dcterms:alternative>
+                <dc:identifier>ISSN 1424-8220</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Gusmão</foaf:surname>
+                        <foaf:givenName>Guilherme Ferreira</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Barbosa</foaf:surname>
+                        <foaf:givenName>Carlos Roberto Hall</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Raposo</foaf:surname>
+                        <foaf:givenName>Alberto Barbosa</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_35"/>
+        <dc:title>Development and Validation of LiDAR Sensor Simulators Based on Parallel Raycasting</dc:title>
+        <dcterms:abstract>Three-dimensional (3D) imaging technologies have been increasingly explored in academia and the industrial sector, especially the ones yielding point clouds. However, obtaining these data can still be expensive and time-consuming, reducing the efficiency of procedures dependent on large datasets, such as the generation of data for machine learning training, forest canopy calculation, and subsea survey. A trending solution is developing simulators for imaging systems, performing the virtual scanning of the digital world, and generating synthetic point clouds from the targets. This work presents a guideline for the development of modular Light Detection and Ranging (LiDAR) system simulators based on parallel raycasting algorithms, with its sensor modeled by metrological parameters and error models. A procedure for calibrating the sensor is also presented, based on comparing with the measurements made by a commercial LiDAR sensor. The sensor simulator developed as a case study resulted in a robust generation of synthetic point clouds in different scenarios, enabling the creation of datasets for use in concept tests, combining real and virtual data, among other applications.</dcterms:abstract>
+        <dc:date>2020-12-15</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://www.mdpi.com/1424-8220/20/24/7186</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:53:56</dcterms:dateSubmitted>
+        <bib:pages>7186</bib:pages>
+    </bib:Article>
+    <z:Attachment rdf:about="#item_35">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>Full Text</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.mdpi.com/1424-8220/20/24/7186/pdf?version=1608208868</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-01-15 18:53:57</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+</rdf:RDF>
