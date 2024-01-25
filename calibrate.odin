@@ -4,6 +4,7 @@ import "core:os"
 import "core:strings"
 import "core:strconv"
 import "core:math"
+import "core:math/rand"
 
 calibrate :: proc() {
     fmt.println("Is this a real calibration (y) or a simulated one (n)?")
@@ -33,7 +34,7 @@ angleData :: struct {
     angle: f32,
     mean: f32,
     stdev: f32,
-    lasers : [dynamic]laserData
+    intensities : [dynamic]f32
 }
 
 LightingModel :: enum {
@@ -53,6 +54,7 @@ materialData :: struct {
 summarizeData :: proc(materials : map[string]materialData) {
     for material in materials {
         fmt.printf("Material: %s \n\tMean: %f\n\tStandard Deviation: %f\n\tTotal Lasers: %d\n", material, materials[material].mean, materials[material].stdev, len(materials[material].lasers))
+        fmt.println(materials[material].anglesData)
     }
 }
 
@@ -112,6 +114,7 @@ analyzeData :: proc () {
 
     materials := make(map[string]materialData);
     
+    // for evert laser, sort them into a material. create the material if it doesnt exist
     for line in lines{
         laser, success := parseLaser(line).?
 
@@ -129,30 +132,49 @@ analyzeData :: proc () {
         }        
     }
 
+    // for every material, run calculations
     for material in materials {
         m := materials[material]
         total : f32 = 0.0;
         intensities : [dynamic]f32;
 
+        // first, get total intensities of the material, to calculate overall mean and stdev
         for laser in m.lasers {
+            // get intensities for every laser
             total += laser.intensity;
             append(&intensities, laser.intensity)
 
+            // also, sort the lasers into angle structs, so that each angle has its own data
             if(!(laser.angle in m.anglesData)) {
                 angle : angleData;
                 angle.angle = laser.angle;
-                angle.lasers = {laser}
+                angle.intensities = {laser.intensity}
                 m.anglesData[laser.angle] = angle;
             } else {
                 angle := m.anglesData[laser.angle]
-                lasers := m.anglesData[laser.angle].lasers
-                append(&lasers, laser)
-                angle.lasers = lasers
+                intensities := m.anglesData[laser.angle].intensities
+                append(&intensities, laser.intensity)
+                angle.intensities = intensities
                 m.anglesData[laser.angle] = angle
             }
 
         }
 
+        // now for every angle struct, run the analysis
+        for angle in m.anglesData {
+            data := m.anglesData[angle]
+            total : f32 = 0.0
+
+            for i in data.intensities {
+                total += i;
+            }
+
+            data.mean = total / f32(len(data.intensities))
+            data.stdev = stdev(data.intensities)
+            m.anglesData[angle] = data
+        }
+
+        // run final analysis on the overall material
         m.mean = total / f32(len(m.lasers));
         m.stdev = stdev(intensities)
         materials[material] = m
@@ -166,12 +188,16 @@ generateFakeCalibrationData :: proc() {
 
     angularRes := 0.225;
 
-    for i := 0; i < 1600; i += 1 {
-        buf := [128]byte{}
-        floatStr := strconv.ftoa(buf[:], angularRes * cast(f64)i, 'g', 6, 64)
+    for j := 0; j < 5; j += 1{
+        for i := 0; i < 1600; i += 1 {
+            buf := [128]byte{}
+            buf2 := [128]byte{}
+            floatStr := strconv.ftoa(buf[:], angularRes * cast(f64)i, 'g', 6, 64)
+            intensityStr := strconv.ftoa(buf2[:], rand.float64(), 'g', 6, 64)
 
-        str := strings.join({"1.0", "0.5", floatStr}, ",");
-        appendLine(f, str);
+            str := strings.join({"1.0", intensityStr, floatStr}, ",");
+            appendLine(f, str);
+        }
     }
 
 }

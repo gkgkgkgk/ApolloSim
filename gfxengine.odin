@@ -7,7 +7,6 @@ import "core:math"
 import "core:c"
 import "core:fmt"
 import "core:thread"
-import "core:math/rand"
 
 PROGRAMNAME :: "Program"
 
