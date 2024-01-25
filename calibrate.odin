@@ -29,6 +29,13 @@ laserData :: struct {
     material : string
 }
 
+angleData :: struct {
+    angle: f32,
+    mean: f32,
+    stdev: f32,
+    lasers : [dynamic]laserData
+}
+
 LightingModel :: enum {
     OrenNayar,
     CookTorrence
@@ -37,6 +44,7 @@ LightingModel :: enum {
 materialData :: struct {
     material : string,
     lasers : [dynamic]laserData,
+    anglesData : map[f32]angleData,
     mean : f32,
     stdev : f32,
     lightingModel : LightingModel
@@ -118,8 +126,7 @@ analyzeData :: proc () {
             append(&lasers, laser)
             mat.lasers = lasers
             materials[laser.material] = mat
-        }
-        
+        }        
     }
 
     for material in materials {
@@ -130,6 +137,20 @@ analyzeData :: proc () {
         for laser in m.lasers {
             total += laser.intensity;
             append(&intensities, laser.intensity)
+
+            if(!(laser.angle in m.anglesData)) {
+                angle : angleData;
+                angle.angle = laser.angle;
+                angle.lasers = {laser}
+                m.anglesData[laser.angle] = angle;
+            } else {
+                angle := m.anglesData[laser.angle]
+                lasers := m.anglesData[laser.angle].lasers
+                append(&lasers, laser)
+                angle.lasers = lasers
+                m.anglesData[laser.angle] = angle
+            }
+
         }
 
         m.mean = total / f32(len(m.lasers));

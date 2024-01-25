@@ -116,5 +116,10 @@ What defines the noise in the LIDAR data? Mainly, the intensity of the point val
 * Check out this book: https://www.sciencedirect.com/book/9780125444224/handbook-of-optical-constants-of-solids
 * Maybe I should be collecting min, max, and average for every incident angle, then I can just calculate the normal of the collision and pick a number based on a Gaussian distribution.
 
+## Example Use Case
+Let's say the user has a brick material benchmark. They calibrate the LIDAR, and are able to obtain the data for each and every angle of the lasers on the sensor. Given it is a known material, they also have the BRDF values for it (or, it can be derived in simulation). Now, lets say they have a material that is unknown- they do not have a benchmark material for it. But, we know that it is similar to the brick material, and has the same BRDF model. How can we simulate this material with information we already have?
+
+Lets say at 90 degrees, the brick responds with a 0.75 intensity. We know the brick is using the Oren-Nayer model, due to its diffuse properties. Now, lets say our new material is concrete. This new material has the same BRDF model as the brick, as it is also a mostly diffuse material. We know the BRDF parameters for it as well. 
+
 ## Why ApolloSim?
 First of all, the name Helios, the Greek god of the sun (specifically the rays of the sun), was taken by [HELIOS++](https://arxiv.org/pdf/2101.09154.pdf). I'm using a language called Odin for the first time, so I wanted to stick with the theme of a god's name; so I went with Apollo, the god of truth and prophecy, because people use simulations to see the future. 
