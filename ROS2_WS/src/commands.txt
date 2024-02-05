@@ -1,0 +1,6 @@
+SOURCE ROS: source install/setup.bash
+BUILD PUBSUB: colcon build --packages-select py_pubsub
+BUILD RPLIDAR: colcon build --packages-select rplidar_ros
+BUILD ALL: colcon build --symlink-install
+RUN THE TALKER: ros2 run py_pubsub talker
+RUN THE LIDAR: ros2 launch rplidar_ros rplidar.launch.py

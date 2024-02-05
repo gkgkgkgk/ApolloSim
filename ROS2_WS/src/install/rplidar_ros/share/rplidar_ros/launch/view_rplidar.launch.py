@@ -1,0 +1,1 @@
+/home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/rplidar_ros2/launch/view_rplidar.launch.py

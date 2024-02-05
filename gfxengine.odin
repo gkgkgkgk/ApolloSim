@@ -41,7 +41,7 @@ initializeGFXEngine :: proc() -> Maybe(GFXEngine) {
 	glfw.WindowHint(glfw.CONTEXT_VERSION_MINOR,GL_MINOR_VERSION)
 	glfw.WindowHint(glfw.OPENGL_PROFILE,glfw.OPENGL_CORE_PROFILE)
 
-    if(glfw.Init() != 1){
+    if(glfw.Init() != true){
 		fmt.println("Failed to initialize GLFW")
 		return nil
 	}

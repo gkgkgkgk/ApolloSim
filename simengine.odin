@@ -52,7 +52,6 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     cube := createCube();
     cube.model = identityModel * glm.mat4Translate({1.0, 0.0, 0.0});
     cube.material = createMaterial(0.1, 0.75, 0.25, 0.5);
-    cube = addTexture(cube, "./textures/concrete.jpg");
     append(&engine.scene, cube);
 
     cube2 := createCube();

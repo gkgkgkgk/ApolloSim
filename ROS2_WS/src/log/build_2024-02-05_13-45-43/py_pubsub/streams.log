@@ -1,0 +1,22 @@
+[0.441s] Invoking command in '/home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/build/py_pubsub': PYTHONPATH=/home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/build/py_pubsub/prefix_override:/home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/install/py_pubsub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/build/py_pubsub/build --no-deps install_data
+[0.585s] running develop
+[0.586s] /usr/lib/python3/dist-packages/setuptools/command/easy_install.py:158: EasyInstallDeprecationWarning: easy_install command is deprecated. Use build and pip and other standards-based tools.
+[0.586s]   warnings.warn(
+[0.587s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.587s]   warnings.warn(
+[0.665s] running egg_info
+[0.665s] writing py_pubsub.egg-info/PKG-INFO
+[0.665s] writing dependency_links to py_pubsub.egg-info/dependency_links.txt
+[0.665s] writing entry points to py_pubsub.egg-info/entry_points.txt
+[0.665s] writing requirements to py_pubsub.egg-info/requires.txt
+[0.665s] writing top-level names to py_pubsub.egg-info/top_level.txt
+[0.666s] reading manifest file 'py_pubsub.egg-info/SOURCES.txt'
+[0.666s] writing manifest file 'py_pubsub.egg-info/SOURCES.txt'
+[0.667s] running build_ext
+[0.667s] Creating /home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/install/py_pubsub/lib/python3.10/site-packages/py-pubsub.egg-link (link to .)
+[0.668s] Installing listener script to /home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/install/py_pubsub/lib/py_pubsub
+[0.668s] Installing talker script to /home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/install/py_pubsub/lib/py_pubsub
+[0.668s] 
+[0.668s] Installed /home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/build/py_pubsub
+[0.668s] running install_data
+[0.687s] Invoked command in '/home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/build/py_pubsub' returned '0': PYTHONPATH=/home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/build/py_pubsub/prefix_override:/home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/install/py_pubsub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/build/py_pubsub/build --no-deps install_data

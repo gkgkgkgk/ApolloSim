@@ -5,7 +5,6 @@ import "core:math"
 import glm "core:math/linalg/glsl"
 import "core:os"
 import "core:strconv"
-import stb "vendor:stb/image"
 import "core:strings"
 
 GeometryType:: enum {
@@ -176,20 +175,6 @@ drawGeometryWithIndices :: proc (geometry : Geometry) {
     gl.DrawElements(gl.TRIANGLES, cast(i32)len(geometry.indices), gl.UNSIGNED_SHORT, nil);
 
     gl.BindVertexArray(0);
-}
-
-addTexture :: proc (geometry : Geometry, path : string) -> Geometry {
-    width, height, nrChannels : i32;
-    data := stb.load(strings.clone_to_cstring(path), &width, &height, &nrChannels, 0);
-    texture : u32;
-    gl.GenTextures(1, &texture);
-    gl.BindTexture(gl.TEXTURE_2D, texture);
-    gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGB, width, height, 0, gl.RGB, gl.UNSIGNED_BYTE, data);
-    gl.GenerateMipmap(gl.TEXTURE_2D);
-    geometry := geometry;
-    geometry.texture = texture;
-
-    return geometry;
 }
 
 /* CUSTOM GEOMETRY LOADER */

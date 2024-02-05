@@ -1,0 +1,28 @@
+[0.413s] Invoking command in '/home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/py_pubsub': PYTHONPATH=/home/gavri/Documents/Code/ApolloSim/ROS2_WS/build/py_pubsub/prefix_override:/home/gavri/Documents/Code/ApolloSim/ROS2_WS/install/py_pubsub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/py_pubsub build --build-base /home/gavri/Documents/Code/ApolloSim/ROS2_WS/build/py_pubsub/build install --record /home/gavri/Documents/Code/ApolloSim/ROS2_WS/build/py_pubsub/install.log --single-version-externally-managed
+[0.538s] running egg_info
+[0.539s] writing ../../build/py_pubsub/py_pubsub.egg-info/PKG-INFO
+[0.539s] writing dependency_links to ../../build/py_pubsub/py_pubsub.egg-info/dependency_links.txt
+[0.539s] writing entry points to ../../build/py_pubsub/py_pubsub.egg-info/entry_points.txt
+[0.539s] writing requirements to ../../build/py_pubsub/py_pubsub.egg-info/requires.txt
+[0.539s] writing top-level names to ../../build/py_pubsub/py_pubsub.egg-info/top_level.txt
+[0.540s] reading manifest file '../../build/py_pubsub/py_pubsub.egg-info/SOURCES.txt'
+[0.540s] adding license file 'LICENSE'
+[0.540s] writing manifest file '../../build/py_pubsub/py_pubsub.egg-info/SOURCES.txt'
+[0.541s] running build
+[0.541s] running build_py
+[0.541s] copying py_pubsub/subscriber_member_function.py -> /home/gavri/Documents/Code/ApolloSim/ROS2_WS/build/py_pubsub/build/lib/py_pubsub
+[0.541s] running install
+[0.541s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[0.541s]   warnings.warn(
+[0.541s] running install_lib
+[0.541s] copying /home/gavri/Documents/Code/ApolloSim/ROS2_WS/build/py_pubsub/build/lib/py_pubsub/subscriber_member_function.py -> /home/gavri/Documents/Code/ApolloSim/ROS2_WS/install/py_pubsub/lib/python3.10/site-packages/py_pubsub
+[0.542s] byte-compiling /home/gavri/Documents/Code/ApolloSim/ROS2_WS/install/py_pubsub/lib/python3.10/site-packages/py_pubsub/subscriber_member_function.py to subscriber_member_function.cpython-310.pyc
+[0.542s] running install_data
+[0.542s] running install_egg_info
+[0.543s] removing '/home/gavri/Documents/Code/ApolloSim/ROS2_WS/install/py_pubsub/lib/python3.10/site-packages/py_pubsub-0.0.0-py3.10.egg-info' (and everything under it)
+[0.543s] Copying ../../build/py_pubsub/py_pubsub.egg-info to /home/gavri/Documents/Code/ApolloSim/ROS2_WS/install/py_pubsub/lib/python3.10/site-packages/py_pubsub-0.0.0-py3.10.egg-info
+[0.544s] running install_scripts
+[0.556s] Installing listener script to /home/gavri/Documents/Code/ApolloSim/ROS2_WS/install/py_pubsub/lib/py_pubsub
+[0.556s] Installing talker script to /home/gavri/Documents/Code/ApolloSim/ROS2_WS/install/py_pubsub/lib/py_pubsub
+[0.556s] writing list of installed files to '/home/gavri/Documents/Code/ApolloSim/ROS2_WS/build/py_pubsub/install.log'
+[0.570s] Invoked command in '/home/gavri/Documents/Code/ApolloSim/ROS2_WS/src/py_pubsub' returned '0': PYTHONPATH=/home/gavri/Documents/Code/ApolloSim/ROS2_WS/build/py_pubsub/prefix_override:/home/gavri/Documents/Code/ApolloSim/ROS2_WS/install/py_pubsub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/py_pubsub build --build-base /home/gavri/Documents/Code/ApolloSim/ROS2_WS/build/py_pubsub/build install --record /home/gavri/Documents/Code/ApolloSim/ROS2_WS/build/py_pubsub/install.log --single-version-externally-managed
