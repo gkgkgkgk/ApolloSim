@@ -2,6 +2,7 @@
 /.VSCodeCounter
 devel/
 logs/
+log/
 build/
 bin/
 lib/
