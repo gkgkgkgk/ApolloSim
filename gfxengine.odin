@@ -41,10 +41,19 @@ initializeGFXEngine :: proc() -> Maybe(GFXEngine) {
 	glfw.WindowHint(glfw.CONTEXT_VERSION_MINOR,GL_MINOR_VERSION)
 	glfw.WindowHint(glfw.OPENGL_PROFILE,glfw.OPENGL_CORE_PROFILE)
 
-    if(glfw.Init() != true){
-		fmt.println("Failed to initialize GLFW")
-		return nil
-	}
+
+    when ODIN_OS == .Windows {
+        if(glfw.Init() != 1.0){
+            fmt.println("Failed to initialize GLFW")
+            return nil
+	    }
+    } else when ODIN_OS == .Linux {
+        if(glfw.Init() != true){
+            fmt.println("Failed to initialize GLFW")
+            return nil
+	    }
+    }
+    
 
     engine.window = glfw.CreateWindow(width, height, PROGRAMNAME, nil, nil)
 
