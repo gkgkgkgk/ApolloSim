@@ -6,7 +6,12 @@ import "core:time"
 
 GPUData :: struct {
     angle: glm.vec4,
-    materialId: int
+    materialId: int,
+    meanIntensity: f32,
+    meanDistance: f32,
+    stdevIntensity: f32,
+    stdevDistance: f32,
+    dropRate: f32
 }
 
 sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
