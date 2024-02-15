@@ -16,6 +16,7 @@ SimEngine :: struct {
     complexScene : [dynamic]Geometry,
     complexScene32 : []Geometry32,
     outputData : []glm.vec4,
+    calibrationData : CalibrationData,
     inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8: u32
 }
 
@@ -23,6 +24,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData) -> Maybe(SimEngi
     engine : SimEngine
     engine.steps = 0
     engine.sensor = initializeSensor();
+    engine.calibrationData = calibrationData;
 
     computeShaderSource, computeShaderError := os.read_entire_file("./shaders/sensor.computeshader.glsl")    
     if !computeShaderError {
@@ -49,6 +51,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData) -> Maybe(SimEngi
 
     engine.computeShaderProgram = computeShaderProgram;
 
+    // initialize scene
     cube := createCube();
     cube.model = identityModel * glm.mat4Translate({1.0, 0.0, 0.0});
     cube.material = createMaterial(0.1, 0.75, 0.25, 0.5);
@@ -82,8 +85,9 @@ initializeSimEngine :: proc (calibrationData : CalibrationData) -> Maybe(SimEngi
     }
 
     engine.complexScene32 = complexScene32;
-    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8: u32
 
+    // initialize compute shader buffers (TODO: get rid of these PLEASE)
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8: u32
     gl.GenBuffers(1, &inputBuffer);
     gl.GenBuffers(1, &inputBuffer2);
     gl.GenBuffers(1, &inputBuffer3);

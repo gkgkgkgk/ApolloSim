@@ -3,6 +3,7 @@ import gl "vendor:OpenGL"
 import glm "core:math/linalg/glsl"
 import "core:math/rand"
 import "core:time"
+import "core:fmt"
 
 GPUData :: struct {
     angle: glm.vec4,
@@ -14,8 +15,20 @@ GPUData :: struct {
     dropRate: f32
 }
 
+// TODO: make sure this is only done ONCE.
 generateGPUData :: proc(engine : SimEngine) -> []GPUData {
     gpudata := make([]GPUData, engine.sensor.packetSize);
+    i := 0;
+
+    for material in engine.calibrationData.materials {
+        for angle in engine.calibrationData.materials[material].anglesData {
+            angleData := engine.calibrationData.materials[material].anglesData[angle];
+            gd : GPUData;
+            gd.angle = angleData.angle;
+            gpudata[i] = gd;
+            i += 1;
+        }
+    }
 
     return gpudata;
 } 

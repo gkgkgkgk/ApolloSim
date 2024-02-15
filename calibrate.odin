@@ -6,9 +6,47 @@ import "core:strconv"
 import "core:math"
 import "core:math/rand"
 
+// calibration data for each material
 CalibrationData :: struct {
     materials : map[string]MaterialData
 };
+
+// calibration data for one material
+MaterialData :: struct {
+    material : string,
+    lasers : [dynamic]laserData,
+    anglesData : map[f32]angleData,
+    mean : f32,
+    stdev : f32,
+    meanDistance : f32,
+    stdevDistance : f32,
+    lightingModel : LightingModel
+}
+
+// struct for a single laser beam
+laserData :: struct {
+    angle : f32,
+    distance : f32,
+    intensity : f32,
+    material : string
+}
+
+// struct for a certain angle
+angleData :: struct {
+    angle: f32,
+    mean: f32,
+    stdev: f32,
+    intensities : [dynamic]f32,
+    distances : [dynamic]f32,
+    meanDistance : f32,
+    stdevDistance : f32
+}
+
+// the lighting model of the material
+LightingModel :: enum {
+    OrenNayar,
+    CookTorrence
+}
 
 calibrate :: proc() -> CalibrationData {
     cd : CalibrationData;
@@ -35,39 +73,6 @@ calibrate :: proc() -> CalibrationData {
     cd.materials = data;
 
     return cd;
-}
-
-laserData :: struct {
-    angle : f32,
-    distance : f32,
-    intensity : f32,
-    material : string
-}
-
-angleData :: struct {
-    angle: f32,
-    mean: f32,
-    stdev: f32,
-    intensities : [dynamic]f32,
-    distances : [dynamic]f32,
-    meanDistance : f32,
-    stdevDistance : f32
-}
-
-LightingModel :: enum {
-    OrenNayar,
-    CookTorrence
-}
-
-MaterialData :: struct {
-    material : string,
-    lasers : [dynamic]laserData,
-    anglesData : map[f32]angleData,
-    mean : f32,
-    stdev : f32,
-    meanDistance : f32,
-    stdevDistance : f32,
-    lightingModel : LightingModel
 }
 
 summarizeData :: proc(materials : map[string]MaterialData) {
