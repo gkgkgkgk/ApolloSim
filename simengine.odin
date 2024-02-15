@@ -16,7 +16,7 @@ SimEngine :: struct {
     complexScene : [dynamic]Geometry,
     complexScene32 : []Geometry32,
     outputData : []glm.vec4,
-    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7: u32
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8: u32
 }
 
 initializeSimEngine :: proc () -> Maybe(SimEngine) {
@@ -82,7 +82,7 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     }
 
     engine.complexScene32 = complexScene32;
-    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7: u32
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8: u32
 
     gl.GenBuffers(1, &inputBuffer);
     gl.GenBuffers(1, &inputBuffer2);
@@ -91,7 +91,7 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     gl.GenBuffers(1, &inputBuffer5);
 	gl.GenBuffers(1, &outputBuffer);
 	gl.GenBuffers(1, &inputBuffer6);
-	gl.GenBuffers(1, &inputBuffer7);
+	gl.GenBuffers(1, &inputBuffer8);
 
     engine.inputBuffer = inputBuffer;
     engine.inputBuffer2 = inputBuffer2;
@@ -101,6 +101,7 @@ initializeSimEngine :: proc () -> Maybe(SimEngine) {
     engine.outputBuffer = outputBuffer;
     engine.inputBuffer6 = inputBuffer6;
     engine.inputBuffer7 = inputBuffer7;
+    engine.inputBuffer8 = inputBuffer8;
 
     fmt.println("Successfully initialized simulation engine.");
     return engine

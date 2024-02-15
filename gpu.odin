@@ -14,6 +14,12 @@ GPUData :: struct {
     dropRate: f32
 }
 
+generateGPUData :: proc(engine : SimEngine) -> []GPUData {
+    gpudata := make([]GPUData, engine.sensor.packetSize);
+
+    return gpudata;
+} 
+
 sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     sg := make([]SimpleGeometry, len(engine.scene));
     materials := make([]Material, len(engine.scene));
@@ -45,6 +51,8 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
         seeds[i] = rand.float32(&my_rand);
     }
 
+    gpudata := generateGPUData(engine);
+
     // Load in scene geometry
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 0, engine.inputBuffer);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(sg) * size_of(SimpleGeometry), &sg[0], gl.STATIC_DRAW);
@@ -70,6 +78,9 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 7, engine.inputBuffer7);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(seeds) * size_of(f32), &seeds[0], gl.STATIC_DRAW);
+
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 8, engine.inputBuffer8);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(gpudata) * size_of(GPUData), &gpudata[0], gl.STATIC_DRAW);
 
     timeUniformLocation := gl.GetUniformLocation(engine.computeShaderProgram, "u_time");
 

@@ -16,6 +16,11 @@ GL_MINOR_VERSION :: 6;
 height : i32 = 720;
 width : i32 = 1280;
 
+mousePos : glm.vec2 = glm.vec2{0.0, 0.0};
+mouseMovement : glm.vec2 = glm.vec2{0.0, 0.0};
+
+running : b32 = true;
+
 identityModel := glm.mat4 {
 		1.0, 0.0, 0.0, 0.0,
 		0.0, 1.0, 0.0, 0.0,
@@ -252,4 +257,20 @@ drawLasers:: proc(engine: SimEngine) {
     gl.LineWidth(3.0);
 
     gl.DrawArrays(gl.LINES, 0, cast(i32)laserCount * 2);
+}
+
+process_mouse :: proc(window: glfw.WindowHandle){
+	x, y := glfw.GetCursorPos(window)
+	mouseMovement = mousePos - glm.vec2{cast(f32)x, cast(f32)y}
+	mousePos = glm.vec2{cast(f32)x, cast(f32)y}
+}
+
+key_callback :: proc "c" (window: glfw.WindowHandle, key, scancode, action, mods: i32) {
+	if key == glfw.KEY_ESCAPE {
+		running = false
+	}
+}
+
+size_callback :: proc "c" (window: glfw.WindowHandle, width, height: i32) {
+	gl.Viewport(0, 0, width, height)
 }

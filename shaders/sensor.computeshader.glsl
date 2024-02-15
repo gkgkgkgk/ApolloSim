@@ -58,6 +58,16 @@ struct IntersectionResult {
     float intensity;
 };
 
+struct AngleData {
+    vec3 angle;
+    int materialId;
+    float meanIntensity;
+    float meanDistance;
+    float stdevIntensity;
+    float stdevDistance;
+    float dropRate;
+};
+
 // BRDF Functions
 float BRDFOrenNayar(float iAngle, float rAngle){
 
@@ -100,6 +110,10 @@ layout(std430, binding = 6) buffer InputBuffer6 {
 
 layout(std430, binding = 7) buffer InputBuffer7 {
     float seeds[];
+};
+
+layout(std430, binding = 8) buffer InputBuffer8 {
+    AngleData angles[];
 };
 
 IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix, int material) {
