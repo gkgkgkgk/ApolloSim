@@ -78,7 +78,6 @@ calibrate :: proc() -> CalibrationData {
 summarizeData :: proc(materials : map[string]MaterialData) {
     for material in materials {
         fmt.printf("Material: %s \n\tMean: %f\n\tStandard Deviation: %f\n\tTotal Lasers: %d\n", material, materials[material].mean, materials[material].stdev, len(materials[material].lasers))
-        fmt.println(materials[material].anglesData)
     }
 }
 
@@ -92,11 +91,7 @@ parseLaser :: proc(line : string) -> Maybe(laserData) {
         laser.angle = cast(f32)strconv.atof(values[2])
 
         // TODO: This logic should be handled by a config file somewhere
-        if(laser.angle < 180.0){
-            laser.material = "metal"
-        } else {
-            laser.material = "concrete"
-        }
+        laser.material = "metal"
 
         return laser;
     }

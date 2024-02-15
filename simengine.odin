@@ -17,6 +17,7 @@ SimEngine :: struct {
     complexScene32 : []Geometry32,
     outputData : []glm.vec4,
     calibrationData : CalibrationData,
+    gpuData : [dynamic]GPUData,
     inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8: u32
 }
 
@@ -106,6 +107,8 @@ initializeSimEngine :: proc (calibrationData : CalibrationData) -> Maybe(SimEngi
     engine.inputBuffer6 = inputBuffer6;
     engine.inputBuffer7 = inputBuffer7;
     engine.inputBuffer8 = inputBuffer8;
+
+    engine.gpuData = generateGPUData(engine, 1.0, 1.0);
 
     fmt.println("Successfully initialized simulation engine.");
     return engine

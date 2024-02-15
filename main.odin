@@ -12,7 +12,7 @@ main :: proc() {
 	calibrationData : CalibrationData;
 
 	if len(args) > 1 && args[1] == "calibrate" {
-		calibrationData := calibrate();
+		calibrationData = calibrate();
 		fmt.println("Launch Simulation? (y or n)");
 		launch := readInput(os.stdin);
 
