@@ -16,6 +16,7 @@ GPUData :: struct {
     dropRate: f32
 }
 
+// WHATS NEXT: FIX THIS CODE SO THAT THE CALIBRATION DATA REPRESENTS THE MATERIAL BENCHMARK AND CAN BE SENT TO THE GPU
 // TODO: make sure this is only done ONCE.
 generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDistance : f32) -> [dynamic]GPUData {
     // TODO: move this logic to the calibration phase
