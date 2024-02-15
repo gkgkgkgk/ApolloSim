@@ -6,7 +6,13 @@ import "core:strconv"
 import "core:math"
 import "core:math/rand"
 
-calibrate :: proc() {
+CalibrationData :: struct {
+    materials : map[string]MaterialData
+};
+
+calibrate :: proc() -> CalibrationData {
+    cd : CalibrationData;
+
     fmt.println("Is this a real calibration (y) or a simulated one (n)?")
     real := readInput(os.stdin)
     
@@ -18,9 +24,17 @@ calibrate :: proc() {
         fmt.println("Calibration data generated.")
     }
 
-    fmt.println("Data Analyzed. Found the following materials:")
+    fmt.println("Data Analyzed. Found the following materials:");
+    data, success := analyzeData().?;
 
-    analyzeData();
+    if !success {
+        fmt.println("Unable to find data file.");
+        return cd;
+    }
+
+    cd.materials = data;
+
+    return cd;
 }
 
 laserData :: struct {
@@ -45,7 +59,7 @@ LightingModel :: enum {
     CookTorrence
 }
 
-materialData :: struct {
+MaterialData :: struct {
     material : string,
     lasers : [dynamic]laserData,
     anglesData : map[f32]angleData,
@@ -56,7 +70,7 @@ materialData :: struct {
     lightingModel : LightingModel
 }
 
-summarizeData :: proc(materials : map[string]materialData) {
+summarizeData :: proc(materials : map[string]MaterialData) {
     for material in materials {
         fmt.printf("Material: %s \n\tMean: %f\n\tStandard Deviation: %f\n\tTotal Lasers: %d\n", material, materials[material].mean, materials[material].stdev, len(materials[material].lasers))
         fmt.println(materials[material].anglesData)
@@ -107,24 +121,24 @@ stdev :: proc (list : [dynamic]f32) -> f32 {
     return std
 }
 
-analyzeData :: proc () {
+analyzeData :: proc () -> Maybe(map[string]MaterialData){
     data, success := getEntireFile("./data.txt").?
 
     if(!success){
         fmt.println("Could not read LIDAR data file.")
-        return
+        return nil
     }
 
     lines := strings.split(data, "\n")
 
-    materials := make(map[string]materialData);
+    materials := make(map[string]MaterialData);
     
     // for evert laser, sort them into a material. create the material if it doesnt exist
     for line in lines{
         laser, success := parseLaser(line).?
 
         if(success && !(laser.material in materials)) {
-            mat : materialData
+            mat : MaterialData
             mat.material = laser.material
             mat.lasers = {laser}
             materials[laser.material] = mat
@@ -211,6 +225,7 @@ analyzeData :: proc () {
     }
 
     summarizeData(materials);
+    return materials;
 }
 
 generateFakeCalibrationData :: proc() {

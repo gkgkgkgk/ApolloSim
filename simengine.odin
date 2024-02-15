@@ -19,7 +19,7 @@ SimEngine :: struct {
     inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8: u32
 }
 
-initializeSimEngine :: proc () -> Maybe(SimEngine) {
+initializeSimEngine :: proc (calibrationData : CalibrationData) -> Maybe(SimEngine) {
     engine : SimEngine
     engine.steps = 0
     engine.sensor = initializeSensor();

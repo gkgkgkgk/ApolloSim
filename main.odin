@@ -9,9 +9,10 @@ import "core:strings"
 
 main :: proc() {
 	args := os.args;
+	calibrationData : CalibrationData;
 
 	if len(args) > 1 && args[1] == "calibrate" {
-		calibrate();
+		calibrationData := calibrate();
 		fmt.println("Launch Simulation? (y or n)");
 		launch := readInput(os.stdin);
 
@@ -27,7 +28,7 @@ main :: proc() {
 		return
 	}
 
-	simEngine, simEngineSuccess := initializeSimEngine().?;
+	simEngine, simEngineSuccess := initializeSimEngine(calibrationData).?;
 
 	if !simEngineSuccess {
 		fmt.println("Failed to initialize Simulation Engine.")
