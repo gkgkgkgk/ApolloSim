@@ -7,6 +7,7 @@ import "core:time"
 import "core:fmt"
 
 GPUData :: struct {
+    angleDeg: f32,
     angle: glm.vec4,
     materialId: int,
     meanIntensity: f32,
@@ -16,10 +17,7 @@ GPUData :: struct {
     dropRate: f32
 }
 
-// WHATS NEXT: FIX THIS CODE SO THAT THE CALIBRATION DATA REPRESENTS THE MATERIAL BENCHMARK AND CAN BE SENT TO THE GPU
-// TODO: make sure this is only done ONCE.
 generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDistance : f32) -> [dynamic]GPUData {
-    // TODO: move this logic to the calibration phase
     maxAngle := math.to_degrees(math.atan((benchmarkLength / 2.0) / benchmarkDistance));
 
     gpudata : [dynamic]GPUData;
@@ -27,16 +25,25 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
 
     for material in engine.calibrationData.materials {
         for angle in engine.calibrationData.materials[material].anglesData {
-            if angle > maxAngle || 360.0 - angle < maxAngle {
-                fmt.printf("heres a valid angle! %f", maxAngle);
+            if angle < maxAngle || 360.0 - angle < maxAngle {
+                angleData := engine.calibrationData.materials[material].anglesData[angle];
+                gd : GPUData;
+                gd.angleDeg = angleData.angle;
+
+                // TODO: Right now this works only for a 2d lidar...
+                gd.angle = glm.vec4{math.cos(math.to_radians(angleData.angle)), math.sin(math.to_radians(angleData.angle)), 0.0, 0.0};
+
+                gd.meanIntensity = angleData.mean;
+                gd.stdevIntensity = angleData.stdev;
+                gd.meanDistance = angleData.meanDistance;
+                gd.stdevDistance = angleData.stdevDistance;
+                append(&gpudata, gd);
+                i += 1;
             } 
-            angleData := engine.calibrationData.materials[material].anglesData[angle];
-            gd : GPUData;
-            gd.angle = angleData.angle;
-            append(&gpudata, gd);
-            i += 1;
         }
     }
+
+    fmt.println(gpudata);
 
     return gpudata;
 } 
