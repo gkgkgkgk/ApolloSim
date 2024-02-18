@@ -24,9 +24,13 @@ appendLine :: proc(file: os.Handle, str: string) {
 
 createBlankFile :: proc(file : string) -> os.Handle{
     os.remove(file);
-    f, err := os.open("./data.txt", os.O_CREATE);
-
-    return f;
+	when ODIN_OS == .Windows {
+		f, err := os.open("./data.txt", os.O_CREATE);
+	    return f;
+    } else when ODIN_OS == .Linux {
+		f, err := os.open("./data.txt", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0o777);
+		return f;
+    }
 }
 
 getEntireFile :: proc (file : string) -> Maybe(string) {

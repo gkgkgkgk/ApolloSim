@@ -247,4 +247,5 @@ generateFakeCalibrationData :: proc() {
         }
     }
 
+    os.close(f);
 }

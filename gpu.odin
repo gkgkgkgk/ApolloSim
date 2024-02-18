@@ -20,13 +20,16 @@ GPUData :: struct {
 // TODO: make sure this is only done ONCE.
 generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDistance : f32) -> [dynamic]GPUData {
     // TODO: move this logic to the calibration phase
-    angle := math.to_degrees(math.atan((benchmarkLength / 2.0) / benchmarkDistance));
+    maxAngle := math.to_degrees(math.atan((benchmarkLength / 2.0) / benchmarkDistance));
 
     gpudata : [dynamic]GPUData;
     i := 0;
 
     for material in engine.calibrationData.materials {
         for angle in engine.calibrationData.materials[material].anglesData {
+            if angle > maxAngle || 360.0 - angle < maxAngle {
+                fmt.printf("heres a valid angle! %f", maxAngle);
+            } 
             angleData := engine.calibrationData.materials[material].anglesData[angle];
             gd : GPUData;
             gd.angle = angleData.angle;
@@ -95,8 +98,8 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 7, engine.inputBuffer7);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(seeds) * size_of(f32), &seeds[0], gl.STATIC_DRAW);
 
-    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 8, engine.inputBuffer8);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(engine.gpuData) * size_of(GPUData), &engine.gpuData[0], gl.STATIC_DRAW);
+    // gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 8, engine.inputBuffer8);
+    // gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(engine.gpuData) * size_of(GPUData), &engine.gpuData[0], gl.STATIC_DRAW);
 
     timeUniformLocation := gl.GetUniformLocation(engine.computeShaderProgram, "u_time");
 
