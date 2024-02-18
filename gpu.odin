@@ -105,8 +105,8 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 7, engine.inputBuffer7);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(seeds) * size_of(f32), &seeds[0], gl.STATIC_DRAW);
 
-    // gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 8, engine.inputBuffer8);
-    // gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(engine.gpuData) * size_of(GPUData), &engine.gpuData[0], gl.STATIC_DRAW);
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 8, engine.inputBuffer8);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(engine.gpuData) * size_of(GPUData), &engine.gpuData[0], gl.STATIC_DRAW);
 
     timeUniformLocation := gl.GetUniformLocation(engine.computeShaderProgram, "u_time");
 

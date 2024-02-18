@@ -31,7 +31,7 @@ class LidarSubscriber(Node):
         angle_increment = laser.angle_increment
         range_min = laser.range_min
         range_max = laser.range_max
-        string = "Timestamp: {}.{}\nstart_angle: {}\nend_angle: {}\nangle_increment: {}\nrange_min: {}\nrange_max: {}\nranges: {}\nintensities: {}".format(
+        string = "[Timestamp:{}.{};start_angle:{};end_angle:{};angle_increment:{};range_min:{};range_max:{};ranges:{};intensities:{}]".format(
             laser.header.stamp.sec,
             laser.header.stamp.nanosec,
             start_angle,
