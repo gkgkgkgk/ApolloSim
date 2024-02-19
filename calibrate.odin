@@ -39,7 +39,8 @@ angleData :: struct {
     intensities : [dynamic]f32,
     distances : [dynamic]f32,
     meanDistance : f32,
-    stdevDistance : f32
+    stdevDistance : f32,
+    dropRate: f32
 }
 
 // the lighting model of the material
