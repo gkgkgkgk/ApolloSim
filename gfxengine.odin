@@ -161,6 +161,67 @@ loopGFXEngine :: proc(engine: GFXEngine, simEngine: SimEngine) {
 	}
 }
 
+loopGFXEngineViewer :: proc(engine: GFXEngine, simEngine: SimEngine) {
+    defer glfw.Terminate()
+	defer glfw.DestroyWindow(engine.window)
+    defer destroyShaders(engine)
+
+    engine := engine
+    simEngine := simEngine
+    view : glm.mat4
+
+    for (!glfw.WindowShouldClose(engine.window) && running) {
+		process_mouse(engine.window);
+		currentFrame := cast(f32)glfw.GetTime();
+		engine.deltaTime = currentFrame - engine.lastFrame;
+		engine.lastFrame = currentFrame;
+		engine.camera = updateCamera(engine.camera, engine.deltaTime, mouseMovement, engine.window);
+
+		view = getCameraViewMatrix(engine.camera);
+
+		glfw.PollEvents();
+		gl.ClearColor(1.0, 1.0, 1.0, 1.0);
+		gl.Clear(gl.COLOR_BUFFER_BIT);
+		gl.Clear(gl.DEPTH_BUFFER_BIT);
+
+        gl.UseProgram(engine.shaders[0]);   
+		uniform_infos := gl.get_uniforms_from_program(engine.shaders[0]);
+
+		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &(simEngine.sensor.geometry.model)[0][0]);
+		drawGeometryWithIndices(simEngine.sensor.geometry);
+
+        for i := 0; i < len(simEngine.scene); i+= 1 {
+            gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &(simEngine.scene[i].model)[0][0]);
+		    drawGeometryWithIndices(simEngine.scene[i]);
+        }
+
+        for i := 0; i < len(simEngine.complexScene); i+= 1 {
+            gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &(simEngine.complexScene[i].model)[0][0]);
+		    drawGeometryWithIndices(simEngine.complexScene[i]);
+        }
+
+		gl.UseProgram(engine.shaders[1])
+        uniform_infos = gl.get_uniforms_from_program(engine.shaders[1]);
+		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);
+		drawGrid(100);
+
+        gl.UseProgram(engine.shaders[2])
+        uniform_infos = gl.get_uniforms_from_program(engine.shaders[2]);
+		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);
+		drawLasers(simEngine);
+
+		glfw.SwapBuffers((engine.window))
+
+        simEngine = stepSimEngineViewer(simEngine, "metal");
+	}
+}
+
 initializeShaders :: proc(engine: GFXEngine) -> [dynamic]u32{
     shaders : [dynamic]u32
     program, shader_success := gl.load_shaders("shaders/shader.vertshader.glsl", "shaders/shader.fragshader.glsl");

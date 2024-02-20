@@ -21,7 +21,7 @@ SimEngine :: struct {
     inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8: u32
 }
 
-initializeSimEngine :: proc (calibrationData : CalibrationData) -> Maybe(SimEngine) {
+initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -> Maybe(SimEngine) {
     engine : SimEngine
     engine.steps = 0
     engine.sensor = initializeSensor();
@@ -52,40 +52,51 @@ initializeSimEngine :: proc (calibrationData : CalibrationData) -> Maybe(SimEngi
 
     engine.computeShaderProgram = computeShaderProgram;
 
-    // initialize scene
-    cube := createCube();
-    cube.model = identityModel * glm.mat4Translate({1.0, 0.0, 0.0});
-    cube.material = createMaterial(0.1, 0.75, 0.25, 0.5);
-    append(&engine.scene, cube);
+    if !viewer {
+        // initialize scene
+        cube := createCube();
+        cube.model = identityModel * glm.mat4Translate({1.0, 0.0, 0.0});
+        cube.material = createMaterial(0.1, 0.75, 0.25, 0.5);
+        append(&engine.scene, cube);
 
-    cube2 := createCube();
-    cube2.model = identityModel * glm.mat4Translate({0.0, 0.0, 5.0});
-    cube2.material = createMaterial(0.9, 0.75, 0.25, 0.000001);
-    append(&engine.scene, cube2)
+        cube2 := createCube();
+        cube2.model = identityModel * glm.mat4Translate({0.0, 0.0, 5.0});
+        cube2.material = createMaterial(0.9, 0.75, 0.25, 0.000001);
+        append(&engine.scene, cube2)
 
-    stopSign := customGeometry("./models/stopsignscale.obj")
-    stopSign.model = identityModel * glm.mat4Translate({2.5, 0, 2.5});
-    append(&engine.complexScene, stopSign)
+        stopSign := customGeometry("./models/stopsignscale.obj")
+        stopSign.model = identityModel * glm.mat4Translate({2.5, 0, 2.5});
+        append(&engine.complexScene, stopSign)
 
-    complexScene32 := make([]Geometry32, len(engine.scene));
-    for i := 0; i < len(engine.complexScene); i += 1 {
-        cg : Geometry32;
+        complexScene32 := make([]Geometry32, len(engine.scene));
+        for i := 0; i < len(engine.complexScene); i += 1 {
+            cg : Geometry32;
 
-        cg.vertices = engine.complexScene[i].vertices
-        indices : [dynamic]i32;
+            cg.vertices = engine.complexScene[i].vertices
+            indices : [dynamic]i32;
 
-        for j := 0; j < len(engine.complexScene[i].indices); j += 1 {
-            append(&indices, cast(i32)engine.complexScene[i].indices[j]);
+            for j := 0; j < len(engine.complexScene[i].indices); j += 1 {
+                append(&indices, cast(i32)engine.complexScene[i].indices[j]);
+            }
+
+            cg.indices = indices;
+            cg.model = engine.complexScene[i].model;
+            cg.gType = 100;
+
+            complexScene32[i] = cg;
         }
 
-        cg.indices = indices;
-        cg.model = engine.complexScene[i].model;
-        cg.gType = 100;
+        engine.complexScene32 = complexScene32;
+    } else {
+        cube := createCube();
+        fmt.println(calibrationData.materialLength);
+        size := glm.vec3({calibrationData.materialLength, calibrationData.materialLength, calibrationData.materialLength});
+        cube.model = identityModel * glm.mat4Translate({calibrationData.distance + (calibrationData.materialLength / 2.0), 0.0, 0.0}) * glm.mat4Scale(size);
+        cube.material = createMaterial(0.1, 0.75, 0.25, 0.5);
+        append(&engine.scene, cube);
 
-        complexScene32[i] = cg;
+        complexScene32 := make([]Geometry32, 0);
     }
-
-    engine.complexScene32 = complexScene32;
 
     // initialize compute shader buffers (TODO: get rid of these PLEASE)
     inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8: u32
@@ -108,7 +119,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData) -> Maybe(SimEngi
     engine.inputBuffer7 = inputBuffer7;
     engine.inputBuffer8 = inputBuffer8;
 
-    engine.gpuData = generateGPUData(engine, 1.0, 1.0);
+    engine.gpuData = generateGPUData(engine, calibrationData.materialLength, calibrationData.distance);
 
     fmt.println("Successfully initialized simulation engine.");
     return engine
@@ -118,10 +129,30 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     engine := engine
 
     outputData := sendDataToGPU(engine);
-
+    
     cube := engine.scene[0]
     cube.model = identityModel * glm.mat4Translate({2 * math.cos(cast(f32)engine.steps * 0.0005), 0.0, 2 * math.sin(cast(f32)engine.steps * 0.0005)});
     engine.scene[0] = cube
+
+    engine.outputData = outputData
+    engine.steps = engine.steps + 1
+    return engine
+}
+
+stepSimEngineViewer :: proc (engine : SimEngine, material : string) -> SimEngine {
+    engine := engine
+
+    outputData := make([]glm.vec4, len(engine.calibrationData.materials[material].anglesData));
+
+    i := 0;
+    mat := engine.calibrationData.materials[material];
+    for data in engine.gpuData {
+        x := math.cos(math.to_radians(data.angleDeg));
+        y := math.tan(math.to_radians(data.angleDeg));
+        outputData[i] = glm.vec4{engine.calibrationData.distance, 0.0, y, data.meanIntensity};
+
+        i += 1;
+    }
 
     engine.outputData = outputData
     engine.steps = engine.steps + 1
