@@ -1,7 +1,15 @@
 import rclpy
 from rclpy.node import Node
-
+import pygame
+import math
 from sensor_msgs.msg import LaserScan
+
+pygame.init()
+
+screen_width = 640
+screen_height = 480
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption('lidar')
 
 class LidarSubscriber(Node):
 
@@ -20,8 +28,9 @@ class LidarSubscriber(Node):
             self.f.close()
 
     def listener_callback(self, msg):
-        self.data.write(self.LaserToString(msg))
-        self.data.write("\n\n")
+        dataString = self.LaserToString(msg)
+        # self.data.write(data)
+        # self.data.write("\n\n")
 
     def LaserToString(self, laser):
         print(laser.header.stamp.sec)
@@ -41,6 +50,25 @@ class LidarSubscriber(Node):
             range_max,
             laser.ranges,
             laser.intensities)
+
+        screen.fill((0,0,0))
+        angle = 0.0
+        spread = 50.0
+
+        pygame.draw.line(screen, (255, 0, 0), (screen_width // 2, 0), (screen_width // 2, screen_height), 2)
+        pygame.draw.line(screen, (255, 0, 0), (0, screen_height // 2), (screen_width, screen_height // 2), 2)
+
+        for distance in laser.ranges:
+            if math.isinf(distance):
+                continue
+            
+            x = int(math.cos(angle) * distance * spread) + screen_width // 2
+            y = int(math.sin(angle) * distance * spread) + screen_height // 2
+            
+            pygame.draw.circle(screen, (255, 255, 255), (x,y), 5)
+            angle += angle_increment
+        
+        pygame.display.flip()
 
         return string
 
