@@ -21,19 +21,44 @@ main :: proc() {
 		}
 	}
 
-	gfxEngine, gfxEngineSuccess := initializeGFXEngine().?;
+	simEngine : SimEngine;
+	simEngineSuccess : bool;
 
-	if !gfxEngineSuccess {
-		fmt.println("Failed to initialize Graphics Engine.")
-		return
+	if len(args) > 2 && args[1] == "viewer" {
+		calibrationData = calibrate();
+		fmt.printf("Viewing Calibration file %s\n", args[2]);
+		
+		gfxEngine, gfxEngineSuccess := initializeGFXEngine().?;
+		
+		if !gfxEngineSuccess {
+			fmt.println("Failed to initialize Graphics Engine.")
+			return
+		}
+
+		simEngine, simEngineSuccess = initializeSimEngine(calibrationData, true).?;
+
+		if !simEngineSuccess {
+			fmt.println("Failed to initialize Viewer Simulation Engine.")
+			return
+		}
+
+		loopGFXEngineViewer(gfxEngine, simEngine);
+	} else {
+		gfxEngine, gfxEngineSuccess := initializeGFXEngine().?;
+		
+		if !gfxEngineSuccess {
+			fmt.println("Failed to initialize Graphics Engine.")
+			return
+		}
+
+		simEngine, simEngineSuccess = initializeSimEngine(calibrationData, false).?;
+		
+
+		if !simEngineSuccess {
+			fmt.println("Failed to initialize Simulation Engine.")
+			return
+		}
+
+		loopGFXEngine(gfxEngine, simEngine);
 	}
-
-	simEngine, simEngineSuccess := initializeSimEngine(calibrationData).?;
-
-	if !simEngineSuccess {
-		fmt.println("Failed to initialize Simulation Engine.")
-		return
-	}
-
-	loopGFXEngine(gfxEngine, simEngine);
 }

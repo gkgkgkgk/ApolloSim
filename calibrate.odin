@@ -8,7 +8,9 @@ import "core:math/rand"
 
 // calibration data for each material
 CalibrationData :: struct {
-    materials : map[string]MaterialData
+    materials : map[string]MaterialData,
+    distance : f32,
+    materialLength : f32
 };
 
 // calibration data for one material
@@ -72,6 +74,8 @@ calibrate :: proc() -> CalibrationData {
     }
 
     cd.materials = data;
+    cd.distance = 1.0;
+    cd.materialLength = 2.0;
 
     return cd;
 }
