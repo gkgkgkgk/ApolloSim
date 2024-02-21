@@ -51,14 +51,51 @@ LightingModel :: enum {
     CookTorrence
 }
 
+MaterialInput :: struct {
+    materialName : string,
+    filePath : string,
+    distance : f32,
+    width : f32
+}
+
 calibrate :: proc() -> CalibrationData {
     cd : CalibrationData;
 
     fmt.println("Is this a real calibration (y) or a simulated one (n)?")
     real := readInput(os.stdin)
+
+    matInputs : [dynamic]MaterialInput;
     
     if(strings.has_prefix(real, "y")){
-        fmt.println("Please Enter Calibration Time")
+        for {
+            fmt.println("Please enter the name of the material.")
+            matName := readInput(os.stdin)
+
+            fmt.printf("Please provide the path to the %s data file.\n", matName)
+            file := readInput(os.stdin)
+
+            fmt.println("Please enter the distance (m) from the sensor to the benchmark material.")
+            distance := cast(f32)strconv.atof(readInput(os.stdin))
+
+            fmt.println("Please enter the width (m) of the benchmark material.")
+            width := cast(f32)strconv.atof(readInput(os.stdin))
+
+            mat : MaterialInput;
+            mat.materialName = matName;
+            mat.filePath = file;
+            mat.distance = distance;
+            mat.width = width;
+            append(&matInputs, mat);
+
+            fmt.println("Saved material: ", mat)
+
+            fmt.println("Are there more materials? (y or n)")
+            more := readInput(os.stdin)
+
+            if !strings.has_prefix(more, "y"){
+                break
+            }
+        }
     }
     else {
         generateFakeCalibrationData();

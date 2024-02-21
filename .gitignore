@@ -4,6 +4,7 @@ devel/
 logs/
 log/
 build/
+ROS2_WS/src/install/*
 bin/
 lib/
 msg_gen/
