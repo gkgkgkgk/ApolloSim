@@ -67,35 +67,45 @@ calibrate :: proc() -> CalibrationData {
     matInputs : [dynamic]MaterialInput;
     
     if(strings.has_prefix(real, "y")){
-        for {
-            fmt.println("Please enter the name of the material.")
-            matName := readInput(os.stdin)
+        fmt.println("Generate a new config file (y) or use a previous one (n)?")
+        newfile := readInput(os.stdin)
 
-            fmt.printf("Please provide the path to the %s data file.\n", matName)
-            file := readInput(os.stdin)
+        if strings.has_prefix(newfile, "y"){
+            for {
+                fmt.println("Please enter the name of the material.")
+                matName := readInput(os.stdin)
 
-            fmt.println("Please enter the distance (m) from the sensor to the benchmark material.")
-            distance := cast(f32)strconv.atof(readInput(os.stdin))
+                fmt.printf("Please provide the path to the %s data file.\n", matName)
+                file := readInput(os.stdin)
 
-            fmt.println("Please enter the width (m) of the benchmark material.")
-            width := cast(f32)strconv.atof(readInput(os.stdin))
+                fmt.println("Please enter the distance (m) from the sensor to the benchmark material.")
+                distance := cast(f32)strconv.atof(readInput(os.stdin))
 
-            mat : MaterialInput;
-            mat.materialName = matName;
-            mat.filePath = file;
-            mat.distance = distance;
-            mat.width = width;
-            append(&matInputs, mat);
+                fmt.println("Please enter the width (m) of the benchmark material.")
+                width := cast(f32)strconv.atof(readInput(os.stdin))
 
-            fmt.println("Saved material: ", mat)
+                mat : MaterialInput;
+                mat.materialName = matName;
+                mat.filePath = file;
+                mat.distance = distance;
+                mat.width = width;
+                append(&matInputs, mat);
 
-            fmt.println("Are there more materials? (y or n)")
-            more := readInput(os.stdin)
+                fmt.println("Saved material: ", mat)
 
-            if !strings.has_prefix(more, "y"){
-                break
+                fmt.println("Are there more materials? (y or n)")
+                more := readInput(os.stdin)
+
+                if !strings.has_prefix(more, "y"){
+                    break
+                }
             }
+        } else {
+            fmt.println("What is the path to the config file?")
+            configFilePath := readInput(os.stdin)
         }
+
+        fmt.println("Gathered the following materials: ", matInputs);
     }
     else {
         generateFakeCalibrationData();
