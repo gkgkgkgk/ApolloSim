@@ -29,7 +29,7 @@ class LidarSubscriber(Node):
 
     def listener_callback(self, msg):
         dataString = self.LaserToString(msg)
-        # self.data.write(data)
+        # self.data.write(dataString)
         # self.data.write("\n\n")
 
     def LaserToString(self, laser):
@@ -52,22 +52,21 @@ class LidarSubscriber(Node):
             laser.intensities)
 
         screen.fill((0,0,0))
-        angle = 0.0
+        angle = start_angle
         spread = 50.0
 
         pygame.draw.line(screen, (255, 0, 0), (screen_width // 2, 0), (screen_width // 2, screen_height), 2)
         pygame.draw.line(screen, (255, 0, 0), (0, screen_height // 2), (screen_width, screen_height // 2), 2)
 
         for distance in laser.ranges:
-            if math.isinf(distance):
-                continue
-            
-            x = int(math.cos(angle) * distance * spread) + screen_width // 2
-            y = int(math.sin(angle) * distance * spread) + screen_height // 2
-            
-            pygame.draw.circle(screen, (255, 255, 255), (x,y), 5)
+            if not math.isinf(distance):            
+                x = screen_width - (int(math.cos(angle) * distance * spread) + screen_width // 2)
+                y = int(math.sin(angle) * distance * spread) + screen_height // 2
+                
+                pygame.draw.circle(screen, (255, 255, 255), (x,y), 5)
             angle += angle_increment
         
+        print(angle)
         pygame.display.flip()
 
         return string
