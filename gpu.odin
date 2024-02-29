@@ -7,9 +7,9 @@ import "core:time"
 import "core:fmt"
 
 GPUData :: struct {
-    angleDeg: f32,
     angle: glm.vec4,
-    materialId: int,
+    angleDeg: f32,
+    materialId: i32,
     meanIntensity: f32,
     meanDistance: f32,
     stdevIntensity: f32,
@@ -26,11 +26,10 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
     for material in engine.calibrationData.materials {
         for angle in engine.calibrationData.materials[material].anglesData {
             if angle < maxAngle || 360.0 - angle < maxAngle {
-                fmt.println(maxAngle, angle);
                 angleData := engine.calibrationData.materials[material].anglesData[angle];
                 gd : GPUData;
                 gd.angleDeg = angleData.angle;
-
+                gd.materialId = 1;
                 // TODO: Right now this works only for a 2d lidar...
                 gd.angle = glm.vec4{math.cos(math.to_radians(angleData.angle)), math.sin(math.to_radians(angleData.angle)), 0.0, 0.0};
 
@@ -106,8 +105,8 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 7, engine.inputBuffer7);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(seeds) * size_of(f32), &seeds[0], gl.STATIC_DRAW);
 
-    // gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 8, engine.inputBuffer8);
-    // gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(engine.gpuData) * size_of(GPUData), &engine.gpuData[0], gl.STATIC_DRAW);
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 8, engine.inputBuffer8);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(engine.gpuData) * size_of(GPUData), &engine.gpuData[0], gl.STATIC_DRAW);
 
     timeUniformLocation := gl.GetUniformLocation(engine.computeShaderProgram, "u_time");
 

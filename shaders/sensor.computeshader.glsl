@@ -59,7 +59,8 @@ struct IntersectionResult {
 };
 
 struct AngleData {
-    vec3 angle;
+    vec4 angle;
+    float angleDeg;
     int materialId;
     float meanIntensity;
     float meanDistance;
@@ -156,6 +157,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
     result.point = rayOrigin + rayDirection * tMin;
     result.intersects = true;
     result.intensity = sampleNormalDistribution(vec2(rayId + u_time, rayId / u_time), materials[material].averageIntensity, 0.1);
+    result.intensity = angles[0].meanIntensity;
 
     return result;
 }

@@ -120,7 +120,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
     engine.inputBuffer8 = inputBuffer8;
 
     engine.gpuData = generateGPUData(engine, calibrationData.materialLength, calibrationData.distance);
-
+    fmt.println(engine.gpuData[0]);
     fmt.println("Successfully initialized simulation engine.");
     return engine
 }
