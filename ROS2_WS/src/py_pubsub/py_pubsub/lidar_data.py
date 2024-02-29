@@ -28,9 +28,7 @@ class LidarSubscriber(Node):
             self.f.close()
 
     def listener_callback(self, msg):
-        dataString = self.LaserToString(msg)
-        # self.data.write(dataString)
-        # self.data.write("\n\n")
+        self.LaserToString(msg)
 
     def LaserToString(self, laser):
         print(laser.header.stamp.sec)
@@ -50,6 +48,12 @@ class LidarSubscriber(Node):
             range_max,
             laser.ranges,
             laser.intensities)
+        
+        currentAngle = start_angle
+        for a in range(len(laser.ranges)):
+            self.data.write(laser.ranges[a], laser.intensities[a], currentAngle)
+            self.data.write("\n")
+            currentAngle += angle_increment
 
         screen.fill((0,0,0))
         angle = start_angle
