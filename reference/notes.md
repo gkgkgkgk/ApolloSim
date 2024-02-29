@@ -123,3 +123,8 @@ Lets say at 90 degrees, the brick responds with a 0.75 intensity. We know the br
 
 ## Why ApolloSim?
 First of all, the name Helios, the Greek god of the sun (specifically the rays of the sun), was taken by [HELIOS++](https://arxiv.org/pdf/2101.09154.pdf). I'm using a language called Odin for the first time, so I wanted to stick with the theme of a god's name; so I went with Apollo, the god of truth and prophecy, because people use simulations to see the future. 
+
+# Testing
+## Testing Wood vs Wall
+Wood distance: 0.389
+Wall Distance: 0.457

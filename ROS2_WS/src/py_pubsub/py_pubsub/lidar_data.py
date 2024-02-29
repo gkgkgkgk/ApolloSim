@@ -20,8 +20,9 @@ class LidarSubscriber(Node):
             '/scan',
             self.listener_callback,
             10)
-        self.subscription
-        f = open("data.txt", "w")
+
+        filename = input("Enter your material name: ") 
+        f = open(filename+"_data.txt", "w")
         self.data = f
 
         def __del__(self):
@@ -51,7 +52,7 @@ class LidarSubscriber(Node):
         
         currentAngle = start_angle
         for a in range(len(laser.ranges)):
-            self.data.write(laser.ranges[a], laser.intensities[a], currentAngle)
+            self.data.write(",".join((str(laser.ranges[a]), str(laser.intensities[a]), str(currentAngle))))
             self.data.write("\n")
             currentAngle += angle_increment
 
