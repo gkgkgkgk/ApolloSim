@@ -21,7 +21,11 @@ class LidarSubscriber(Node):
             self.listener_callback,
             10)
 
-        filename = input("Enter your material name: ") 
+        filename = input("Enter your material name: ")
+        self.width = float(input("Enter your material width: "))
+        self.distance = float(input("Enter your material distance: "))
+
+
         f = open(filename+"_data.txt", "w")
         self.data = f
 
@@ -52,8 +56,8 @@ class LidarSubscriber(Node):
         
         currentAngle = start_angle
         for a in range(len(laser.ranges)):
-            self.data.write(",".join((str(laser.ranges[a]), str(laser.intensities[a]), str(currentAngle))))
-            self.data.write("\n")
+            # self.data.write(",".join((str(laser.ranges[a]), str(laser.intensities[a]), str(currentAngle))))
+            # self.data.write("\n")
             currentAngle += angle_increment
 
         screen.fill((0,0,0))
@@ -63,15 +67,26 @@ class LidarSubscriber(Node):
         pygame.draw.line(screen, (255, 0, 0), (screen_width // 2, 0), (screen_width // 2, screen_height), 2)
         pygame.draw.line(screen, (255, 0, 0), (0, screen_height // 2), (screen_width, screen_height // 2), 2)
 
+        max_angle = math.atan2((self.width / 2.0 ), self.distance)
+        min_angle = -2.0 * math.pi - max_angle
+
+        pygame.draw.line(screen, (0, 255, 0), (screen_width//2, screen_height // 2), (screen_width//2 + spread * self.distance, screen_height//2 + spread * self.width / 2.0), 2)
+        pygame.draw.line(screen, (0, 255, 0), (screen_width//2, screen_height // 2), (screen_width//2 + spread * self.distance, screen_height//2 - spread * self.width / 2.0), 2)
+
         for distance in laser.ranges:
             if not math.isinf(distance):            
                 x = screen_width - (int(math.cos(angle) * distance * spread) + screen_width // 2)
                 y = int(math.sin(angle) * distance * spread) + screen_height // 2
                 
-                pygame.draw.circle(screen, (255, 255, 255), (x,y), 5)
+                color = (math.pi + angle) / (2.0 * math.pi)
+                if (angle > 0 and angle > math.pi - max_angle) or (angle < 0 and angle < -math.pi + max_angle):
+                    pygame.draw.circle(screen, (255, 255, 255), (x,y), 5)
+                else:
+                    pygame.draw.circle(screen, (100, 100, 100), (x,y), 5)
+
             angle += angle_increment
         
-        print(angle)
+        print(angle, max_angle, min_angle)
         pygame.display.flip()
 
         return string
