@@ -97,6 +97,23 @@ calibrate :: proc() -> CalibrationData {
                 more := readInput(os.stdin)
 
                 if !strings.has_prefix(more, "y"){
+                    // materialName : string,
+                    // filePath : string,
+                    // distance : f32,
+                    // width : f32
+                    config := createBlankFile("./data.config")
+
+                    for mat in matInputs {
+                        buf := [128]byte{}
+                        buf2 := [128]byte{}
+
+                        distanceStr := strconv.ftoa(buf[:], f64(mat.distance), 'g', 6, 64)
+                        widthStr := strconv.ftoa(buf2[:], f64(mat.width), 'g', 6, 64)
+
+                        str := strings.join({mat.materialName, mat.filePath, distanceStr, widthStr}, ",");
+                        appendLine(config, str)
+                    }
+                    fmt.println("Generating Config File...")
                     break
                 }
             }

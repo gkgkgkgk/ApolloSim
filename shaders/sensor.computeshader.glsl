@@ -156,8 +156,21 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     result.point = rayOrigin + rayDirection * tMin;
     result.intersects = true;
+
+    AngleData a = angles[0];
+
+    for(int i = 1; i < angles.length(); i++){
+        if(material == angles[i].materialId && material != a.materialId){
+            a = angles[i];
+        }
+
+        // if(abs(angles[i].angleDeg) - abs(atan2(rayDirection.y, rayDirection.x)) < abs(a.angleDeg) - abs(atan2(rayDirection.y, rayDirection.x))){
+        //     a = angles[i];
+        // }
+    }
+
     result.intensity = sampleNormalDistribution(vec2(rayId + u_time, rayId / u_time), materials[material].averageIntensity, 0.1);
-    result.intensity = angles[0].meanIntensity;
+    result.intensity = a.meanIntensity;
 
     return result;
 }

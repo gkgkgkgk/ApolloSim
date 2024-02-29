@@ -29,7 +29,7 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
                 angleData := engine.calibrationData.materials[material].anglesData[angle];
                 gd : GPUData;
                 gd.angleDeg = angleData.angle;
-                gd.materialId = 1;
+                gd.materialId = 0;
                 // TODO: Right now this works only for a 2d lidar...
                 gd.angle = glm.vec4{math.cos(math.to_radians(angleData.angle)), math.sin(math.to_radians(angleData.angle)), 0.0, 0.0};
 

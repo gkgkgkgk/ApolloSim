@@ -13,7 +13,7 @@ readInput :: proc(input: os.Handle) -> string {
 
 	str := strings.clone_from_bytes(buf[:n]);
 
-	return strings.trim(str, "\n");
+	return strings.trim(str, "\n\r");
 }
 
 appendLine :: proc(file: os.Handle, str: string) {
@@ -25,10 +25,10 @@ appendLine :: proc(file: os.Handle, str: string) {
 createBlankFile :: proc(file : string) -> os.Handle{
     os.remove(file);
 	when ODIN_OS == .Windows {
-		f, err := os.open("./data.txt", os.O_CREATE);
+		f, err := os.open(file, os.O_CREATE);
 	    return f;
     } else when ODIN_OS == .Linux {
-		f, err := os.open("./data.txt", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0o777);
+		f, err := os.open(file, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0o777);
 		return f;
     }
 }
