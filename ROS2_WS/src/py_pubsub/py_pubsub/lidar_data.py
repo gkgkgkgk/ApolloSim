@@ -68,7 +68,6 @@ class LidarSubscriber(Node):
         pygame.draw.line(screen, (255, 0, 0), (0, screen_height // 2), (screen_width, screen_height // 2), 2)
 
         max_angle = math.atan2((self.width / 2.0 ), self.distance)
-        min_angle = -2.0 * math.pi - max_angle
 
         pygame.draw.line(screen, (0, 255, 0), (screen_width//2, screen_height // 2), (screen_width//2 + spread * self.distance, screen_height//2 + spread * self.width / 2.0), 2)
         pygame.draw.line(screen, (0, 255, 0), (screen_width//2, screen_height // 2), (screen_width//2 + spread * self.distance, screen_height//2 - spread * self.width / 2.0), 2)
@@ -78,7 +77,6 @@ class LidarSubscriber(Node):
                 x = screen_width - (int(math.cos(angle) * distance * spread) + screen_width // 2)
                 y = int(math.sin(angle) * distance * spread) + screen_height // 2
                 
-                color = (math.pi + angle) / (2.0 * math.pi)
                 if (angle > 0 and angle > math.pi - max_angle) or (angle < 0 and angle < -math.pi + max_angle):
                     pygame.draw.circle(screen, (255, 255, 255), (x,y), 5)
                 else:
@@ -86,7 +84,6 @@ class LidarSubscriber(Node):
 
             angle += angle_increment
         
-        print(angle, max_angle, min_angle)
         pygame.display.flip()
 
         return string

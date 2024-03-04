@@ -12,7 +12,14 @@ main :: proc() {
 	calibrationData : CalibrationData;
 
 	if len(args) > 1 && args[1] == "calibrate" {
-		calibrationData = calibrate();
+		configFile :string = ""
+
+		if len(args) > 2 {
+			configFile = args[2]
+			fmt.println("Calibrating on config file: ", configFile)
+		}
+
+		calibrationData = calibrate(configFile);
 		fmt.println("Launch Simulation? (y or n)");
 		launch := readInput(os.stdin);
 
@@ -25,7 +32,7 @@ main :: proc() {
 	simEngineSuccess : bool;
 
 	if len(args) > 2 && args[1] == "viewer" {
-		calibrationData = calibrate();
+		calibrationData = calibrate("");
 		fmt.printf("Viewing Calibration file %s\n", args[2]);
 		
 		gfxEngine, gfxEngineSuccess := initializeGFXEngine().?;
