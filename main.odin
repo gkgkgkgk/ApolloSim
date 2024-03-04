@@ -32,7 +32,15 @@ main :: proc() {
 	simEngineSuccess : bool;
 
 	if len(args) > 2 && args[1] == "viewer" {
-		calibrationData = calibrate("");
+		configFile :string = ""
+
+		if len(args) > 2 {
+			configFile = args[2]
+			fmt.println("Calibrating on config file: ", configFile)
+		}
+
+		calibrationData = calibrate(configFile);
+
 		fmt.printf("Viewing Calibration file %s\n", args[2]);
 		
 		gfxEngine, gfxEngineSuccess := initializeGFXEngine().?;

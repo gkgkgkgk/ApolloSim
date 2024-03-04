@@ -25,21 +25,20 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
 
     for material in engine.calibrationData.materials {
         for angle in engine.calibrationData.materials[material].anglesData {
-            if angle < maxAngle || 360.0 - angle < maxAngle {
-                angleData := engine.calibrationData.materials[material].anglesData[angle];
-                gd : GPUData;
-                gd.angleDeg = angleData.angle;
-                gd.materialId = 0;
-                // TODO: Right now this works only for a 2d lidar...
-                gd.angle = glm.vec4{math.cos(math.to_radians(angleData.angle)), math.sin(math.to_radians(angleData.angle)), 0.0, 0.0};
+            angleData := engine.calibrationData.materials[material].anglesData[angle];
+            gd : GPUData;
+            gd.angleDeg = math.to_degrees(angleData.angle);
+            gd.materialId = engine.calibrationData.materials[material].materialId;
+            // TODO: Right now this works only for a 2d lidar...
+            gd.angle = glm.vec4{math.cos((angleData.angle)), math.sin((angleData.angle)), 0.0, 0.0};
+            gd.meanIntensity = angleData.mean;
+            gd.stdevIntensity = angleData.stdev;
+            gd.meanDistance = angleData.meanDistance;
+            gd.stdevDistance = angleData.stdevDistance;
+            gd.dropRate = angleData.dropRate;
 
-                gd.meanIntensity = angleData.mean;
-                gd.stdevIntensity = angleData.stdev;
-                gd.meanDistance = angleData.meanDistance;
-                gd.stdevDistance = angleData.stdevDistance;
-                append(&gpudata, gd);
-                i += 1;
-            } 
+            append(&gpudata, gd);
+            i += 1;
         }
     }
 

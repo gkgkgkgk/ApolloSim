@@ -120,7 +120,6 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
     engine.inputBuffer8 = inputBuffer8;
 
     engine.gpuData = generateGPUData(engine, calibrationData.materialLength, calibrationData.distance);
-    fmt.println(engine.gpuData[0]);
     fmt.println("Successfully initialized simulation engine.");
     return engine
 }
@@ -146,12 +145,15 @@ stepSimEngineViewer :: proc (engine : SimEngine, material : string) -> SimEngine
 
     i := 0;
     mat := engine.calibrationData.materials[material];
-    for data in engine.gpuData {
-        x := math.cos(math.to_radians(data.angleDeg));
-        y := math.tan(math.to_radians(data.angleDeg));
-        outputData[i] = glm.vec4{engine.calibrationData.distance, 0.0, y, data.meanIntensity};
 
-        i += 1;
+    for data in engine.gpuData {
+        if data.materialId == mat.materialId{
+            x := math.cos(math.to_radians(data.angleDeg));
+            y := math.tan(math.to_radians(data.angleDeg));
+            outputData[i] = glm.vec4{engine.calibrationData.distance, 0.0, y, data.meanIntensity};
+
+            i += 1;
+        }
     }
 
     engine.outputData = outputData
