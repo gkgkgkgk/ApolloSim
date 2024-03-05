@@ -59,12 +59,20 @@ main :: proc() {
 
 		loopGFXEngineViewer(gfxEngine, simEngine);
 	} else {
+		configFile : string = "./data.config"
+
+		if len(args) > 1 {
+			configFile = args[1]
+		}
+
 		gfxEngine, gfxEngineSuccess := initializeGFXEngine().?;
 		
 		if !gfxEngineSuccess {
 			fmt.println("Failed to initialize Graphics Engine.")
 			return
 		}
+
+		calibrationData = calibrate(configFile);
 
 		simEngine, simEngineSuccess = initializeSimEngine(calibrationData, false).?;
 		
