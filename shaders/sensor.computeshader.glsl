@@ -35,6 +35,7 @@ struct Material
     float maxIntensity;
     float minIntensity;
     float dropRate;
+    int materialId;
 };
 
 struct SimpleGeometry
@@ -159,6 +160,22 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     AngleData a = angles[0];
 
+    vec3 normal = vec3(0);
+    
+    float e = 0.0001;
+    for (int i = 0; i < 3; i++) {
+        if(abs(result.point[i] - maxExtents[i]) < e){
+            normal[i] = 1.0;
+            break;
+        }
+    
+        if(abs(result.point[i] - minExtents[i]) < e){
+            normal[i] = -1.0;
+            break;
+        }
+    }
+
+
     for(int i = 1; i < angles.length(); i++){
         if(material == angles[i].materialId && material != a.materialId){
             a = angles[i];
@@ -169,8 +186,12 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
         // }
     }
 
-    result.intensity = sampleNormalDistribution(vec2(rayId + u_time, rayId / u_time), materials[material].averageIntensity, 0.1);
-    result.intensity = a.meanIntensity;
+    // result.intensity = sampleNormalDistribution(vec2(rayId + u_time, rayId / u_time), materials[material].averageIntensity, 0.1);
+    // if(material == 0){
+    //     result.intensity = 1.0;
+    // } else {
+    //     result.intensity = 0.0;
+    // }    
 
     return result;
 }

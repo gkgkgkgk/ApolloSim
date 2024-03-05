@@ -54,8 +54,7 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
         sgTemp.model = engine.scene[i].model
         sgTemp.gType = cast(i32)engine.scene[i].gType
 
-        materials[i] = engine.scene[i].material;
-        sgTemp.material = cast(i32)i;
+        sgTemp.material = cast(i32) engine.scene[i].material;
 
         sg[i] = sgTemp
     }

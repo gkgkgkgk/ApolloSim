@@ -19,7 +19,7 @@ Geometry :: struct {
     indices: [dynamic]u16,
     model : glm.mat4,
     gType : int,
-    material: Material,
+    material: int,
     texturePath : string,
     texture : u32,
 }
@@ -118,7 +118,7 @@ createCylinder :: proc () -> Geometry {
     return cylinder;
 }
 
-createMaterial :: proc (average:f32, max:f32, min:f32, dropRate:f32) -> Material {
+createMaterial :: proc (average:f32, max:f32, min:f32, dropRate:f32, materialId: i32) -> Material {
     m : Material;
     m.averageIntensity = average;
     m.maxIntensity = max;

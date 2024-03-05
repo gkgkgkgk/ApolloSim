@@ -56,12 +56,12 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
         // initialize scene
         cube := createCube();
         cube.model = identityModel * glm.mat4Translate({1.0, 0.0, 0.0});
-        cube.material = createMaterial(0.1, 0.75, 0.25, 0.5);
+        cube.material = 0;
         append(&engine.scene, cube);
 
         cube2 := createCube();
         cube2.model = identityModel * glm.mat4Translate({0.0, 0.0, 5.0});
-        cube2.material = createMaterial(0.9, 0.75, 0.25, 0.000001);
+        cube2.material = 1;
         append(&engine.scene, cube2)
 
         stopSign := customGeometry("./models/stopsignscale.obj")
@@ -92,7 +92,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
         fmt.println(calibrationData.materialLength);
         size := glm.vec3({calibrationData.materialLength, calibrationData.materialLength, calibrationData.materialLength});
         cube.model = identityModel * glm.mat4Translate({calibrationData.distance + (calibrationData.materialLength / 2.0), 0.0, 0.0}) * glm.mat4Scale(size);
-        cube.material = createMaterial(0.1, 0.75, 0.25, 0.5);
+        cube.material = 0;
         append(&engine.scene, cube);
 
         complexScene32 := make([]Geometry32, 0);
@@ -130,7 +130,7 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     outputData := sendDataToGPU(engine);
     
     cube := engine.scene[0]
-    cube.model = identityModel * glm.mat4Translate({2 * math.cos(cast(f32)engine.steps * 0.0005), 0.0, 2 * math.sin(cast(f32)engine.steps * 0.0005)});
+    cube.model = identityModel * glm.mat4Translate({2 * math.cos(cast(f32)engine.steps * 0.005), 0.0, 2 * math.sin(cast(f32)engine.steps * 0.005)});
     engine.scene[0] = cube
 
     engine.outputData = outputData
