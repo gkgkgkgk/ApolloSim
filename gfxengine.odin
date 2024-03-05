@@ -148,6 +148,13 @@ loopGFXEngine :: proc(engine: GFXEngine, simEngine: SimEngine) {
 		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);
 		drawGrid(100);
 
+        gl.UseProgram(engine.shaders[3])
+        uniform_infos = gl.get_uniforms_from_program(engine.shaders[3]);
+		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);
+        drawAxis();
+
         gl.UseProgram(engine.shaders[2])
         uniform_infos = gl.get_uniforms_from_program(engine.shaders[2]);
 		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
@@ -209,6 +216,13 @@ loopGFXEngineViewer :: proc(engine: GFXEngine, simEngine: SimEngine) {
 		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);
 		drawGrid(100);
 
+        gl.UseProgram(engine.shaders[3])
+        uniform_infos = gl.get_uniforms_from_program(engine.shaders[3]);
+		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
+		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);
+        drawAxis();
+
         gl.UseProgram(engine.shaders[2])
         uniform_infos = gl.get_uniforms_from_program(engine.shaders[2]);
 		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
@@ -233,6 +247,9 @@ initializeShaders :: proc(engine: GFXEngine) -> [dynamic]u32{
 
     laser_program, laser_shader_success := gl.load_shaders("shaders/laser.vertshader.glsl", "shaders/laser.fragshader.glsl");
     append(&shaders, laser_program)
+
+    axis_program, axis_shader_success := gl.load_shaders("shaders/axis.vertshader.glsl", "shaders/axis.fragshader.glsl");
+    append(&shaders, axis_program)
 
     return shaders
 }
@@ -269,6 +286,49 @@ drawGrid :: proc($gridSize: int) {
         vertices[index + 10] = 0;
         vertices[index + 11] = offset;
     }
+
+    vbo, vao: u32;
+    gl.GenVertexArrays(1, &vao); defer gl.DeleteVertexArrays(1, &vao);
+	gl.GenBuffers(1, &vbo); defer gl.DeleteBuffers(1, &vbo);
+
+	gl.BindVertexArray(vao)
+	gl.BindBuffer(gl.ARRAY_BUFFER, vbo);
+    gl.BufferData(gl.ARRAY_BUFFER, len(vertices) * size_of(f32), &vertices[0], gl.STATIC_DRAW);
+
+    gl.VertexAttribPointer(0, 3, gl.FLOAT, gl.FALSE, 3 * size_of(f32), 0);
+	gl.EnableVertexAttribArray(0);
+
+    gl.DrawArrays(gl.LINES, 0, (cast(i32)gridSize + 1) * 4);
+}
+
+drawAxis :: proc() {
+    gridSize : int = 100;
+    gl.LineWidth(10.0);
+    vertices : [18]f32;
+
+    vertices[0] = 0.0;
+    vertices[1] = 0.0;
+    vertices[2] = 0.0;
+
+    vertices[3] = 1.0;
+    vertices[4] = 0.0;
+    vertices[5] = 0.0;
+
+    vertices[6] = 0.0;
+    vertices[7] = 0.0;
+    vertices[8] = 0.0;
+
+    vertices[9] = 0.0;
+    vertices[10] = 1.0;
+    vertices[11] = 0.0;
+
+    vertices[12] = 0.0;
+    vertices[13] = 0.0;
+    vertices[14] = 0.0;
+
+    vertices[15] = 0.0;
+    vertices[16] = 0.0;
+    vertices[17] = 1.0;
 
     vbo, vao: u32;
     gl.GenVertexArrays(1, &vao); defer gl.DeleteVertexArrays(1, &vao);
