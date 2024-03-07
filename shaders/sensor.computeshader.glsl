@@ -175,6 +175,9 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
         }
     }
 
+    vec3 ray = rayDirection - rayOrigin;
+
+    float angle = acos(dot(ray, normal)  / (length(ray) * length(normal)));
 
     for(int i = 1; i < angles.length(); i++){
         if(material == angles[i].materialId && material != a.materialId){
@@ -191,7 +194,9 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
     //     result.intensity = 1.0;
     // } else {
     //     result.intensity = 0.0;
-    // }    
+    // }
+
+    // result.intensity = angle;
 
     return result;
 }
