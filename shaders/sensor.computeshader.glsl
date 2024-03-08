@@ -1,4 +1,7 @@
 #version 460 core
+
+#define PI 3.1415926535897932384626433832795
+
 layout (local_size_x = 16, local_size_y = 1, local_size_z = 1) in;
 
 uniform float u_time;
@@ -21,7 +24,7 @@ float sampleNormalDistribution(vec2 uv, float mean, float stdDev)
 
     u1 = u1 == 0.0 ? 0.0001 : u1;
     float r = sqrt(-2.0 * log(u1));
-    float theta = 2.0 * 3.14159265 * u2;
+    float theta = 2.0 * PI * u2;
 
     float z = r * cos(theta);
 
@@ -179,6 +182,10 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     float angle = acos(dot(ray, normal)  / (length(ray) * length(normal)));
 
+    if (angle > (PI/2.0)) {
+        angle = PI - angle;
+    }
+
     for(int i = 1; i < angles.length(); i++){
         if(material == angles[i].materialId && material != a.materialId){
             a = angles[i];
@@ -196,7 +203,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
     //     result.intensity = 0.0;
     // }
 
-    // result.intensity = angle;
+    result.intensity = angle;
 
     return result;
 }
