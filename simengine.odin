@@ -18,7 +18,7 @@ SimEngine :: struct {
     outputData : []glm.vec4,
     calibrationData : CalibrationData,
     gpuData : [dynamic]GPUData,
-    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8: u32
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8, outputBuffer2: u32
 }
 
 initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -> Maybe(SimEngine) {
@@ -99,7 +99,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
     }
 
     // initialize compute shader buffers (TODO: get rid of these PLEASE)
-    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8: u32
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8, outputBuffer2: u32
     gl.GenBuffers(1, &inputBuffer);
     gl.GenBuffers(1, &inputBuffer2);
     gl.GenBuffers(1, &inputBuffer3);
@@ -108,6 +108,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
 	gl.GenBuffers(1, &outputBuffer);
 	gl.GenBuffers(1, &inputBuffer6);
 	gl.GenBuffers(1, &inputBuffer8);
+	gl.GenBuffers(1, &outputBuffer2);
 
     engine.inputBuffer = inputBuffer;
     engine.inputBuffer2 = inputBuffer2;
@@ -118,6 +119,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
     engine.inputBuffer6 = inputBuffer6;
     engine.inputBuffer7 = inputBuffer7;
     engine.inputBuffer8 = inputBuffer8;
+    engine.outputBuffer2 = outputBuffer2;
 
     engine.gpuData = generateGPUData(engine, calibrationData.materialLength, calibrationData.distance);
     fmt.println("Successfully initialized simulation engine.");

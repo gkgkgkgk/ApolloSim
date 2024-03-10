@@ -68,6 +68,7 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     }
 
     outputData := make([]glm.vec4, engine.sensor.packetSize);
+    outputData2 := make([]glm.vec4, engine.sensor.packetSize);
 
     my_rand := rand.create(1)
     seeds := make([]f32, len(engine.sensor.directions))
@@ -115,6 +116,9 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
 
     gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, engine.outputBuffer);
     gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0])
+
+    gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, engine.outputBuffer2);
+    gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, engine.sensor.packetSize * size_of(glm.vec4), &outputData2[0])
 
     return outputData;
 }

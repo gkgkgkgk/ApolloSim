@@ -21,6 +21,8 @@ mouseMovement : glm.vec2 = glm.vec2{0.0, 0.0};
 
 running : b32 = true;
 
+paused : bool = false;
+
 identityModel := glm.mat4 {
 		1.0, 0.0, 0.0, 0.0,
 		0.0, 1.0, 0.0, 0.0,
@@ -110,6 +112,13 @@ loopGFXEngine :: proc(engine: GFXEngine, simEngine: SimEngine) {
     view : glm.mat4
 
     for (!glfw.WindowShouldClose(engine.window) && running) {
+        if(glfw.GetKey(engine.window, glfw.KEY_O) == glfw.PRESS){
+            paused = false;
+        }
+        if(glfw.GetKey(engine.window, glfw.KEY_P) == glfw.PRESS){
+            paused = true;
+        }
+
 		process_mouse(engine.window);
 		currentFrame := cast(f32)glfw.GetTime();
 		engine.deltaTime = currentFrame - engine.lastFrame;
@@ -164,7 +173,9 @@ loopGFXEngine :: proc(engine: GFXEngine, simEngine: SimEngine) {
 
 		glfw.SwapBuffers((engine.window))
 
-        simEngine = stepSimEngine(simEngine);
+        if (!paused){
+            simEngine = stepSimEngine(simEngine);
+        }
 	}
 }
 

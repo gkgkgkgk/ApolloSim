@@ -121,6 +121,10 @@ layout(std430, binding = 8) buffer InputBuffer8 {
     AngleData angles[];
 };
 
+layout(std430, binding = 9) buffer OutputBuffer2 {
+    vec4 outputData2[];
+};
+
 IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix, int material) {
     IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0);
 
@@ -302,10 +306,12 @@ void main()
             }
         }
 
+        outputData2[id.x * count + i] = vec4(directions[index], 1.0);
+
         if (result.intersects){
             outputData[id.x * count + i] = vec4(result.point, result.intensity);
         } else {
-            outputData[id.x * count + i] = vec4(0);
+            outputData[id.x * count + i] = vec4(0.0, 0.0, 0.0, -1.0);
         }
     }
 }
