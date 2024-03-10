@@ -21,7 +21,7 @@ mouseMovement : glm.vec2 = glm.vec2{0.0, 0.0};
 
 running : b32 = true;
 
-paused : bool = false;
+paused : bool = true;
 
 identityModel := glm.mat4 {
 		1.0, 0.0, 0.0, 0.0,
