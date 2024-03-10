@@ -30,8 +30,8 @@ initializeSensor :: proc () -> Sensor {
     sensor.sensorType = SensorType.Stationary
     sensor.dataDimensions = DataDimensions.TwoD
     sensor.workingRange = [2]f32 {0.1, 40}
-    sensor.scanFrequency = 10;
-    sensor.sampleFrequency = 32000;
+    sensor.scanFrequency = 5.5;
+    sensor.sampleFrequency = 3960;
 
     packetSize := cast(int)(sensor.sampleFrequency / sensor.scanFrequency);
 

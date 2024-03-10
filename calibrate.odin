@@ -9,6 +9,7 @@ import "core:math/rand"
 // calibration data for each material
 CalibrationData :: struct {
     materials : map[string]MaterialData,
+    materialInputs : [dynamic]MaterialInput,
     distance : f32,
     materialLength : f32
 };
@@ -161,6 +162,7 @@ calibrate :: proc(configFile : string) -> CalibrationData {
         fmt.println("Calibration data generated.")
     }
 
+    cd.materialInputs = matInputs;
     fmt.println("Data Analyzed. Found the following materials:");
     data, success := analyzeData(matInputs).?;
 
@@ -170,8 +172,8 @@ calibrate :: proc(configFile : string) -> CalibrationData {
     }
 
     cd.materials = data;
-    cd.distance = 1.0;
-    cd.materialLength = 2.0;
+    // cd.distance = 1.0;
+    // cd.materialLength = 2.0;
 
     return cd;
 }

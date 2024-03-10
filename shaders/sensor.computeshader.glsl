@@ -178,9 +178,9 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
         }
     }
 
-    vec3 ray = rayDirection - rayOrigin;
+    vec3 ray = normalize(rayDirection - rayOrigin);
 
-    float angle = acos(dot(ray, normal)  / (length(ray) * length(normal)));
+    float angle = acos(dot(ray, normal));
 
     if (angle > (PI/2.0)) {
         angle = PI - angle;

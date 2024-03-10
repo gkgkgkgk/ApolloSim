@@ -33,13 +33,28 @@ main :: proc() {
 
 	if len(args) > 2 && args[1] == "viewer" {
 		configFile :string = ""
+		materialName : string = ""
 
 		if len(args) > 2 {
 			configFile = args[2]
 			fmt.println("Calibrating on config file: ", configFile)
 		}
 
+		if len(args) > 3 {
+			materialName = args[3]
+		}
+
 		calibrationData = calibrate(configFile);
+
+		fmt.println(materialName);
+		for matInput in calibrationData.materialInputs {
+			if matInput.materialName == materialName {
+				calibrationData.materialLength = matInput.width * 2.0;
+				calibrationData.distance = matInput.distance;
+				break;
+			}
+		}
+		
 
 		fmt.printf("Viewing Calibration file %s\n", args[2]);
 		
