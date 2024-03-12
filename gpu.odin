@@ -27,7 +27,7 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
         for angle in engine.calibrationData.materials[material].anglesData {
             angleData := engine.calibrationData.materials[material].anglesData[angle];
             gd : GPUData;
-            gd.angleDeg = math.to_degrees(angleData.angle);
+            gd.angleDeg = 180.0 - math.to_degrees(math.abs(angleData.angle));
             gd.materialId = engine.calibrationData.materials[material].materialId;
             // TODO: Right now this works only for a 2d lidar...
             gd.angle = glm.vec4{math.cos((angleData.angle)), math.sin((angleData.angle)), 0.0, 0.0};
@@ -97,6 +97,8 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 5, engine.outputBuffer);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, engine.sensor.packetSize * size_of(glm.vec4), &outputData[0], gl.STATIC_DRAW);
+    gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 9, engine.outputBuffer2);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, engine.sensor.packetSize * size_of(glm.vec4), &outputData2[0], gl.STATIC_DRAW);
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 6, engine.inputBuffer6);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(materials) * size_of(Material), &materials[0], gl.STATIC_DRAW);
@@ -119,6 +121,8 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
 
     gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, engine.outputBuffer2);
     gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, engine.sensor.packetSize * size_of(glm.vec4), &outputData2[0])
+
+    fmt.println(outputData[180], outputData2[180]);
 
     return outputData;
 }

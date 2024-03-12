@@ -125,6 +125,26 @@ layout(std430, binding = 9) buffer OutputBuffer2 {
     vec4 outputData2[];
 };
 
+AngleData closestAngle(int material, float angleDeg){
+    AngleData a = angles[0];
+    float e = 100.0;
+
+    for(int i = 1; i < angles.length(); i++){
+        if(angles[i].materialId == material){
+            if(a.materialId != material){
+                a = angles[i];
+            }
+
+            if(abs(a.angleDeg - angles[i].angleDeg) < e){
+                e = abs(a.angleDeg - angles[i].angleDeg);
+                a = angles[i];
+            }
+        }
+    }
+
+    return a;
+}
+
 IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix, int material) {
     IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0);
 
@@ -165,8 +185,6 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
     result.point = rayOrigin + rayDirection * tMin;
     result.intersects = true;
 
-    AngleData a = angles[0];
-
     vec3 normal = vec3(0);
     
     float e = 0.0001;
@@ -190,24 +208,11 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
         angle = PI - angle;
     }
 
-    for(int i = 1; i < angles.length(); i++){
-        if(material == angles[i].materialId && material != a.materialId){
-            a = angles[i];
-        }
+    float angleDeg = angle * 180.0 / PI;
 
-        // if(abs(angles[i].angleDeg) - abs(atan2(rayDirection.y, rayDirection.x)) < abs(a.angleDeg) - abs(atan2(rayDirection.y, rayDirection.x))){
-        //     a = angles[i];
-        // }
-    }
+    AngleData a = closestAngle(material, angleDeg);
 
-    // result.intensity = sampleNormalDistribution(vec2(rayId + u_time, rayId / u_time), materials[material].averageIntensity, 0.1);
-    // if(material == 0){
-    //     result.intensity = 1.0;
-    // } else {
-    //     result.intensity = 0.0;
-    // }
-
-    result.intensity = angle;
+    result.intensity = a.angleDeg;
 
     return result;
 }

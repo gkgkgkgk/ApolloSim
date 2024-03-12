@@ -247,14 +247,14 @@ analyzeData :: proc (matInputs: [dynamic]MaterialInput) -> Maybe(map[string]Mate
         }
 
         lines := strings.split(data, "\n")
+        maxAngle := math.atan2(mat.width, mat.distance * 2.0)
 
         // for every laser, sort them into a material. create the material if it doesnt exist
         for line in lines{
             laser, success := parseLaser(line, mat.materialName).?
-            maxAngle := math.atan2(mat.width, mat.distance * 2.0)
 
             // first, check if this laser is a valid angle
-            if (laser.angle > 0 && laser.angle > math.PI - maxAngle) || (laser.angle < 0 && laser.angle < -math.PI + maxAngle){
+            if (laser.angle > 0 && laser.angle > math.PI - (maxAngle/2.0)) || (laser.angle < 0 && laser.angle < -math.PI + (maxAngle/2.0)){
                 if(success && !(laser.material in materials)) {
                     m : MaterialData
                     m.materialId = mat.materialId
