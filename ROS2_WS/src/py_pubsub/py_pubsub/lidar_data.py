@@ -56,8 +56,8 @@ class LidarSubscriber(Node):
         
         currentAngle = start_angle
         for a in range(len(laser.ranges)):
-            # self.data.write(",".join((str(laser.ranges[a]), str(laser.intensities[a]), str(currentAngle))))
-            # self.data.write("\n")
+            self.data.write(",".join((str(laser.ranges[a]), str(laser.intensities[a]), str(currentAngle))))
+            self.data.write("\n")
             currentAngle += angle_increment
 
         screen.fill((0,0,0))
@@ -69,9 +69,7 @@ class LidarSubscriber(Node):
 
         max_angle = math.atan2((self.width / 2.0 ), self.distance)
 
-        pygame.draw.line(screen, (0, 255, 0), (screen_width//2, screen_height // 2), (screen_width//2 + spread * self.distance, screen_height//2 + spread * self.width / 2.0), 2)
-        pygame.draw.line(screen, (0, 255, 0), (screen_width//2, screen_height // 2), (screen_width//2 + spread * self.distance, screen_height//2 - spread * self.width / 2.0), 2)
-
+        
         for distance in laser.ranges:
             if not math.isinf(distance):            
                 x = screen_width - (int(math.cos(angle) * distance * spread) + screen_width // 2)
@@ -84,6 +82,9 @@ class LidarSubscriber(Node):
 
             angle += angle_increment
         
+        pygame.draw.line(screen, (0, 255, 0), (screen_width//2, screen_height // 2), (screen_width//2 + spread * self.distance, screen_height//2 + spread * self.width / 2.0), 2)
+        pygame.draw.line(screen, (0, 255, 0), (screen_width//2, screen_height // 2), (screen_width//2 + spread * self.distance, screen_height//2 - spread * self.width / 2.0), 2)
+
         pygame.display.flip()
 
         return string

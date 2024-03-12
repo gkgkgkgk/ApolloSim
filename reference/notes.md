@@ -128,3 +128,5 @@ First of all, the name Helios, the Greek god of the sun (specifically the rays o
 ## Testing Wood vs Wall
 Wood distance: 0.389
 Wall Distance: 0.457
+metal: 0.479
+shiny metal: 0.188
