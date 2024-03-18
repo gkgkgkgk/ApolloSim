@@ -25,6 +25,7 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
 
     for materialInput in engine.calibrationData.materialInputs {
         material := materialInput.materialName;
+
         for angle in engine.calibrationData.materials[material].anglesData {
             angleData := engine.calibrationData.materials[material].anglesData[angle];
             gd : GPUData;
@@ -43,8 +44,18 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
         }
     }
 
+    printMaterialGPUData(-1, gpudata);
+
     return gpudata;
 } 
+
+printMaterialGPUData :: proc (materialId : i32, gpudata : [dynamic]GPUData) {
+    for data in gpudata {
+        if (data.materialId == materialId || materialId < 0) {
+            fmt.println(data);
+        }
+    }
+}
 
 sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     sg := make([]SimpleGeometry, len(engine.scene));
@@ -67,6 +78,8 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
         complexSceneSize += size_of(glm.mat4)
         complexSceneSize += size_of(int)
     }
+
+    gpuDataSize := len(engine.gpuData) * (size_of(f32) * 6) + size_of(glm.vec4) + size_of(i32)
 
     outputData := make([]glm.vec4, engine.sensor.packetSize);
     outputData2 := make([]glm.vec4, engine.sensor.packetSize);
@@ -108,7 +121,7 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(seeds) * size_of(f32), &seeds[0], gl.STATIC_DRAW);
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 8, engine.inputBuffer8);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(engine.gpuData) * size_of(GPUData), &engine.gpuData[0], gl.STATIC_DRAW);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, gpuDataSize, &engine.gpuData[0], gl.STATIC_DRAW);
 
     timeUniformLocation := gl.GetUniformLocation(engine.computeShaderProgram, "u_time");
 
@@ -123,7 +136,7 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, engine.outputBuffer2);
     gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, engine.sensor.packetSize * size_of(glm.vec4), &outputData2[0])
 
-    fmt.println(outputData[180], outputData2[180]);
+    fmt.println(outputData[180], outputData2[180], outputData[181], outputData2[181]);
 
     return outputData;
 }

@@ -126,23 +126,35 @@ layout(std430, binding = 9) buffer OutputBuffer2 {
 };
 
 AngleData closestAngle(int material, float angleDeg){
-    AngleData a = angles[0];
-    float e = 100.0;
+    AngleData closest;
+    bool found = false;
+    float minError = 10000.0;
 
-    for(int i = 1; i < angles.length(); i++){
+    for(int i = 0; i < angles.length(); i++){
         if(angles[i].materialId == material){
-            if(a.materialId != material){
-                a = angles[i];
-            }
-
-            if(abs(a.angleDeg - angles[i].angleDeg) < e){
-                e = abs(a.angleDeg - angles[i].angleDeg);
-                a = angles[i];
+            float currentError = abs(angles[i].angleDeg - angleDeg);
+            if(currentError < minError){
+                minError = currentError;
+                closest = angles[i];
+                found = true;
             }
         }
     }
 
-    return a;
+    if(found){
+        return closest;
+    } else {
+        closest = angles[0];
+        closest.angle = vec4(0.0);
+        closest.angleDeg = 0.0;
+        closest.materialId = -1;
+        closest.meanIntensity = -10.0;
+        closest.meanDistance = 0.0;
+        closest.stdevIntensity = 0.0;
+        closest.stdevDistance = 0.0;
+        closest.dropRate = 0.0;
+        return closest;
+    }
 }
 
 IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix, int material) {
@@ -212,7 +224,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     AngleData a = closestAngle(material, angleDeg);
 
-    result.intensity = angles[material].angleDeg;
+    result.intensity = a.meanIntensity / 47.0;
 
     return result;
 }
