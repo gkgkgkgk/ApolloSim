@@ -23,7 +23,8 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
     gpudata : [dynamic]GPUData;
     i := 0;
 
-    for material in engine.calibrationData.materials {
+    for materialInput in engine.calibrationData.materialInputs {
+        material := materialInput.materialName;
         for angle in engine.calibrationData.materials[material].anglesData {
             angleData := engine.calibrationData.materials[material].anglesData[angle];
             gd : GPUData;

@@ -202,7 +202,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     vec3 ray = normalize(rayDirection - rayOrigin);
 
-    float angle = acos(dot(ray, normal));
+    float angle = acos(abs(dot(ray, normal)));
 
     if (angle > (PI/2.0)) {
         angle = PI - angle;
@@ -212,7 +212,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     AngleData a = closestAngle(material, angleDeg);
 
-    result.intensity = a.angleDeg;
+    result.intensity = angles[material].angleDeg;
 
     return result;
 }
