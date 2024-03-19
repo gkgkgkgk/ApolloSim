@@ -88,12 +88,14 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
 
         engine.complexScene32 = complexScene32;
     } else {
-        cube := createCube();
-        fmt.println(calibrationData.materialLength);
-        size := glm.vec3({calibrationData.materialLength, calibrationData.materialLength, calibrationData.materialLength});
-        cube.model = identityModel * glm.mat4Translate({calibrationData.distance + (calibrationData.materialLength / 2.0), 0.0, 0.0}) * glm.mat4Scale(size);
-        cube.material = 0;
-        append(&engine.scene, cube);
+        for i := -3; i < 4; i += 1 {
+	        cube := createCube();
+            cube.model = identityModel * glm.mat4Translate({calibrationData.distance + (0.5), 0.0, f32(i)});
+            cube.material = 0;
+            append(&engine.scene, cube);
+        }
+        
+        
 
         complexScene32 := make([]Geometry32, 0);
     }
@@ -135,21 +137,32 @@ stepSimEngine :: proc (engine : SimEngine) -> SimEngine {
     cube.model = identityModel * glm.mat4Translate({2 * math.cos(cast(f32)engine.steps * 0.005), 0.0, 2 * math.sin(cast(f32)engine.steps * 0.005)});
     engine.scene[0] = cube
 
+    cube2 := engine.scene[1]
+    cube2.model = identityModel * glm.mat4Translate({4 * math.sin(cast(f32)engine.steps * 0.005), 0.0, 4 * math.cos(cast(f32)engine.steps * 0.005)});
+    engine.scene[1] = cube2
+
     engine.outputData = outputData
     engine.steps = engine.steps + 1
     return engine
 }
 
-stepSimEngineViewer :: proc (engine : SimEngine, material : string) -> SimEngine {
+stepSimEngineViewer :: proc (engine : SimEngine, material : int) -> SimEngine {
     engine := engine
 
-    outputData := make([]glm.vec4, len(engine.calibrationData.materials[material].anglesData));
-
-    i := 0;
-    mat := engine.calibrationData.materials[material];
+    l := 0
 
     for data in engine.gpuData {
-        if data.materialId == mat.materialId{
+        if(int(data.materialId) == material){
+            l += 1;
+        }
+    }
+
+    outputData := make([]glm.vec4, l);
+
+    i := 0;
+
+    for data in engine.gpuData {
+        if int(data.materialId) == material{
             x := math.cos(math.to_radians(data.angleDeg));
             y := math.tan(math.to_radians(data.angleDeg));
             outputData[i] = glm.vec4{engine.calibrationData.distance, 0.0, y, data.meanIntensity};

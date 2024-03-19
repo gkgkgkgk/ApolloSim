@@ -4167,6 +4167,13 @@ arXiv:2006.09348 [cs]</dc:description>
     <bib:Memo rdf:about="#item_115">
        <rdf:value>Includes index</rdf:value>
     </bib:Memo>
+    <bib:Data rdf:about="https://carla.org//">
+        <z:itemType>computerProgram</z:itemType>
+        <dc:title>CARLA Simulator</dc:title>
+        <dc:identifier>
+           <dcterms:URI><rdf:value>https://carla.org//</rdf:value></dcterms:URI>
+        </dc:identifier>
+    </bib:Data>
     <z:Collection rdf:about="#collection_1">
         <dc:title>ApolloSim Reference</dc:title>
         <dcterms:hasPart rdf:resource="http://arxiv.org/abs/2101.09154"/>
@@ -4195,6 +4202,7 @@ arXiv:2006.09348 [cs]</dc:description>
         <dcterms:hasPart rdf:resource="https://velodynelidar.com/wp-content/uploads/2019/12/63-9378_Rev-F_Ultra-Puck_Datasheet_Web.pdf"/>
         <dcterms:hasPart rdf:resource="https://thebookofshaders.com/"/>
         <dcterms:hasPart rdf:resource="urn:isbn:978-90-90-33256-7"/>
+        <dcterms:hasPart rdf:resource="https://carla.org//"/>
     </z:Collection>
     <z:Collection rdf:about="#collection_3">
         <dc:title>ApolloSim Reference 2/25/2024, 2:11:17 AM</dc:title>

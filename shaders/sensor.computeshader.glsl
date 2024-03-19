@@ -63,7 +63,6 @@ struct IntersectionResult {
 };
 
 struct AngleData {
-    vec4 angle;
     float angleDeg;
     int materialId;
     float meanIntensity;
@@ -145,7 +144,6 @@ AngleData closestAngle(int material, float angleDeg){
         return closest;
     } else {
         closest = angles[0];
-        closest.angle = vec4(0.0);
         closest.angleDeg = 0.0;
         closest.materialId = -1;
         closest.meanIntensity = -10.0;
@@ -224,7 +222,10 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     AngleData a = closestAngle(material, angleDeg);
 
-    result.intensity = a.meanIntensity / 47.0;
+    result.intensity = a.meanIntensity;
+    // result.point.z = a.angleDeg;
+    // result.point.y = angleDeg;
+    // result.point.x = 1.234;
 
     return result;
 }

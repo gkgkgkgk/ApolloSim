@@ -244,7 +244,7 @@ loopGFXEngineViewer :: proc(engine: GFXEngine, simEngine: SimEngine) {
 		glfw.SwapBuffers((engine.window))
 
         // TODO: THIS should be abstracted. abstract more of the viewer process.
-        simEngine = stepSimEngineViewer(simEngine, "metal");
+        simEngine = stepSimEngineViewer(simEngine, 1);
 	}
 }
 

@@ -46,7 +46,6 @@ main :: proc() {
 
 		calibrationData = calibrate(configFile);
 
-		fmt.println(materialName);
 		for matInput in calibrationData.materialInputs {
 			if matInput.materialName == materialName {
 				calibrationData.materialLength = matInput.width * 2.0;

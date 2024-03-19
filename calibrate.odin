@@ -5,6 +5,7 @@ import "core:strings"
 import "core:strconv"
 import "core:math"
 import "core:math/rand"
+import "core:slice"
 
 // calibration data for each material
 CalibrationData :: struct {
@@ -19,7 +20,8 @@ MaterialData :: struct {
     material : string,
     materialId : i32,
     lasers : [dynamic]laserData,
-    anglesData : map[f32]angleData,
+    anglesDataMap : map[f32]angleData,
+    anglesData : []angleData,
     mean : f32,
     stdev : f32,
     meanDistance : f32,
@@ -151,8 +153,6 @@ calibrate :: proc(configFile : string) -> CalibrationData {
                 append(&matInputs, mat);
                 id += 1;
             }
-
-            
         }
 
         fmt.println("Gathered the following materials: ", matInputs);
@@ -254,7 +254,7 @@ analyzeData :: proc (matInputs: [dynamic]MaterialInput) -> Maybe(map[string]Mate
             laser, success := parseLaser(line, mat.materialName).?
 
             // first, check if this laser is a valid angle
-            if (laser.angle > 0 && laser.angle > math.PI - (maxAngle/2.0)) || (laser.angle < 0 && laser.angle < -math.PI + (maxAngle/2.0)){
+            if (laser.angle > 0 && laser.angle > math.PI - (maxAngle)) || (laser.angle < 0 && laser.angle < -math.PI + (maxAngle)){
                 if(success && !(laser.material in materials)) {
                     m : MaterialData
                     m.materialId = mat.materialId
@@ -292,31 +292,31 @@ analyzeData :: proc (matInputs: [dynamic]MaterialInput) -> Maybe(map[string]Mate
             }
 
             // also, sort the lasers into angle structs, so that each angle has its own data
-            if(!(laser.angle in m.anglesData)) {
+            if(!(laser.angle in m.anglesDataMap)) {
                 angle : angleData;
                 angle.angle = laser.angle;
                 angle.intensities = {laser.intensity}
                 angle.distances = {laser.distance}
-                m.anglesData[laser.angle] = angle;
+                m.anglesDataMap[laser.angle] = angle;
             } else {
-                angle := m.anglesData[laser.angle]
+                angle := m.anglesDataMap[laser.angle]
                 
-                intensities := m.anglesData[laser.angle].intensities
+                intensities := m.anglesDataMap[laser.angle].intensities
                 append(&intensities, laser.intensity)
                 angle.intensities = intensities
 
-                distances := m.anglesData[laser.angle].distances
+                distances := m.anglesDataMap[laser.angle].distances
                 append(&distances, laser.distance)
                 angle.distances = distances
 
-                m.anglesData[laser.angle] = angle
+                m.anglesDataMap[laser.angle] = angle
             }
 
         }
 
         // now for every angle struct, run the analysis
-        for angle in m.anglesData {
-            data := m.anglesData[angle]
+        for angle in m.anglesDataMap {
+            data := m.anglesDataMap[angle]
             total : f32 = 0.0
             totalDistance : f32 = 0.0
 
@@ -339,9 +339,24 @@ analyzeData :: proc (matInputs: [dynamic]MaterialInput) -> Maybe(map[string]Mate
             data.meanDistance = totalDistance / f32(len(validDistances))
             data.stdevDistance = stdev(validDistances)
             data.dropRate = len(validDistances) > 0 ? (1.0 - f32(len(validDistances))/f32(len(data.distances))) : 1.0
-            m.anglesData[angle] = data
+            m.anglesDataMap[angle] = data
         }
 
+        anglesData := make([]angleData, len(m.anglesDataMap));
+
+        // sort into the angles array where the angle is actually the incident angle
+        i := 0;
+        for angleMap in m.anglesDataMap {
+            angleData := m.anglesDataMap[angleMap];
+
+            angleData.angle = math.PI - abs(angleData.angle);
+
+            anglesData[i] = angleData;
+            i += 1;
+        }
+
+        slice.sort_by(anglesData, compareAngle);
+        m.anglesData = anglesData;
         // run final analysis on the overall material
         m.mean = total / f32(len(m.lasers));
         m.stdev = stdev(intensities)
@@ -354,6 +369,10 @@ analyzeData :: proc (matInputs: [dynamic]MaterialInput) -> Maybe(map[string]Mate
 
     summarizeData(materials);
     return materials;
+}
+
+compareAngle :: proc (a : angleData, b : angleData) -> bool {
+    return a.angle < b.angle;
 }
 
 generateFakeCalibrationData :: proc() {

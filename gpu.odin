@@ -7,7 +7,6 @@ import "core:time"
 import "core:fmt"
 
 GPUData :: struct {
-    angle: glm.vec4,
     angleDeg: f32,
     materialId: i32,
     meanIntensity: f32,
@@ -27,12 +26,11 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
         material := materialInput.materialName;
 
         for angle in engine.calibrationData.materials[material].anglesData {
-            angleData := engine.calibrationData.materials[material].anglesData[angle];
+            angleData := angle;
             gd : GPUData;
-            gd.angleDeg = 180.0 - math.to_degrees(math.abs(angleData.angle));
+            gd.angleDeg = math.to_degrees((angleData.angle));
             gd.materialId = engine.calibrationData.materials[material].materialId;
             // TODO: Right now this works only for a 2d lidar...
-            gd.angle = glm.vec4{math.cos((angleData.angle)), math.sin((angleData.angle)), 0.0, 0.0};
             gd.meanIntensity = angleData.mean;
             gd.stdevIntensity = angleData.stdev;
             gd.meanDistance = angleData.meanDistance;
@@ -44,7 +42,7 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
         }
     }
 
-    printMaterialGPUData(-1, gpudata);
+    // printMaterialGPUData(-1, gpudata);
 
     return gpudata;
 } 
@@ -79,7 +77,7 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
         complexSceneSize += size_of(int)
     }
 
-    gpuDataSize := len(engine.gpuData) * (size_of(f32) * 6) + size_of(glm.vec4) + size_of(i32)
+    gpuDataSize := len(engine.gpuData) * (size_of(f32) * 6) + size_of(i32)
 
     outputData := make([]glm.vec4, engine.sensor.packetSize);
     outputData2 := make([]glm.vec4, engine.sensor.packetSize);
@@ -135,8 +133,6 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
 
     gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, engine.outputBuffer2);
     gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, engine.sensor.packetSize * size_of(glm.vec4), &outputData2[0])
-
-    fmt.println(outputData[180], outputData2[180], outputData[181], outputData2[181]);
 
     return outputData;
 }
