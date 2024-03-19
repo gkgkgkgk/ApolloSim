@@ -222,10 +222,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     AngleData a = closestAngle(material, angleDeg);
 
-    result.intensity = a.meanIntensity;
-    // result.point.z = a.angleDeg;
-    // result.point.y = angleDeg;
-    // result.point.x = 1.234;
+    result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity / 47.0, a.stdevIntensity / 47.0);
 
     return result;
 }

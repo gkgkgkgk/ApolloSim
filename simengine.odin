@@ -94,8 +94,6 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
             cube.material = 0;
             append(&engine.scene, cube);
         }
-        
-        
 
         complexScene32 := make([]Geometry32, 0);
     }
@@ -157,7 +155,7 @@ stepSimEngineViewer :: proc (engine : SimEngine, material : int) -> SimEngine {
         }
     }
 
-    outputData := make([]glm.vec4, l);
+    outputData := make([]glm.vec4, l * 2);
 
     i := 0;
 
@@ -166,8 +164,8 @@ stepSimEngineViewer :: proc (engine : SimEngine, material : int) -> SimEngine {
             x := math.cos(math.to_radians(data.angleDeg));
             y := math.tan(math.to_radians(data.angleDeg));
             outputData[i] = glm.vec4{engine.calibrationData.distance, 0.0, y, data.meanIntensity};
-
-            i += 1;
+            outputData[i + 1] = glm.vec4{engine.calibrationData.distance, 0.0, -y, data.meanIntensity};
+            i += 2;
         }
     }
 
