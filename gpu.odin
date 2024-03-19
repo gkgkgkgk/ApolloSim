@@ -42,7 +42,7 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
         }
     }
 
-    // printMaterialGPUData(-1, gpudata);
+    // printMaterialGPUData(0, gpudata);
 
     return gpudata;
 } 

@@ -327,7 +327,7 @@ analyzeData :: proc (matInputs: [dynamic]MaterialInput) -> Maybe(map[string]Mate
             }
 
             for i in data.distances {
-                if i > 0{
+                if i > 0 {
                     totalDistance += i;
                     append(&validDistances, i)
                 }
@@ -336,8 +336,14 @@ analyzeData :: proc (matInputs: [dynamic]MaterialInput) -> Maybe(map[string]Mate
             data.mean = total / f32(len(data.intensities))
             data.stdev = stdev(data.intensities)
 
-            data.meanDistance = totalDistance / f32(len(validDistances))
-            data.stdevDistance = stdev(validDistances)
+            if totalDistance > 0 {
+                data.meanDistance = totalDistance / f32(len(validDistances));
+                data.stdevDistance = stdev(validDistances);
+            } else {
+                data.meanDistance = 0.0;
+                data.stdevDistance = 0.0;
+            }
+            
             data.dropRate = len(validDistances) > 0 ? (1.0 - f32(len(validDistances))/f32(len(data.distances))) : 1.0
             m.anglesDataMap[angle] = data
         }
