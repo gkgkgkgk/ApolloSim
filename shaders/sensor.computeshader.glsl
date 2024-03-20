@@ -31,6 +31,28 @@ float sampleNormalDistribution(vec2 uv, float mean, float stdDev)
     return z * stdDev + mean;
 }
 
+// BRDF Functions
+float BRDFOrenNayar(float roughness, float theta_i) {
+    float sigma2 = roughness * roughness;
+    float A = 1.0 - (0.5 * sigma2 / (sigma2 + 0.33));
+    float B = 0.45 * sigma2 / (sigma2 + 0.09);
+    float cosTheta = cos(theta_i);
+
+    // Avoiding division by zero as theta_i approaches pi/2.
+    float sinTheta = sin(theta_i);
+    float tanTheta = (abs(cosTheta) > 0.001) ? (sinTheta / cosTheta) : 0.0;
+
+    float BRDF = A + B * sinTheta * tanTheta;
+    BRDF = clamp(BRDF, 0.0, 1.0);
+
+    return BRDF;
+}
+
+float BRDFCookTorrence(float iAngle, float rAngle){
+
+    return 1.0;
+}
+
 // STRUCTS
 struct Material 
 {
@@ -71,17 +93,6 @@ struct AngleData {
     float stdevDistance;
     float dropRate;
 };
-
-// BRDF Functions
-float BRDFOrenNayar(float iAngle, float rAngle){
-
-    return 1.0;
-}
-
-float BRDFCookTorrence(float iAngle, float rAngle){
-
-    return 1.0;
-}
 
 // INPUT/OUTPUT LAYOUTS
 layout(std430, binding = 0) buffer InputBuffer {
@@ -124,26 +135,31 @@ layout(std430, binding = 9) buffer OutputBuffer2 {
     vec4 outputData2[];
 };
 
-AngleData closestAngle(int material, float angleDeg){
+AngleData closestAngle(int material, float angleDeg, out bool maximum) {
     AngleData closest;
     bool found = false;
     float minError = 10000.0;
+    float maxAngleForMaterial = -10000.0;
 
-    for(int i = 0; i < angles.length(); i++){
-        if(angles[i].materialId == material){
+    for (int i = 0; i < angles.length(); i++) {
+        if (angles[i].materialId == material) {
             float currentError = abs(angles[i].angleDeg - angleDeg);
-            if(currentError < minError){
+            if (currentError < minError) {
                 minError = currentError;
                 closest = angles[i];
                 found = true;
             }
+            if (angles[i].angleDeg > maxAngleForMaterial) {
+                maxAngleForMaterial = angles[i].angleDeg;
+            }
         }
     }
 
-    if(found){
+    if (found) {
+        maximum = (closest.angleDeg == maxAngleForMaterial && angleDeg > maxAngleForMaterial);
+
         return closest;
     } else {
-        closest = angles[0];
         closest.angleDeg = 0.0;
         closest.materialId = -1;
         closest.meanIntensity = -10.0;
@@ -151,6 +167,7 @@ AngleData closestAngle(int material, float angleDeg){
         closest.stdevIntensity = 0.0;
         closest.stdevDistance = 0.0;
         closest.dropRate = 0.0;
+        maximum = false;
         return closest;
     }
 }
@@ -220,10 +237,38 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     float angleDeg = angle * 180.0 / PI;
 
-    AngleData a = closestAngle(material, angleDeg);
+    bool maximum = false;
+    AngleData a = closestAngle(material, angleDeg, maximum);
 
     result.point = rayOrigin + rayDirection * (tMin + sampleNormalDistribution(vec2(rayId, rayId / u_time), 0.0, a.stdevDistance));
-    result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity / 47.0, a.stdevIntensity / 47.0);
+
+    // if(maximum) {
+    //     vec3 L = ray;
+    //     vec3 V = -ray;
+    //     vec3 N = normal;
+
+    //     float roughness = 0.25;
+    //     float theta_i = acos(dot(L, N));
+    //     float theta_o = acos(dot(N, V));
+
+    //     vec3 L_proj = normalize(L - dot(L, N) * N);
+    //     vec3 V_proj = normalize(V - dot(V, N) * N);
+    //     float phi_diff = atan(dot(cross(N, L_proj), V_proj), dot(L_proj, V_proj));
+
+    //     result.intensity = BRDFOrenNayar(roughness, theta_i, theta_o, phi_diff);
+    // } else {
+    //     result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity / 47.0, a.stdevIntensity / 47.0);
+    // }
+
+    vec3 L = ray;
+    vec3 V = -ray;
+    vec3 N = normal;
+
+    float roughness = 0.5;
+    float theta_i = acos(dot(L, N));
+    float theta_o = acos(dot(N, V));
+
+    result.intensity = BRDFOrenNayar(roughness, theta_i);
 
     return result;
 }

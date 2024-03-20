@@ -134,5 +134,7 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, engine.outputBuffer2);
     gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, engine.sensor.packetSize * size_of(glm.vec4), &outputData2[0])
 
+    fmt.println(outputData[180], outputData[170])
+
     return outputData;
 }

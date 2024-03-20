@@ -61,7 +61,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
 
         cube2 := createCube();
         cube2.model = identityModel * glm.mat4Translate({0.0, 0.0, 5.0});
-        cube2.material = 1;
+        cube2.material = 0;
         append(&engine.scene, cube2)
 
         stopSign := customGeometry("./models/stopsignscale.obj")

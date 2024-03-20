@@ -9,7 +9,7 @@ void main() {
     float blue = fragIntensity;
 
     if (fragIntensity <= 0.0f){
-        FragColor = vec4(1.0f, 0.0f, 0.0f, 0.1f);
+        FragColor = vec4(1.0f, 1.0f, 0.0f, 0.5f);
     }
     else {
         FragColor = vec4(0, green, blue, 1.0f);
