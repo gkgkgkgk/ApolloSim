@@ -4174,6 +4174,282 @@ arXiv:2006.09348 [cs]</dc:description>
            <dcterms:URI><rdf:value>https://carla.org//</rdf:value></dcterms:URI>
         </dc:identifier>
     </bib:Data>
+    <rdf:Description rdf:about="https://api.semanticscholar.org/CorpusID:231830546">
+        <z:itemType>preprint</z:itemType>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                       <foaf:surname>Mattia Previtali</foaf:surname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                       <foaf:surname>Lucia Díaz-Vilariño</foaf:surname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                       <foaf:surname>Marco Scaioni</foaf:surname>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                       <foaf:surname>Ernesto Frías Nores</foaf:surname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Evaluation of the Expected Data Quality in Laser Scanning Surveying of Archaeological Sites</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://api.semanticscholar.org/CorpusID:231830546</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </rdf:Description>
+    <bib:Article rdf:about="https://onlinelibrary.wiley.com/doi/10.1002/arp.1712">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:1075-2196,%201099-0763"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Risbøl</foaf:surname>
+                        <foaf:givenName>Ole</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Gustavsen</foaf:surname>
+                        <foaf:givenName>Lars</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_119"/>
+        <dc:title>LiDAR from drones employed for mapping archaeology – Potential, benefits and challenges</dc:title>
+        <dcterms:abstract>Abstract
+            Although the use of both drones and LiDAR (light detection and ranging) has become common in archaeology in recent years, LiDAR scanning from drones is still in its infancy. The technological development related to drones as well as laser scanner instruments has gradually reached the point where these can be integrated. In this paper we present the results from a test where the applicability of LiDAR used from a drone was studied. The study had two objectives – both based on comparative studies: (i) whether LiDAR from drones represents an improvement in terms of detection success; and (ii) whether LiDAR from drones can increase the quality of the documentation of archaeological features and their physical properties based on remote sensing. A modest improvement of detection success was found, but was not as convincing as one would perhaps expect given the relatively large increase in terms of ground points. This has led us to the conclusion that very dense vegetation obstructs laser beams from reaching all the way to the bare earth. As regards accuracy in documenting archaeological features, the study showed more significant improvements. The last part of the paper is dedicated to a discussion of the pros and cons of using LiDAR from drones compared to conventional airborne laser scanning from aeroplanes or helicopters. The main advantages concern flexibility, low flight altitude and small laser footprint as well as the advantages of a far‐reaching field of view. The disadvantages are related to price, battery capacity, size of area and especially the requirement of line of sight between the drone operator and the drone, a fact that restricts the efficiency in terms of mapping large areas. Nevertheless, the final conclusion is that LiDAR from drones has the potential to make a substantial improvement to archaeological remote sensing.</dcterms:abstract>
+        <dc:date>10/2018</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://onlinelibrary.wiley.com/doi/10.1002/arp.1712</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-03-19 21:29:41</dcterms:dateSubmitted>
+        <bib:pages>329-338</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:1075-2196,%201099-0763">
+        <prism:volume>25</prism:volume>
+        <dc:title>Archaeological Prospection</dc:title>
+        <dc:identifier>DOI 10.1002/arp.1712</dc:identifier>
+        <prism:number>4</prism:number>
+        <dcterms:alternative>Archaeological Prospection</dcterms:alternative>
+        <dc:identifier>ISSN 1075-2196, 1099-0763</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_119">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>Submitted Version</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://niku.brage.unit.no/niku-xmlui/bitstream/11250/2736798/1/Risb%25C3%25B8l%2526Gustavsen_Lidarfromdrone_AP2018.pdf</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-03-19 21:29:46</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <bib:Article rdf:about="https://ieeexplore.ieee.org/document/9127855/">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf rdf:resource="urn:issn:1053-5888,%201558-0792"/>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Li</foaf:surname>
+                        <foaf:givenName>You</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Ibanez-Guzman</foaf:surname>
+                        <foaf:givenName>Javier</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <link:link rdf:resource="#item_121"/>
+        <dc:title>Lidar for Autonomous Driving: The Principles, Challenges, and Trends for Automotive Lidar and Perception Systems</dc:title>
+        <dc:date>7/2020</dc:date>
+        <z:shortTitle>Lidar for Autonomous Driving</z:shortTitle>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://ieeexplore.ieee.org/document/9127855/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-03-19 21:29:56</dcterms:dateSubmitted>
+        <bib:pages>50-61</bib:pages>
+    </bib:Article>
+    <bib:Journal rdf:about="urn:issn:1053-5888,%201558-0792">
+        <prism:volume>37</prism:volume>
+        <dc:title>IEEE Signal Processing Magazine</dc:title>
+        <dc:identifier>DOI 10.1109/MSP.2020.2973615</dc:identifier>
+        <prism:number>4</prism:number>
+        <dcterms:alternative>IEEE Signal Process. Mag.</dcterms:alternative>
+        <dc:identifier>ISSN 1053-5888, 1558-0792</dc:identifier>
+    </bib:Journal>
+    <z:Attachment rdf:about="#item_121">
+        <z:itemType>attachment</z:itemType>
+        <dc:title>Submitted Version</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://arxiv.org/pdf/2004.08467</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-03-19 21:29:58</dcterms:dateSubmitted>
+        <z:linkMode>1</z:linkMode>
+        <link:type>application/pdf</link:type>
+    </z:Attachment>
+    <bib:Document rdf:about="https://www.neonscience.org/resources/learning-hub/tutorials/lidar-basics">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog></z:Blog>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                       <foaf:surname>Leah A. Wasser</foaf:surname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>The Basics of LiDAR - Light Detection and Ranging - Remote Sensing</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.neonscience.org/resources/learning-hub/tutorials/lidar-basics</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Article rdf:about="#item_123">
+        <z:itemType>journalArticle</z:itemType>
+        <dcterms:isPartOf>
+            <bib:Journal>
+                <prism:volume>61</prism:volume>
+                <dc:title>ISPRS Journal of Photogrammetry and Remote Sensing</dc:title>
+                <dc:identifier>DOI 10.1016/j.isprsjprs.2006.09.001</dc:identifier>
+                <prism:number>2</prism:number>
+                <dcterms:alternative>ISPRS Journal of Photogrammetry and Remote Sensing</dcterms:alternative>
+                <dc:identifier>ISSN 09242716</dc:identifier>
+            </bib:Journal>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Jutzi</foaf:surname>
+                        <foaf:givenName>Boris</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+                <rdf:li>
+                    <foaf:Person>
+                        <foaf:surname>Stilla</foaf:surname>
+                        <foaf:givenName>Uwe</foaf:givenName>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Range determination with waveform recording laser systems using a Wiener Filter</dc:title>
+        <dc:date>11/2006</dc:date>
+        <z:language>en</z:language>
+        <z:libraryCatalog>DOI.org (Crossref)</z:libraryCatalog>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://linkinghub.elsevier.com/retrieve/pii/S0924271606001080</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+        <dcterms:dateSubmitted>2024-03-19 21:40:25</dcterms:dateSubmitted>
+        <bib:pages>95-107</bib:pages>
+    </bib:Article>
+    <bib:Data rdf:about="https://velodynelidar.com/products/puck/">
+        <z:itemType>computerProgram</z:itemType>
+        <dc:title>Velodyne Lidar Puck</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+               <rdf:value>https://velodynelidar.com/products/puck/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Data>
+    <bib:Document rdf:about="https://www.geeksforgeeks.org/difference-between-parametric-and-non-parametric-methods/">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog></z:Blog>
+        </dcterms:isPartOf>
+        <dc:title>Difference between Parametric and Non-Parametric Methods</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.geeksforgeeks.org/difference-between-parametric-and-non-parametric-methods/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="https://www.pre-scient.com/knowledge-center/reverse-engineering/parametric-and-non-parametric-modelling/">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog></z:Blog>
+        </dcterms:isPartOf>
+        <dc:title>What are Parametric and Non-parametric Modeling</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.pre-scient.com/knowledge-center/reverse-engineering/parametric-and-non-parametric-modelling/</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <bib:Document rdf:about="https://www.baeldung.com/cs/ml-parametric-vs-non-parametric-models">
+        <z:itemType>blogPost</z:itemType>
+        <dcterms:isPartOf>
+           <z:Blog><dc:title>Baeldung CS</dc:title></z:Blog>
+        </dcterms:isPartOf>
+        <bib:authors>
+            <rdf:Seq>
+                <rdf:li>
+                    <foaf:Person>
+                       <foaf:surname>Georgios Nanos</foaf:surname>
+                    </foaf:Person>
+                </rdf:li>
+            </rdf:Seq>
+        </bib:authors>
+        <dc:title>Differences Between a Parametric and Non-parametric Model</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.baeldung.com/cs/ml-parametric-vs-non-parametric-models</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </bib:Document>
+    <rdf:Description rdf:about="https://www.nmr.mgh.harvard.edu/PMI/toolbox/Documentation/pminoise.xhtml">
+        <z:itemType>document</z:itemType>
+        <dc:title>Adding Synthetic Noise</dc:title>
+        <z:archive>Photon Migration Imaging Toolbox Documentation</z:archive>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.nmr.mgh.harvard.edu/PMI/toolbox/Documentation/pminoise.xhtml</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </rdf:Description>
+    <rdf:Description rdf:about="#item_129">
+       <z:itemType>standard</z:itemType>
+    </rdf:Description>
+    <rdf:Description rdf:about="https://www.khronos.org/opengl/wiki/Compute_Shader">
+        <z:itemType>document</z:itemType>
+        <dc:title>Compute Shader</dc:title>
+        <dc:identifier>
+            <dcterms:URI>
+                <rdf:value>https://www.khronos.org/opengl/wiki/Compute_Shader</rdf:value>
+            </dcterms:URI>
+        </dc:identifier>
+    </rdf:Description>
     <z:Collection rdf:about="#collection_1">
         <dc:title>ApolloSim Reference</dc:title>
         <dcterms:hasPart rdf:resource="http://arxiv.org/abs/2101.09154"/>
@@ -4203,6 +4479,16 @@ arXiv:2006.09348 [cs]</dc:description>
         <dcterms:hasPart rdf:resource="https://thebookofshaders.com/"/>
         <dcterms:hasPart rdf:resource="urn:isbn:978-90-90-33256-7"/>
         <dcterms:hasPart rdf:resource="https://carla.org//"/>
+        <dcterms:hasPart rdf:resource="https://api.semanticscholar.org/CorpusID:231830546"/>
+        <dcterms:hasPart rdf:resource="https://onlinelibrary.wiley.com/doi/10.1002/arp.1712"/>
+        <dcterms:hasPart rdf:resource="https://ieeexplore.ieee.org/document/9127855/"/>
+        <dcterms:hasPart rdf:resource="https://www.neonscience.org/resources/learning-hub/tutorials/lidar-basics"/>
+        <dcterms:hasPart rdf:resource="https://velodynelidar.com/products/puck/"/>
+        <dcterms:hasPart rdf:resource="https://www.geeksforgeeks.org/difference-between-parametric-and-non-parametric-methods/"/>
+        <dcterms:hasPart rdf:resource="https://www.pre-scient.com/knowledge-center/reverse-engineering/parametric-and-non-parametric-modelling/"/>
+        <dcterms:hasPart rdf:resource="https://www.baeldung.com/cs/ml-parametric-vs-non-parametric-models"/>
+        <dcterms:hasPart rdf:resource="https://www.nmr.mgh.harvard.edu/PMI/toolbox/Documentation/pminoise.xhtml"/>
+        <dcterms:hasPart rdf:resource="https://www.khronos.org/opengl/wiki/Compute_Shader"/>
     </z:Collection>
     <z:Collection rdf:about="#collection_3">
         <dc:title>ApolloSim Reference 2/25/2024, 2:11:17 AM</dc:title>
