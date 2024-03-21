@@ -91,7 +91,9 @@ float BRDFCookTorrance(vec3 N, vec3 V, float roughness, float F0) {
 struct Material 
 {
     int id;
-    int brdfType; // 0 for ON, 1 for CT
+    int brdfType; // 0 for ON, 1 for CT,
+    float roughness;
+    float fresnel;
 };
 
 struct SimpleGeometry
