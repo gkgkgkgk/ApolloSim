@@ -48,9 +48,43 @@ float BRDFOrenNayar(float roughness, float theta_i) {
     return BRDF;
 }
 
-float BRDFCookTorrence(float iAngle, float rAngle){
+// Schlicks approximation
+float FresnelSchlick(float cosTheta, float F0) {
+    return F0 + (1 - F0) * pow(1.0 - cosTheta, 5.0);
+}
 
-    return 1.0;
+float GeometrySchlickGGX(float NdotV, float roughness) {
+    float alpha = roughness * roughness;
+    float k = (alpha + 1) * (alpha + 1) / 8.0;
+    return NdotV / (NdotV * (1 - k) + k);
+}
+
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float alpha) {
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, V), 0.0);
+
+    return GeometrySchlickGGX(NdotV, alpha) * GeometrySchlickGGX(NdotL, alpha);
+}
+
+float GGXDistribution(vec3 N, vec3 V, float roughness) {
+    float alpha = roughness * roughness;
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotV2 = NdotV * NdotV;
+    float denom = NdotV2 * (alpha * alpha - 1.0) + 1.0;
+    return alpha * alpha / (PI * denom * denom);
+}
+
+// Assuming L = -V for LiDAR
+float BRDFCookTorrance(vec3 N, vec3 V, float roughness, float F0) {
+    float NdotV = max(dot(N, V), 0.0);
+
+    float F = FresnelSchlick(NdotV, F0);
+    float G = GeometrySchlickGGX(NdotV, roughness);
+    float D = GGXDistribution(N, V, roughness);
+
+    float specularReflection = F * G * D / (4.0 * NdotV * NdotV + 0.0001);
+
+    return specularReflection;
 }
 
 // STRUCTS
@@ -263,7 +297,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
         if (mat.brdfType == 0){
             result.intensity = BRDFOrenNayar(roughness, theta_i);
         } else {
-            result.intensity = BRDFCookTorrence(roughness, theta_i);
+            result.intensity = BRDFCookTorrance(N, V, roughness, 0.5);
         }
     } else {
         result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity / 47.0, a.stdevIntensity / 47.0);
