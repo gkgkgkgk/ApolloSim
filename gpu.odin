@@ -82,8 +82,6 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
         materials[i] = mat;
     }
 
-    fmt.println(materials);
-
     complexSceneSize := 0
     for i := 0; i < len(engine.complexScene32); i += 1 {
         complexSceneSize += size_of(f32) * len(engine.complexScene32[i].vertices)
