@@ -16,6 +16,11 @@ GPUData :: struct {
     dropRate: f32
 }
 
+GPUMaterial :: struct {
+    id : i32,
+    brdf: i32,
+}
+
 generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDistance : f32) -> [dynamic]GPUData {
     maxAngle := math.to_degrees(math.atan((benchmarkLength / 2.0) / benchmarkDistance));
 
@@ -57,7 +62,7 @@ printMaterialGPUData :: proc (materialId : i32, gpudata : [dynamic]GPUData) {
 
 sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     sg := make([]SimpleGeometry, len(engine.scene));
-    materials := make([]Material, len(engine.scene));
+    materials := make([]GPUMaterial, len(engine.calibrationData.materialInputs));
 
     for i := 0; i < len(engine.scene); i+=1 {
         sgTemp : SimpleGeometry
@@ -68,6 +73,16 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
 
         sg[i] = sgTemp
     }
+
+    for i := 0; i < len(engine.calibrationData.materialInputs); i+=1 {
+        mat : GPUMaterial;
+        mat.brdf = engine.calibrationData.materialInputs[i].brdf;
+        mat.id = engine.calibrationData.materialInputs[i].materialId;
+
+        materials[i] = mat;
+    }
+
+    fmt.println(materials);
 
     complexSceneSize := 0
     for i := 0; i < len(engine.complexScene32); i += 1 {
@@ -113,7 +128,7 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, engine.sensor.packetSize * size_of(glm.vec4), &outputData2[0], gl.STATIC_DRAW);
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 6, engine.inputBuffer6);
-    gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(materials) * size_of(Material), &materials[0], gl.STATIC_DRAW);
+    gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(engine.calibrationData.materialInputs) * size_of(GPUMaterial), &materials[0], gl.STATIC_DRAW);
 
     gl.BindBufferBase(gl.SHADER_STORAGE_BUFFER, 7, engine.inputBuffer7);
     gl.BufferData(gl.SHADER_STORAGE_BUFFER, len(seeds) * size_of(f32), &seeds[0], gl.STATIC_DRAW);

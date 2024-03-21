@@ -61,6 +61,7 @@ MaterialInput :: struct {
     filePath : string,
     distance : f32,
     width : f32,
+    brdf: i32,
     materialId : i32,
 }
 
@@ -138,7 +139,7 @@ calibrate :: proc(configFile : string) -> CalibrationData {
             }
             
             config := getEntireFile(c).?
-            lines := strings.split(config, "\n")
+            lines := strings.split(config, "\r\n")
             id := 0
             for line in lines {
                 l := strings.split(line, ",")
@@ -149,13 +150,26 @@ calibrate :: proc(configFile : string) -> CalibrationData {
                 mat.filePath = l[1];
                 mat.distance = cast(f32)strconv.atof(l[2]);
                 mat.width = cast(f32)strconv.atof(l[3]);
+                brdf := strings.trim(l[4], "\n");
+
+                fmt.println(brdf == "ON")
+
+                if brdf == "ON" {
+                    mat.brdf = 0;
+                } else {
+                    mat.brdf = 1;
+                }
 
                 append(&matInputs, mat);
                 id += 1;
             }
         }
 
-        fmt.println("Gathered the following materials: ", matInputs);
+        fmt.println("Gathered the following materials: ");
+
+        for matInput in matInputs {
+            fmt.println(matInput);
+        }
     }
     else {
         generateFakeCalibrationData();

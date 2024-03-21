@@ -56,11 +56,8 @@ float BRDFCookTorrence(float iAngle, float rAngle){
 // STRUCTS
 struct Material 
 {
-    float averageIntensity;
-    float maxIntensity;
-    float minIntensity;
-    float dropRate;
-    int materialId;
+    int id;
+    int brdfType; // 0 for ON, 1 for CT
 };
 
 struct SimpleGeometry
@@ -242,33 +239,23 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     result.point = rayOrigin + rayDirection * (tMin + sampleNormalDistribution(vec2(rayId, rayId / u_time), 0.0, a.stdevDistance));
 
-    // if(maximum) {
-    //     vec3 L = ray;
-    //     vec3 V = -ray;
-    //     vec3 N = normal;
+    if(maximum) {
+        vec3 L = ray;
+        vec3 V = -ray;
+        vec3 N = normal;
 
-    //     float roughness = 0.25;
-    //     float theta_i = acos(dot(L, N));
-    //     float theta_o = acos(dot(N, V));
+        float roughness = 0.5;
+        float theta_i = acos(dot(L, N));
+        float theta_o = acos(dot(N, V));
 
-    //     vec3 L_proj = normalize(L - dot(L, N) * N);
-    //     vec3 V_proj = normalize(V - dot(V, N) * N);
-    //     float phi_diff = atan(dot(cross(N, L_proj), V_proj), dot(L_proj, V_proj));
-
-    //     result.intensity = BRDFOrenNayar(roughness, theta_i, theta_o, phi_diff);
-    // } else {
-    //     result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity / 47.0, a.stdevIntensity / 47.0);
-    // }
-
-    vec3 L = ray;
-    vec3 V = -ray;
-    vec3 N = normal;
-
-    float roughness = 0.5;
-    float theta_i = acos(dot(L, N));
-    float theta_o = acos(dot(N, V));
-
-    result.intensity = BRDFOrenNayar(roughness, theta_i);
+        if (a.materialId == 0){
+            result.intensity = BRDFOrenNayar(roughness, theta_i);
+        } else {
+            result.intensity = BRDFOrenNayar(roughness, theta_i);
+        }
+    } else {
+        result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity / 47.0, a.stdevIntensity / 47.0);
+    }
 
     return result;
 }
