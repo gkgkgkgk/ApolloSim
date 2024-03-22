@@ -206,6 +206,11 @@ AngleData closestAngle(int material, float angleDeg, out bool maximum) {
     }
 }
 
+bool shouldDrop(float rate, vec2 coord) {
+    float rand = rand(coord);
+    return rand < rate;
+}
+
 Material findMaterial(int id) {
     for (int i = 0; i < materials.length(); i++){
         if (materials[i].id == id){
@@ -306,7 +311,11 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
             result.intensity = BRDFCookTorrance(N, V, roughness, 0.5);
         }
     } else {
-        result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity / 47.0, a.stdevIntensity / 47.0);
+        if (shouldDrop(a.dropRate, vec2(rayId, rayId / u_time))){
+            result.intensity = 0.0;
+        } else {
+            result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity / 47.0, a.stdevIntensity / 47.0);
+        }
     }
 
     return result;

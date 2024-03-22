@@ -63,7 +63,8 @@ MaterialInput :: struct {
     width : f32,
     brdf: i32,
     materialId : i32,
-    roughness : f32
+    roughness : f32,
+    fresnel : f32
 }
 
 calibrate :: proc(configFile : string) -> CalibrationData {
@@ -143,6 +144,10 @@ calibrate :: proc(configFile : string) -> CalibrationData {
             lines := strings.split(config, "\r\n")
             id := 0
             for line in lines {
+                if len(line) < 1 {
+                    break;
+                }
+
                 l := strings.split(line, ",")
 
                 mat : MaterialInput;
@@ -160,6 +165,9 @@ calibrate :: proc(configFile : string) -> CalibrationData {
                 } else {
                     mat.brdf = 1;
                 }
+
+                mat.roughness = cast(f32)strconv.atof(l[5]);
+                mat.fresnel = cast(f32)strconv.atof(l[6]);
 
                 append(&matInputs, mat);
                 id += 1;

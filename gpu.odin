@@ -83,6 +83,7 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
         mat.id = engine.calibrationData.materialInputs[i].materialId;
         mat.isReal = mat.id >= 0;
         mat.roughness = engine.calibrationData.materialInputs[i].roughness;
+        mat.fresnel = engine.calibrationData.materialInputs[i].fresnel;
 
         materials[i] = mat;
     }
