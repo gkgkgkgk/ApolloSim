@@ -94,6 +94,7 @@ struct Material
     int brdfType; // 0 for ON, 1 for CT,
     float roughness;
     float fresnel;
+    bool isReal;
 };
 
 struct SimpleGeometry
@@ -281,11 +282,16 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
     float angleDeg = angle * 180.0 / PI;
 
     bool maximum = false;
-    AngleData a = closestAngle(material, angleDeg, maximum);
+    AngleData a;
+    Material mat = findMaterial(material);
+    
+    if (mat.isReal){
+        a = closestAngle(material, angleDeg, maximum);
+    }
 
     result.point = rayOrigin + rayDirection * (tMin + sampleNormalDistribution(vec2(rayId, rayId / u_time), 0.0, a.stdevDistance));
 
-    if(maximum) {
+    if(maximum || !mat.isReal) {
         vec3 L = ray;
         vec3 V = -ray;
         vec3 N = normal;
@@ -294,10 +300,8 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
         float theta_i = acos(dot(L, N));
         float theta_o = acos(dot(N, V));
 
-        Material mat = findMaterial(a.materialId);
-
         if (mat.brdfType == 0){
-            result.intensity = BRDFOrenNayar(roughness, theta_i);
+            result.intensity = BRDFOrenNayar(mat.roughness, theta_i);
         } else {
             result.intensity = BRDFCookTorrance(N, V, roughness, 0.5);
         }

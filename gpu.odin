@@ -20,7 +20,8 @@ GPUMaterial :: struct {
     id : i32,
     brdf: i32,
     roughness : f32,
-    fresnel : f32
+    fresnel : f32,
+    isReal : bool
 }
 
 generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDistance : f32) -> [dynamic]GPUData {
@@ -80,6 +81,8 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
         mat : GPUMaterial;
         mat.brdf = engine.calibrationData.materialInputs[i].brdf;
         mat.id = engine.calibrationData.materialInputs[i].materialId;
+        mat.isReal = mat.id >= 0;
+        mat.roughness = engine.calibrationData.materialInputs[i].roughness;
 
         materials[i] = mat;
     }

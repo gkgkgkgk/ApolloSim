@@ -63,6 +63,7 @@ MaterialInput :: struct {
     width : f32,
     brdf: i32,
     materialId : i32,
+    roughness : f32
 }
 
 calibrate :: proc(configFile : string) -> CalibrationData {
