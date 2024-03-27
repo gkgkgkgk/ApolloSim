@@ -202,14 +202,30 @@ calibrate :: proc(configFile : string) -> CalibrationData {
 }
 
 summarizeData :: proc(materials : map[string]MaterialData) {
+    f := createBlankFile("./evaluation/real_data.txt");
     for material in materials {
         fmt.printf("Material: %s \n\tMean: %f\n\tStandard Deviation: %f\n\tTotal Lasers: %d\n", material, materials[material].mean, materials[material].stdev, len(materials[material].lasers))
-        // for angle in materials[material].anglesData {
-        //     if materials[material].anglesData[angle].mean < 47.0 {
-        //         fmt.println(materials[material].anglesData[angle])
-        //     }
-        //     fmt.println(materials[material].anglesData[angle].angle, materials[material].anglesData[angle].mean, materials[material].anglesData[angle].dropRate)
-        // }
+
+        for angle in materials[material].anglesData {
+            buf1 := [128]byte{}
+            buf2 := [128]byte{}
+            buf3 := [128]byte{}
+            buf4 := [128]byte{}
+            buf5 := [128]byte{}
+
+            floatStr1 := strconv.ftoa(buf1[:], cast(f64)angle.angle, 'g', 6, 64)
+            floatStr2 := strconv.ftoa(buf2[:], cast(f64)angle.mean, 'g', 6, 64)
+            floatStr3 := strconv.ftoa(buf3[:], cast(f64)angle.stdev, 'g', 6, 64)
+            floatStr4 := strconv.ftoa(buf4[:], cast(f64)angle.stdevDistance, 'g', 6, 64)
+            floatStr5 := strconv.ftoa(buf5[:], cast(f64)angle.dropRate, 'g', 6, 64)
+
+            a := [?]string {material, ",", floatStr1, ",", floatStr2, ",", floatStr3, ",", floatStr4, ",", floatStr5};
+            appendLine(f, strings.concatenate(a[:]));
+            // if materials[material].anglesData[angle].mean < 47.0 {
+            //     fmt.println(materials[material].anglesData[angle])
+            // }
+            fmt.println(angle)
+        }
     }
 }
 

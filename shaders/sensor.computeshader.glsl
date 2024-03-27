@@ -301,14 +301,22 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
         vec3 V = -ray;
         vec3 N = normal;
 
-        float roughness = 0.5;
         float theta_i = acos(dot(L, N));
         float theta_o = acos(dot(N, V));
 
+        float intensity = 0.0;
+
         if (mat.brdfType == 0){
-            result.intensity = BRDFOrenNayar(mat.roughness, theta_i);
+            intensity = BRDFOrenNayar(mat.roughness, theta_i);
         } else {
-            result.intensity = BRDFCookTorrance(N, V, roughness, 0.5);
+            intensity = BRDFCookTorrance(N, V, mat.roughness, 0.5);
+        }
+
+        // the rplidar a1 has a binary intensity value, so clamp it to 0 or 1.
+        if(intensity < 0.5){
+            intensity = 0.0;
+        } else {
+            intensity = 1.0;
         }
     } else {
         if (shouldDrop(a.dropRate, vec2(rayId, rayId / u_time))){
