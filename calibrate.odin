@@ -224,7 +224,6 @@ summarizeData :: proc(materials : map[string]MaterialData) {
             // if materials[material].anglesData[angle].mean < 47.0 {
             //     fmt.println(materials[material].anglesData[angle])
             // }
-            fmt.println(angle)
         }
     }
 }
@@ -242,8 +241,8 @@ parseLaser :: proc(line : string, material: string) -> Maybe(laserData) {
             laser.dropped = false
         }
 
-        laser.intensity = cast(f32)strconv.atof(values[1])
-        laser.angle = cast(f32)strconv.atof(values[2])
+        laser.intensity = cast(f32)strconv.atof(values[1]);
+        laser.angle = math.abs(math.round(cast(f32)strconv.atof(values[2]) * 100.0) / 100.0);
         laser.material = material
 
         return laser;

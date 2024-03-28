@@ -40,8 +40,6 @@ plt.xlabel('Angle (degrees)')
 plt.ylabel('Mean Intensity')
 plt.legend()
 
-plt.show()
-
 plt.figure(figsize=(10, 6))
 
 for material, items in objects.items():

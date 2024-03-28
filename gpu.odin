@@ -5,6 +5,8 @@ import "core:math"
 import "core:math/rand"
 import "core:time"
 import "core:fmt"
+import "core:strings"
+import "core:strconv"
 
 GPUData :: struct {
     angleDeg: f32,
@@ -38,6 +40,7 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
             gd : GPUData;
             gd.angleDeg = math.to_degrees((angleData.angle));
             gd.materialId = engine.calibrationData.materials[material].materialId;
+            // fmt.println(engine.calibrationData.materials[material].materialId, materialInput);
             // TODO: Right now this works only for a 2d lidar...
             gd.meanIntensity = angleData.mean;
             gd.stdevIntensity = angleData.stdev;
@@ -50,7 +53,7 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
         }
     }
 
-    // printMaterialGPUData(0, gpudata);
+    printMaterialGPUData(4, gpudata);
 
     return gpudata;
 } 
@@ -96,7 +99,7 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
         complexSceneSize += size_of(int)
     }
 
-    gpuDataSize := len(engine.gpuData) * (size_of(f32) * 6) + size_of(i32)
+    gpuDataSize := len(engine.gpuData) * ((size_of(f32) * 6) + size_of(i32))
 
     outputData := make([]glm.vec4, engine.sensor.packetSize);
     outputData2 := make([]glm.vec4, engine.sensor.packetSize);
@@ -153,7 +156,32 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, engine.outputBuffer2);
     gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, engine.sensor.packetSize * size_of(glm.vec4), &outputData2[0])
 
-    fmt.println((outputData))
+    // for i := 0; i < len(outputData); i+=1 {
+    //     if(outputData2[i][0] == 0 && outputData2[i][1] == 0 && outputData2[i][2] == 0){
+    //         continue;
+    //     }
+
+
+    //     buf1 := [128]byte{}
+    //     buf2 := [128]byte{}
+    //     buf3 := [128]byte{}
+
+    //     floatStr1 := strconv.ftoa(buf1[:], cast(f64)outputData2[i][0], 'g', 6, 64)
+    //     floatStr2 := strconv.ftoa(buf2[:], cast(f64)outputData2[i][1], 'g', 6, 64)
+    //     floatStr3 := strconv.ftoa(buf3[:], cast(f64)outputData2[i][2], 'g', 6, 64)
+
+    //     // floatStr2 := strconv.ftoa(buf2[:], cast(f64)angle.mean, 'g', 6, 64)
+    //     // floatStr3 := strconv.ftoa(buf3[:], cast(f64)angle.stdev, 'g', 6, 64)
+    //     // floatStr4 := strconv.ftoa(buf4[:], cast(f64)angle.stdevDistance, 'g', 6, 64)
+    //     // floatStr5 := strconv.ftoa(buf5[:], cast(f64)angle.dropRate, 'g', 6, 64)
+
+    //     a := [?]string {floatStr1, ",", floatStr2, ",", floatStr3};
+    //     appendLine(engine.evalFile, strings.concatenate(a[:]));
+    // }
+
+    // for i := 0; i < len(outputData); i+=1 {
+    //     fmt.println(outputData[i], outputData2[i]);
+    // }
 
     return outputData;
 }

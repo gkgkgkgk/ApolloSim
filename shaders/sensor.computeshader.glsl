@@ -116,6 +116,7 @@ struct IntersectionResult {
     bool intersects;
     vec3 point;
     float intensity;
+    float theta_i;
 };
 
 struct AngleData {
@@ -222,7 +223,7 @@ Material findMaterial(int id) {
 }
 
 IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix, int material) {
-    IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0);
+    IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0, 0.0);
 
     vec3 position = modelMatrix[3].xyz;
     float cubeHalfSize = length(modelMatrix[0].xyz) * 0.5;
@@ -294,6 +295,8 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
         a = closestAngle(material, angleDeg, maximum);
     }
 
+    result.theta_i = angleDeg;
+
     result.point = rayOrigin + rayDirection * (tMin + sampleNormalDistribution(vec2(rayId, rayId / u_time), 0.0, a.stdevDistance));
 
     if(maximum || !mat.isReal) {
@@ -322,7 +325,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
         if (shouldDrop(a.dropRate, vec2(rayId, rayId / u_time))){
             result.intensity = 0.0;
         } else {
-            result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity / 47.0, a.stdevIntensity / 47.0);
+            result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity, a.stdevIntensity)  / 47.0;
         }
     }
 
@@ -330,7 +333,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 }
 
 IntersectionResult IntersectRayTriangle(vec3 rayOrigin, vec3 rayDirection, vec3 v0, vec3 v1, vec3 v2) {
-    IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0);
+    IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0, 0.0);
     vec3 edge1 = v1 - v0;
     vec3 edge2 = v2 - v0;
     vec3 h = cross(rayDirection, edge2);
@@ -371,7 +374,7 @@ IntersectionResult IntersectRayTriangle(vec3 rayOrigin, vec3 rayDirection, vec3 
 }
 
 IntersectionResult complexMeshIntersection(int rayId, vec3 rayOrigin, vec3 rayDirection, ComplexGeometry geometry) {
-    IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0);
+    IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0, 0.0);
 
     for (int i = 0; i < vertices.length(); i += 3) {
         int i0 = indices[i];
@@ -405,7 +408,7 @@ void main()
         int rayId = int(id.x) + 10*int(id.y) + 100 * int(id.z) + 1000 * i;
         int index = int(id.x) * count + i;
 
-        IntersectionResult result = IntersectionResult(false, vec3(10000000.0), 0.5);
+        IntersectionResult result = IntersectionResult(false, vec3(10000000.0), 0.5, 0.0);
 
         for(int j = 0; j < scene.length(); j++){
             IntersectionResult newIntersection = rayBoxIntersection(index, vec3(0), normalize(directions[index]), scene[j].model, scene[j].material);
@@ -423,7 +426,8 @@ void main()
             }
         }
 
-        outputData2[id.x * count + i] = vec4(directions[index], 1.0);
+
+        outputData2[id.x * count + i] = vec4(result.theta_i, result.intensity, length(result.point), 1.0);
 
         if (result.intersects){
             outputData[id.x * count + i] = vec4(result.point, result.intensity);

@@ -18,7 +18,8 @@ SimEngine :: struct {
     outputData : []glm.vec4,
     calibrationData : CalibrationData,
     gpuData : [dynamic]GPUData,
-    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8, outputBuffer2: u32
+    inputBuffer, inputBuffer2, inputBuffer3, inputBuffer4, inputBuffer5, outputBuffer, inputBuffer6, inputBuffer7, inputBuffer8, outputBuffer2: u32,
+    evalFile : os.Handle
 }
 
 initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -> Maybe(SimEngine) {
@@ -26,6 +27,8 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
     engine.steps = 0
     engine.sensor = initializeSensor();
     engine.calibrationData = calibrationData;
+
+    engine.evalFile = createBlankFile("./evaluation/wall_data.txt");
 
     computeShaderSource, computeShaderError := os.read_entire_file("./shaders/sensor.computeshader.glsl")    
     if !computeShaderError {
@@ -55,7 +58,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
     if !viewer {
         // initialize scene
         cube := createCube();
-        cube.model = identityModel * glm.mat4Translate({0.0, 0.0, 35.0}) * glm.mat4Scale(glm.vec3{50.1, 50.1, 50.1});
+        cube.model = identityModel * glm.mat4Translate({0.0, 0.0, 55.0}) * glm.mat4Scale(glm.vec3{100.1, 100.1, 100.1});
         cube.material = 4;
         append(&engine.scene, cube);
 
