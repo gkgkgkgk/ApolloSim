@@ -28,7 +28,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
     engine.sensor = initializeSensor();
     engine.calibrationData = calibrationData;
 
-    engine.evalFile = createBlankFile("./evaluation/wall_data.txt");
+    engine.evalFile = createBlankFile("./evaluation/wood_data.txt");
 
     computeShaderSource, computeShaderError := os.read_entire_file("./shaders/sensor.computeshader.glsl")    
     if !computeShaderError {
@@ -59,7 +59,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
         // initialize scene
         cube := createCube();
         cube.model = identityModel * glm.mat4Translate({0.0, 0.0, 55.0}) * glm.mat4Scale(glm.vec3{100.1, 100.1, 100.1});
-        cube.material = 4;
+        cube.material = 1;
         append(&engine.scene, cube);
 
         // cube2 := createCube();
