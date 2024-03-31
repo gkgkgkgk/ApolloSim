@@ -11,12 +11,6 @@ float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
-bool dropsRay(vec2 co, float dropRate){
-    float randomValue = rand(co);
-    return false;
-    return randomValue < dropRate ? true : false;
-}
-
 float sampleNormalDistribution(vec2 uv, float mean, float stdDev)
 {
     float u1 = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
@@ -299,7 +293,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     result.point = rayOrigin + rayDirection * (tMin + sampleNormalDistribution(vec2(rayId, rayId / u_time), 0.0, a.stdevDistance));
 
-    if(maximum || !mat.isReal) {
+    if(true || !mat.isReal) {
         vec3 L = ray;
         vec3 V = -ray;
         vec3 N = normal;
@@ -310,7 +304,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
         float intensity = 0.0;
 
         if (mat.brdfType == 0){
-            intensity = BRDFOrenNayar(mat.roughness, theta_i);
+            intensity = BRDFOrenNayar(0.5, theta_i);
         } else {
             intensity = BRDFCookTorrance(N, V, mat.roughness, 0.5);
         }
@@ -321,6 +315,8 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
         } else {
             intensity = 1.0;
         }
+
+        result.intensity = intensity;
     } else {
         if (shouldDrop(a.dropRate, vec2(rayId, rayId / u_time))){
             result.intensity = 0.0;
@@ -402,69 +398,69 @@ IntersectionResult complexMeshIntersection(int rayId, vec3 rayOrigin, vec3 rayDi
             result = newIntersection;
             result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), 0.5, 0.0);
 
-            vec3 ab = v1 - v0;
-            vec3 ac = v2 - v0;
+            // vec3 ab = v1 - v0;
+            // vec3 ac = v2 - v0;
 
-            vec3 normal = normalize(cross(ab, ac));
+            // vec3 normal = normalize(cross(ab, ac));
 
-            vec3 ray = normalize(rayDirection - rayOrigin);
+            // vec3 ray = normalize(rayDirection - rayOrigin);
 
-            float angle = acos(abs(dot(ray, normal)));
+            // float angle = acos(abs(dot(ray, normal)));
 
-            if (angle > (PI/2.0)) {
-                angle = PI - angle;
-            }
+            // if (angle > (PI/2.0)) {
+            //     angle = PI - angle;
+            // }
 
-            float angleDeg = angle * 180.0 / PI;
+            // float angleDeg = angle * 180.0 / PI;
 
-            bool maximum = false;
-            AngleData a;
-            Material mat = findMaterial(material);
+            // bool maximum = false;
+            // AngleData a;
+            // Material mat = findMaterial(material);
             
-            if (mat.isReal){
-                a = closestAngle(material, angleDeg, maximum);
-            }
+            // if (mat.isReal){
+            //     a = closestAngle(material, angleDeg, maximum);
+            // }
 
-            result.theta_i = angleDeg;
+            // result.theta_i = angleDeg;
 
-            result.point = rayOrigin + rayDirection * (tMin + sampleNormalDistribution(vec2(rayId, rayId / u_time), 0.0, a.stdevDistance));
+            // result.point = rayOrigin + rayDirection * (tMin + sampleNormalDistribution(vec2(rayId, rayId / u_time), 0.0, a.stdevDistance));
 
-            if(maximum || !mat.isReal) {
-                vec3 L = ray;
-                vec3 V = -ray;
-                vec3 N = normal;
+            // if(maximum || !mat.isReal) {
+            //     vec3 L = ray;
+            //     vec3 V = -ray;
+            //     vec3 N = normal;
 
-                float theta_i = acos(dot(L, N));
-                float theta_o = acos(dot(N, V));
+            //     float theta_i = acos(dot(L, N));
+            //     float theta_o = acos(dot(N, V));
 
-                float intensity = 0.0;
+            //     float intensity = 0.0;
 
-                if (mat.brdfType == 0){
-                    intensity = BRDFOrenNayar(mat.roughness, theta_i);
-                } else {
-                    intensity = BRDFCookTorrance(N, V, mat.roughness, 0.5);
-                }
+            //     if (mat.brdfType == 0){
+            //         intensity = BRDFOrenNayar(mat.roughness, theta_i);
+            //     } else {
+            //         intensity = BRDFCookTorrance(N, V, mat.roughness, 0.5);
+            //     }
 
-                // the rplidar a1 has a binary intensity value, so clamp it to 0 or 1.
-                if(intensity < 0.5){
-                    intensity = 0.0;
-                } else {
-                    intensity = 1.0;
-                }
-            } else {
-                if (shouldDrop(a.dropRate, vec2(rayId, rayId / u_time))){
-                    result.intensity = 0.0;
-                } else {
-                    result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity, a.stdevIntensity)  / 47.0;
-                }
+            //     // the rplidar a1 has a binary intensity value, so clamp it to 0 or 1.
+            //     if(intensity < 0.5){
+            //         intensity = 0.0;
+            //     } else {
+            //         intensity = 1.0;
+            //     }
+            // } else {
+            //     if (shouldDrop(a.dropRate, vec2(rayId, rayId / u_time))){
+            //         result.intensity = 0.0;
+            //     } else {
+            //         result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity, a.stdevIntensity)  / 47.0;
+            //     }
 
-                result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity, a.stdevIntensity)  / 47.0;
-                if(result.intensity < 0.5){
-                    result.intensity = 0.0;
-                } else {
-                    result.intensity = 1.0;
-                }
-            }
+            //     result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity, a.stdevIntensity)  / 47.0;
+            //     if(result.intensity < 0.5){
+            //         result.intensity = 0.0;
+            //     } else {
+            //         result.intensity = 1.0;
+            //     }
+            // }
         }
     }
     
@@ -490,7 +486,7 @@ void main()
         }
 
         for(int j = 0; j < complexScene.length(); j++){
-            IntersectionResult newIntersection = complexMeshIntersection(index, vec3(0), normalize(directions[index]), complexScene[j], complexScene[j].material);
+            IntersectionResult newIntersection = complexMeshIntersection(index, vec3(0), normalize(directions[index]), complexScene[j], 0);
 
             if (!result.intersects || (newIntersection.intersects && newIntersection.point.length() < result.point.length())) {
                 result = newIntersection;

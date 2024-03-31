@@ -141,6 +141,7 @@ calibrate :: proc(configFile : string) -> CalibrationData {
             }
             
             config := getEntireFile(c).?
+            fmt.println(config)
             lines := strings.split(config, "\r\n")
             id := 0
             for line in lines {
@@ -157,8 +158,6 @@ calibrate :: proc(configFile : string) -> CalibrationData {
                 mat.distance = cast(f32)strconv.atof(l[2]);
                 mat.width = cast(f32)strconv.atof(l[3]);
                 brdf := strings.trim(l[4], "\n");
-
-                fmt.println(brdf == "ON")
 
                 if brdf == "ON" {
                     mat.brdf = 0;
