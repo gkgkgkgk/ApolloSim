@@ -6,6 +6,7 @@ import glm "core:math/linalg/glsl"
 import "core:os"
 import "core:strconv"
 import "core:strings"
+import stb "vendor:stb/image"
 
 GeometryType:: enum {
     cube,
@@ -50,32 +51,64 @@ createCube :: proc () -> Geometry {
         -0.5, -0.5, -0.5,  0.0, 0.0,
          0.5, -0.5, -0.5,  1.0, 0.0,
          0.5,  0.5, -0.5,  1.0, 1.0,
+         0.5,  0.5, -0.5,  1.0, 1.0,
         -0.5,  0.5, -0.5,  0.0, 1.0,
+        -0.5, -0.5, -0.5,  0.0, 0.0,
 
         -0.5, -0.5,  0.5,  0.0, 0.0,
          0.5, -0.5,  0.5,  1.0, 0.0,
          0.5,  0.5,  0.5,  1.0, 1.0,
+         0.5,  0.5,  0.5,  1.0, 1.0,
         -0.5,  0.5,  0.5,  0.0, 1.0,
+        -0.5, -0.5,  0.5,  0.0, 0.0,
+
+        -0.5,  0.5,  0.5,  1.0, 0.0,
+        -0.5,  0.5, -0.5,  1.0, 1.0,
+        -0.5, -0.5, -0.5,  0.0, 1.0,
+        -0.5, -0.5, -0.5,  0.0, 1.0,
+        -0.5, -0.5,  0.5,  0.0, 0.0,
+        -0.5,  0.5,  0.5,  1.0, 0.0,
+
+         0.5,  0.5,  0.5,  1.0, 0.0,
+         0.5,  0.5, -0.5,  1.0, 1.0,
+         0.5, -0.5, -0.5,  0.0, 1.0,
+         0.5, -0.5, -0.5,  0.0, 1.0,
+         0.5, -0.5,  0.5,  0.0, 0.0,
+         0.5,  0.5,  0.5,  1.0, 0.0,
+
+        -0.5, -0.5, -0.5,  0.0, 1.0,
+         0.5, -0.5, -0.5,  1.0, 1.0,
+         0.5, -0.5,  0.5,  1.0, 0.0,
+         0.5, -0.5,  0.5,  1.0, 0.0,
+        -0.5, -0.5,  0.5,  0.0, 0.0,
+        -0.5, -0.5, -0.5,  0.0, 1.0,
+
+        -0.5,  0.5, -0.5,  0.0, 1.0,
+         0.5,  0.5, -0.5,  1.0, 1.0,
+         0.5,  0.5,  0.5,  1.0, 0.0,
+         0.5,  0.5,  0.5,  1.0, 0.0,
+        -0.5,  0.5,  0.5,  0.0, 0.0,
+        -0.5,  0.5, -0.5,  0.0, 1.0
     };
     
     cube.indices = [dynamic]u16 {
         0, 1, 2, // Front
-        2, 3, 0,
+        3, 4, 5,
 
-        4, 5, 6, // Back
-        6, 7, 4,
+        6, 7, 8, // Back
+        9, 10, 11,
 
-        0, 4, 7, // Left
-        7, 3, 0,
+        12, 13, 14, // Left
+        15, 16, 17,
 
-        1, 5, 6, // Right
-        6, 2, 1,
+        18, 19, 20, // Right
+        21, 22, 23,
 
-        0, 1, 5, // Top
-        5, 4, 0,
+        24, 25, 26, // Top
+        27, 28, 29,
 
-        2, 3, 7, // Bottom
-        7, 6, 2
+        30, 31, 32,
+        33, 34, 35 // Bottom
     };
 
     cube.gType = 6;
@@ -175,6 +208,26 @@ drawGeometryWithIndices :: proc (geometry : Geometry) {
     gl.DrawElements(gl.TRIANGLES, cast(i32)len(geometry.indices), gl.UNSIGNED_SHORT, nil);
 
     gl.BindVertexArray(0);
+}
+
+addTexture :: proc (geometry : Geometry, path : string) -> Geometry {
+    width, height, nrChannels : i32;
+    data := stb.load(strings.clone_to_cstring(path), &width, &height, &nrChannels, 0);
+    texture : u32;
+    gl.GenTextures(1, &texture);
+    gl.BindTexture(gl.TEXTURE_2D, texture);
+
+    gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+    gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+    gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGB, width, height, 0, gl.RGB, gl.UNSIGNED_BYTE, data);
+    gl.GenerateMipmap(gl.TEXTURE_2D);
+    geometry := geometry;
+    geometry.texture = texture;
+
+    return geometry;
 }
 
 /* CUSTOM GEOMETRY LOADER */

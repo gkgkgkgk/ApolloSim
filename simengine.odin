@@ -28,7 +28,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
     engine.sensor = initializeSensor();
     engine.calibrationData = calibrationData;
 
-    engine.evalFile = createBlankFile("./evaluation/wall_data.txt");
+    engine.evalFile = createBlankFile("./evaluation/test.txt");
 
     computeShaderSource, computeShaderError := os.read_entire_file("./shaders/sensor.computeshader.glsl")    
     if !computeShaderError {
@@ -58,17 +58,19 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
     if !viewer {
         // initialize scene
         cube := createCube();
-        cube.model = identityModel * glm.mat4Translate({0.0, 0.0, 55.0}) * glm.mat4Scale(glm.vec3{100.1, 100.1, 100.1});
-        cube.material = 1;
+        cube.model = identityModel * glm.mat4Translate({-2.0, 0.0, 5.0});
+        cube.material = 0;
+        cube = addTexture(cube, "./textures/wood.jpg");
         append(&engine.scene, cube);
 
-        // cube2 := createCube();
-        // cube2.model = identityModel * glm.mat4Translate({0.0, 0.0, 5.0});
-        // cube2.material = 1;
-        // append(&engine.scene, cube2)
+        cube2 := createCube();
+        cube2.model = identityModel * glm.mat4Translate({2.0, 0.0, -2.0});
+        cube2.material = 1;
+        cube2 = addTexture(cube2, "./textures/concrete.jpg");
+        append(&engine.scene, cube2)
 
         stopSign := customGeometry("./models/stopsignscale.obj")
-        stopSign.model = identityModel * glm.mat4Translate({25, 0, 25});
+        stopSign.model = identityModel * glm.mat4Translate({2.5, 0, 2.5});
         append(&engine.complexScene, stopSign)
 
         complexScene32 := make([]Geometry32, len(engine.scene));

@@ -46,7 +46,7 @@ def process_sim_data(filepath):
 
             item = {
                 "angle": math.radians(float(angle)),
-                "intensity": float(intensity),
+                "intensity": float(intensity) if float(intensity) <= 1.0 else float(intensity) / 47.0,
                 "distance": float(distance),
             }
 
@@ -75,7 +75,7 @@ f.close()
 
 objects = {"wood":[], "wall":[], "metal":[], "metal2":[], "acrylic":[]}
 alt_names = {"wood":"Plywood", "wall":"Epoxy", "metal":"Brushed Aluminum", "metal2":"Shiny Aluminum", "acrylic":"Frosted Glass"}
-colors = {"wood":"#FFA500", "wall":"#8a8a8a", "metal":"#8d92c2", "metal2":"#d1d1d1", "acrylic":"#72BCD4"}
+colors = {"wood":"#FFA500", "wall":"#9c9c9c", "metal":"#8d92c2", "metal2":"#d1d1d1", "acrylic":"#72BCD4"}
 
 for line in real_data.strip().split("\n"):
     parts = line.split(",")
@@ -112,13 +112,13 @@ def mean_graph():
         mean_sim_intensities = [item['mean_intensity'] for item in sim_objects[material]][:len(sim_angles)]
         axs[i].plot(sim_angles, mean_sim_intensities, marker='s', label="Simulation", color=darken_hex(colors[material], 0.5))
         axs[i].plot(angles, mean_intensities, marker='o', label="Calibrated", color=colors[material])
-        axs[i].set_title(alt_names[material])
+        axs[i].set_title(alt_names[material], fontsize=10)
         axs[i].set_ylim(0, 1.0)
         axs[i].legend()
 
 
-    fig.supylabel('Mean Intensity')
-    fig.supxlabel('Lidar Beam Angle (radians)')
+    fig.supylabel('Mean Intensity', fontsize=14)
+    fig.supxlabel('Lidar Beam Angle (radians)', fontsize=14)
 
     plt.tight_layout()
     plt.savefig('mean_plot.pgf')
@@ -137,13 +137,13 @@ def std_graph():
         mean_sim_intensities = [item['stdev_intensity'] for item in sim_objects[material]][:len(sim_angles)]
         axs[i].plot(sim_angles, mean_sim_intensities, marker='s', label="Simulation", color=darken_hex(colors[material], 0.5))
         axs[i].plot(angles, mean_intensities, marker='o', label="Calibrated", color=colors[material])
-        axs[i].set_title(alt_names[material])
+        axs[i].set_title(alt_names[material], fontsize=10)
         axs[i].set_ylim(0, 1.0)
         axs[i].legend()
 
 
-    fig.supylabel('Standard Deviation of Intensity')
-    fig.supxlabel('Lidar Beam Angle (radians)')
+    fig.supylabel('Standard Deviation of Intensity', fontsize=14)
+    fig.supxlabel('Lidar Beam Angle (radians)', fontsize=14)
 
     plt.tight_layout()
     plt.savefig('stdev_plot.pgf')
@@ -162,13 +162,13 @@ def droprate_graph():
         dr_sim = [item['drop_rate'] for item in sim_objects[material]][:len(sim_angles)]
         axs[i].plot(sim_angles, dr_sim, marker='s', label="Simulation", color=darken_hex(colors[material], 0.5))
         axs[i].plot(angles, dr, marker='o', label="Calibrated", color=colors[material])
-        axs[i].set_title(alt_names[material])
+        axs[i].set_title(alt_names[material], fontsize=10)
         axs[i].set_ylim(0, 1.0)
         axs[i].legend()
 
 
-    fig.supylabel('Drop Rate')
-    fig.supxlabel('Lidar Beam Angle (radians)')
+    fig.supylabel('Drop Rate', fontsize=14)
+    fig.supxlabel('Lidar Beam Angle (radians)', fontsize=14)
 
     plt.tight_layout()
     plt.savefig('droprate_plot.pgf')
@@ -187,19 +187,137 @@ def distance_graph():
         dr_sim = [item['stdev_distance'] for item in sim_objects[material]][:len(sim_angles)]
         axs[i].plot(sim_angles, dr_sim, marker='s', label="Simulation", color=darken_hex(colors[material], 0.5))
         axs[i].plot(angles, dr, marker='o', label="Calibrated", color=colors[material])
-        axs[i].set_title(alt_names[material])
+        axs[i].set_title(alt_names[material], fontsize=10)
         axs[i].set_ylim(0, 0.05)
         axs[i].legend()
 
 
-    fig.supylabel('Standard Deviation of Distance')
-    fig.supxlabel('Lidar Beam Angle (radians)')
+    fig.supylabel('Standard Deviation of Distance', fontsize=14)
+    fig.supxlabel('Lidar Beam Angle (radians)', fontsize=14)
 
     plt.tight_layout()
     plt.savefig('distance_plot.pgf')
+
+
+def brdf_graph():
+    on_data = process_sim_data("./on_data.txt")
+    on_binary_data = process_sim_data("./on_binary_data.txt")
+    sim_wood_data = sim_objects["wood"]
+    wood_data = objects["wood"]
+
+    fig, axs = plt.subplots(2, figsize=(8, 8))
+    fig.suptitle('Comparing BRDFs to Calibrated Noise', fontsize=16)
+
+    angles = [item['angle'] for item in wood_data]
+    max_angle = max(angles)
+
+    sim_angles_unfiltered = [item['angle'] for item in sim_wood_data]
+    sim_angles = [angle for angle in sim_angles_unfiltered if angle <= max_angle]
+
+    brdf_angles_unfiltered = [item['angle'] for item in on_data]
+    brdf_angles = [angle for angle in brdf_angles_unfiltered if angle <= max_angle]
+
+    brdf_binary_angles_unfiltered = [item['angle'] for item in on_binary_data]
+    brdf_binary_angles = [angle for angle in brdf_binary_angles_unfiltered if angle <= max_angle]
+
+    mean_i = [item['mean_intensity'] for item in wood_data]
+    mean_i_sim = [item['mean_intensity'] for item in sim_wood_data][:len(sim_angles)]
+    mean_i_brdf = [item['mean_intensity'] for item in on_data][:len(brdf_angles)]
+    mean_i_brdf_binary = [item['mean_intensity'] for item in on_binary_data][:len(brdf_binary_angles)]
+
+    axs[0].plot(angles, mean_i, marker='o', label="Calibration", color=colors["wood"])
+    axs[0].plot(sim_angles, mean_i_sim, marker='s', label="Simulation", color=darken_hex(colors["wood"], 0.5))
+    axs[0].plot(brdf_angles, mean_i_brdf, marker='^', label="Oren-Nayar BRDF", color="#379634")
+    axs[0].plot(brdf_binary_angles, mean_i_brdf_binary, marker='|', label="Binary Oren-Nayar BRDF", color=darken_hex("#379634", 0.75))
+    axs[0].legend()
+    axs[0].set_title("Plywood vs Oren-Nayar", fontsize=10)
+
+    ct_data = process_sim_data("./ct_data.txt")
+    ct_binary_data = process_sim_data("./ct_binary_data.txt")
+    sim_wall_data = sim_objects["wall"]
+    wall_data = objects["wall"]
+
+    angles = [item['angle'] for item in wall_data]
+    max_angle = max(angles)
+
+    sim_angles_unfiltered = [item['angle'] for item in sim_wall_data]
+    sim_angles = [angle for angle in sim_angles_unfiltered if angle <= max_angle]
+
+    brdf_angles_unfiltered = [item['angle'] for item in ct_data]
+    brdf_angles = [angle for angle in brdf_angles_unfiltered if angle <= max_angle]
+
+    brdf_binary_angles_unfiltered = [item['angle'] for item in ct_binary_data]
+    brdf_binary_angles = [angle for angle in brdf_binary_angles_unfiltered if angle <= max_angle]
+
+    mean_i = [item['mean_intensity'] for item in wall_data]
+    mean_i_sim = [item['mean_intensity'] for item in sim_wall_data][:len(sim_angles)]
+    mean_i_brdf = [item['mean_intensity'] for item in ct_data][:len(brdf_angles)]
+    mean_i_brdf_binary = [item['mean_intensity'] for item in ct_binary_data][:len(brdf_binary_angles)]
+
+    axs[1].plot(angles, mean_i, marker='o', label="Calibration", color=colors["wall"])
+    axs[1].plot(sim_angles, mean_i_sim, marker='s', label="Simulation", color=darken_hex(colors["wall"], 0.5))
+    axs[1].plot(brdf_angles, mean_i_brdf, marker='^', label="Cook-Torrance BRDF", color="#379634")
+    axs[1].plot(brdf_binary_angles, mean_i_brdf_binary, marker='|', label="Binary Cook-Torrance BRDF", color=darken_hex("#379634", 0.3))
+    axs[1].legend()
+    axs[1].set_title("Epoxy vs Cook-Torrance", fontsize=10)
+
+    fig.supylabel('Mean Intensity', fontsize=14)
+    fig.supxlabel('Lidar Beam Angle (radians)', fontsize=14)
+
+    plt.tight_layout()
+    plt.savefig('intensity_brdf_plot.pgf')
+
+
+def datagap_graph():
+    on_data = process_sim_data("./brdf_continuation_on_data.txt")
+    sim_wood_data = sim_objects["wood"]
+    on_binary_data = process_sim_data("./brdf_continuation_binary_on_data.txt")
+
+    fig, axs = plt.subplots(2, figsize=(8, 8))
+    fig.suptitle('BRDFs for Addressing Data Gaps', fontsize=16)
+
+    angles = [item['angle'] for item in sim_wood_data]
+    on_angles = [item['angle'] for item in on_data]
+    on_binary_angles = [item['angle'] for item in on_binary_data]
+
+    mean_i = [item['mean_intensity'] for item in sim_wood_data]
+    mean_i_on = [item['mean_intensity'] for item in on_data]
+    mean_i_binary_on = [item['mean_intensity'] for item in on_binary_data]
+
+    axs[0].plot(angles, mean_i, marker='o', label="Simulation", color=colors["wood"])
+    axs[0].plot(on_angles, mean_i_on, marker='.', label="BRDF", color=darken_hex(colors["wood"], 0.5))
+    axs[0].plot(on_binary_angles, mean_i_binary_on, marker='s', label="BRDF Binary", color=darken_hex(colors["wood"], 0.75))
+    axs[0].legend()
+    axs[0].set_title("Plywood and Oren-Nayar", fontsize=10)
+
+    ct_data = process_sim_data("./brdf_continuation_ct_data.txt")
+    sim_wall_data = sim_objects["wall"]
+    ct_binary_data = process_sim_data("./brdf_continuation_binary_ct_data.txt")
+
+    angles = [item['angle'] for item in sim_wall_data]
+    on_angles = [item['angle'] for item in ct_data]
+    on_binary_angles = [item['angle'] for item in ct_binary_data]
+
+    mean_i = [item['mean_intensity'] for item in sim_wall_data]
+    mean_i_on = [item['mean_intensity'] for item in ct_data]
+    mean_i_binary_on = [item['mean_intensity'] for item in ct_binary_data]
+
+    axs[1].plot(angles, mean_i, marker='o', label="Simulation", color="#b1b1b1")
+    axs[1].plot(on_angles, mean_i_on, marker='.', label="BRDF", color=darken_hex(colors["wall"], 0.15))
+    axs[1].plot(on_binary_angles, mean_i_binary_on, marker='s', label="BRDF Binary", color="#000000")
+    axs[1].legend()
+    axs[1].set_title("Epoxy and Cook-Torrance", fontsize=10)
+
+    fig.supylabel('Mean Intensity', fontsize=14)
+    fig.supxlabel('Lidar Beam Angle (radians)', fontsize=14)
+
+    plt.tight_layout()
+    plt.savefig('continuation_brdf_plot.pgf')
     
-mean_graph()
-std_graph()
-droprate_graph()
-distance_graph()
+# mean_graph()
+# std_graph()
+# droprate_graph()
+# distance_graph()
+# brdf_graph()
+datagap_graph()
 # plt.show()

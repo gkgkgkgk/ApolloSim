@@ -28,7 +28,7 @@ float sampleNormalDistribution(vec2 uv, float mean, float stdDev)
 // BRDF Functions
 float BRDFOrenNayar(float roughness, float theta_i) {
     float sigma2 = roughness * roughness;
-    float A = 1.0 - (0.5 * sigma2 / (sigma2 + 0.33));
+    float A = 1.0 - (0.5 * (sigma2 / (sigma2 + 0.33)));
     float B = 0.45 * sigma2 / (sigma2 + 0.09);
     float cosTheta = cos(theta_i);
 
@@ -36,7 +36,7 @@ float BRDFOrenNayar(float roughness, float theta_i) {
     float sinTheta = sin(theta_i);
     float tanTheta = (abs(cosTheta) > 0.001) ? (sinTheta / cosTheta) : 0.0;
 
-    float BRDF = A + B * sinTheta * tanTheta;
+    float BRDF = abs(cosTheta) * (A + B * sinTheta * tanTheta);
     BRDF = clamp(BRDF, 0.0, 1.0);
 
     return BRDF;
@@ -69,16 +69,18 @@ float GGXDistribution(vec3 N, vec3 V, float roughness) {
 }
 
 // Assuming L = -V for LiDAR
-float BRDFCookTorrance(vec3 N, vec3 V, float roughness, float F0) {
+float BRDFCookTorrance(vec3 N, vec3 V, float roughness, float n, float theta_i) {
     float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, -V), 0.0);
 
-    float F = FresnelSchlick(NdotV, F0);
+    float F = FresnelSchlick(NdotV, n);
     float G = GeometrySchlickGGX(NdotV, roughness);
     float D = GGXDistribution(N, V, roughness);
 
     float specularReflection = F * G * D / (4.0 * NdotV * NdotV + 0.0001);
+    float diffuseReflection = BRDFOrenNayar(roughness, theta_i);
 
-    return specularReflection;
+    return clamp(specularReflection + diffuseReflection, 0.0, 1.0);
 }
 
 // STRUCTS
@@ -111,6 +113,7 @@ struct IntersectionResult {
     vec3 point;
     float intensity;
     float theta_i;
+    bool brdf;
 };
 
 struct AngleData {
@@ -217,7 +220,7 @@ Material findMaterial(int id) {
 }
 
 IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirection, mat4 modelMatrix, int material) {
-    IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0, 0.0);
+    IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0, 0.0, false);
 
     vec3 position = modelMatrix[3].xyz;
     float cubeHalfSize = length(modelMatrix[0].xyz) * 0.5;
@@ -293,28 +296,28 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 
     result.point = rayOrigin + rayDirection * (tMin + sampleNormalDistribution(vec2(rayId, rayId / u_time), 0.0, a.stdevDistance));
 
-    if(true || !mat.isReal) {
+    if(maximum || !mat.isReal) {
+        result.brdf = true;
         vec3 L = ray;
         vec3 V = -ray;
         vec3 N = normal;
 
         float theta_i = acos(dot(L, N));
-        float theta_o = acos(dot(N, V));
 
         float intensity = 0.0;
 
         if (mat.brdfType == 0){
             intensity = BRDFOrenNayar(0.5, theta_i);
         } else {
-            intensity = BRDFCookTorrance(N, V, mat.roughness, 0.5);
+            intensity = BRDFCookTorrance(N, V, 0.45, 1.5, theta_i);
         }
 
         // the rplidar a1 has a binary intensity value, so clamp it to 0 or 1.
-        if(intensity < 0.5){
-            intensity = 0.0;
-        } else {
-            intensity = 1.0;
-        }
+        // if(intensity < 0.5){
+        //     intensity = 0.0;
+        // } else {
+        //     intensity = 1.0;
+        // }
 
         result.intensity = intensity;
     } else {
@@ -336,7 +339,7 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
 }
 
 IntersectionResult IntersectRayTriangle(vec3 rayOrigin, vec3 rayDirection, vec3 v0, vec3 v1, vec3 v2) {
-    IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0, 0.0);
+    IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0, 0.0, false);
     vec3 edge1 = v1 - v0;
     vec3 edge2 = v2 - v0;
     vec3 h = cross(rayDirection, edge2);
@@ -377,7 +380,7 @@ IntersectionResult IntersectRayTriangle(vec3 rayOrigin, vec3 rayDirection, vec3 
 }
 
 IntersectionResult complexMeshIntersection(int rayId, vec3 rayOrigin, vec3 rayDirection, ComplexGeometry geometry, int material) {
-    IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0, 0.0);
+    IntersectionResult result = IntersectionResult(false, rayOrigin, 0.0, 0.0, false);
 
     for (int i = 0; i < vertices.length(); i += 3) {
         int i0 = indices[i];
@@ -475,7 +478,7 @@ void main()
         int rayId = int(id.x) + 10*int(id.y) + 100 * int(id.z) + 1000 * i;
         int index = int(id.x) * count + i;
 
-        IntersectionResult result = IntersectionResult(false, vec3(10000000.0), 0.5, 0.0);
+        IntersectionResult result = IntersectionResult(false, vec3(10000000.0), 0.5, 0.0, false);
 
         for(int j = 0; j < scene.length(); j++){
             IntersectionResult newIntersection = rayBoxIntersection(index, vec3(0), normalize(directions[index]), scene[j].model, scene[j].material);
@@ -494,7 +497,7 @@ void main()
         }
 
 
-        outputData2[id.x * count + i] = vec4(result.theta_i, result.intensity, length(result.point), 1.0);
+        outputData2[id.x * count + i] = vec4(result.theta_i, result.intensity, result.brdf ? 1.0 : 0.0, 1.0);
 
         if (result.intersects){
             outputData[id.x * count + i] = vec4(result.point, result.intensity);
