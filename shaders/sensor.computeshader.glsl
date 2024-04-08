@@ -328,11 +328,11 @@ IntersectionResult rayBoxIntersection(int rayId, vec3 rayOrigin, vec3 rayDirecti
         }
 
         result.intensity = sampleNormalDistribution(vec2(rayId, rayId / u_time), a.meanIntensity, a.stdevIntensity)  / 47.0;
-        if(result.intensity < 0.5){
-            result.intensity = 0.0;
-        } else {
-            result.intensity = 1.0;
-        }
+        // if(result.intensity < 0.5){
+        //     result.intensity = 0.0;
+        // } else {
+        //     result.intensity = 1.0;
+        // }
     }
 
     return result;

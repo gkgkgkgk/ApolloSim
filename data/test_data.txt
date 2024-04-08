@@ -1,0 +1,2 @@
+wood,./data/wood_data.txt,0.389,1.25,ON,0.8,0.0
+epoxy,./data/epoxy_data.txt,0.457,1.25,CT,0.25,1.5

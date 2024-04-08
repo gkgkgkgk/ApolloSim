@@ -58,44 +58,45 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
     if !viewer {
         // initialize scene
         cube := createCube();
-        cube.model = identityModel * glm.mat4Translate({-2.0, 0.0, 5.0});
-        cube.material = 0;
+        cube.model = identityModel * glm.mat4Translate({-1.0, 0.0, 1.0});
+        cube.material = 1;
         cube = addTexture(cube, "./textures/wood.jpg");
         append(&engine.scene, cube);
 
         cube2 := createCube();
-        cube2.model = identityModel * glm.mat4Translate({2.0, 0.0, -2.0});
-        cube2.material = 1;
-        cube2 = addTexture(cube2, "./textures/concrete.jpg");
+        cube2.model = identityModel * glm.mat4Translate({0.25, 0.0, -1.0});
+        cube2.material = 0;
+        cube2 = addTexture(cube2, "./textures/epoxy.jpg");
         append(&engine.scene, cube2)
 
-        stopSign := customGeometry("./models/stopsignscale.obj")
-        stopSign.model = identityModel * glm.mat4Translate({2.5, 0, 2.5});
-        append(&engine.complexScene, stopSign)
+        // stopSign := customGeometry("./models/mug.obj")
+        // stopSign.model = identityModel * glm.mat4Translate({2.5, 0, 2.5});
+        // append(&engine.complexScene, stopSign)
 
-        complexScene32 := make([]Geometry32, len(engine.scene));
-        for i := 0; i < len(engine.complexScene); i += 1 {
-            cg : Geometry32;
+        // complexScene32 := make([]Geometry32, len(engine.scene));
+        // for i := 0; i < len(engine.complexScene); i += 1 {
+        //     cg : Geometry32;
 
-            cg.vertices = engine.complexScene[i].vertices
-            indices : [dynamic]i32;
+        //     cg.vertices = engine.complexScene[i].vertices
+        //     indices : [dynamic]i32;
 
-            for j := 0; j < len(engine.complexScene[i].indices); j += 1 {
-                append(&indices, cast(i32)engine.complexScene[i].indices[j]);
-            }
+        //     for j := 0; j < len(engine.complexScene[i].indices); j += 1 {
+        //         append(&indices, cast(i32)engine.complexScene[i].indices[j]);
+        //     }
 
-            cg.indices = indices;
-            cg.model = engine.complexScene[i].model;
-            cg.gType = 100;
+        //     cg.indices = indices;
+        //     cg.model = engine.complexScene[i].model;
+        //     cg.gType = 100;
 
-            complexScene32[i] = cg;
-        }
+        //     complexScene32[i] = cg;
+        // }
 
-        engine.complexScene32 = complexScene32;
+        // engine.complexScene32 = complexScene32;
     } else {
         for i := -3; i < 4; i += 1 {
 	        cube := createCube();
             cube.model = identityModel * glm.mat4Translate({calibrationData.distance + (0.5), 0.0, f32(i)});
+            cube = addTexture(cube, "./textures/wood.jpg");
             cube.material = 0;
             append(&engine.scene, cube);
         }

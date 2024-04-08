@@ -194,7 +194,7 @@ loopGFXEngineViewer :: proc(engine: GFXEngine, simEngine: SimEngine) {
 		engine.deltaTime = currentFrame - engine.lastFrame;
 		engine.lastFrame = currentFrame;
 		engine.camera = updateCamera(engine.camera, engine.deltaTime, mouseMovement, engine.window);
-
+        // engine.camera = getViewCamera(engine.camera);
 		view = getCameraViewMatrix(engine.camera);
 
 		glfw.PollEvents();
@@ -227,12 +227,12 @@ loopGFXEngineViewer :: proc(engine: GFXEngine, simEngine: SimEngine) {
 		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);
 		drawGrid(100);
 
-        gl.UseProgram(engine.shaders[3])
-        uniform_infos = gl.get_uniforms_from_program(engine.shaders[3]);
-		gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
-		gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
-		gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);
-        drawAxis();
+        // gl.UseProgram(engine.shaders[3])
+        // uniform_infos = gl.get_uniforms_from_program(engine.shaders[3]);
+		// gl.UniformMatrix4fv(uniform_infos["projection"].location, 1, gl.FALSE, &engine.projection[0][0]);
+		// gl.UniformMatrix4fv(uniform_infos["view"].location, 1, gl.FALSE, &view[0][0]);
+		// gl.UniformMatrix4fv(uniform_infos["model"].location, 1, gl.FALSE, &identityModel[0][0]);
+        // drawAxis();
 
         gl.UseProgram(engine.shaders[2])
         uniform_infos = gl.get_uniforms_from_program(engine.shaders[2]);
@@ -244,7 +244,7 @@ loopGFXEngineViewer :: proc(engine: GFXEngine, simEngine: SimEngine) {
 		glfw.SwapBuffers((engine.window))
 
         // TODO: THIS should be abstracted. abstract more of the viewer process.
-        simEngine = stepSimEngineViewer(simEngine, 1);
+        simEngine = stepSimEngineViewer(simEngine, 0);
 	}
 }
 

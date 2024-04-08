@@ -65,3 +65,20 @@ updateCamera :: proc(oldCam: Camera, deltaTime: f32, mouseMovement: glm.vec2, wi
 
     return newCam;
 }
+
+getViewCamera :: proc(oldCam: Camera) -> Camera {
+    newCam := oldCam;
+    newCam.pos = glm.vec3{-3.0, 1.5, 0.0};
+
+    newCam.yaw = 0;
+    newCam.pitch = -10;
+
+    newCam.front.x = math.cos(glm.radians(newCam.yaw)) * math.cos(glm.radians(newCam.pitch))
+    newCam.front.y = math.sin(glm.radians(newCam.pitch))
+    newCam.front.z = math.sin(glm.radians(newCam.yaw)) * math.cos(glm.radians(newCam.pitch))
+
+    newCam.right = glm.normalize(glm.cross(newCam.front, glm.vec3{0.0, 1.0, 0.0}))
+    newCam.up = glm.normalize(glm.cross(newCam.right, newCam.front))
+
+    return newCam;
+}

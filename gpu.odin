@@ -53,8 +53,6 @@ generateGPUData :: proc(engine : SimEngine, benchmarkLength : f32, benchmarkDist
         }
     }
 
-    // printMaterialGPUData(4, gpudata);
-
     return gpudata;
 } 
 
@@ -156,24 +154,24 @@ sendDataToGPU :: proc(engine : SimEngine) -> []glm.vec4{
     gl.BindBuffer(gl.SHADER_STORAGE_BUFFER, engine.outputBuffer2);
     gl.GetBufferSubData(gl.SHADER_STORAGE_BUFFER, 0, engine.sensor.packetSize * size_of(glm.vec4), &outputData2[0])
 
-    for i := 0; i < len(outputData); i+=1 {
-        if(outputData2[i][0] == 0 && outputData2[i][1] == 0 && outputData2[i][2] == 0){
-            continue;
-        }
+    // for i := 0; i < len(outputData); i+=1 {
+    //     if(outputData2[i][0] == 0 && outputData2[i][1] == 0 && outputData2[i][2] == 0){
+    //         continue;
+    //     }
 
 
-        buf1 := [128]byte{}
-        buf2 := [128]byte{}
-        buf3 := [128]byte{}
+    //     buf1 := [128]byte{}
+    //     buf2 := [128]byte{}
+    //     buf3 := [128]byte{}
 
-        floatStr1 := strconv.ftoa(buf1[:], cast(f64)outputData2[i][0], 'g', 6, 64)
-        floatStr2 := strconv.ftoa(buf2[:], cast(f64)outputData2[i][1], 'g', 6, 64)
-        floatStr3 := strconv.ftoa(buf3[:], cast(f64)outputData2[i][2], 'g', 6, 64)
+    //     floatStr1 := strconv.ftoa(buf1[:], cast(f64)outputData2[i][0], 'g', 6, 64)
+    //     floatStr2 := strconv.ftoa(buf2[:], cast(f64)outputData2[i][1], 'g', 6, 64)
+    //     floatStr3 := strconv.ftoa(buf3[:], cast(f64)outputData2[i][2], 'g', 6, 64)
 
 
-        a := [?]string {floatStr1, ",", floatStr2, ",", floatStr3};
-        appendLine(engine.evalFile, strings.concatenate(a[:]));
-    }
+    //     a := [?]string {floatStr1, ",", floatStr2, ",", floatStr3};
+    //     appendLine(engine.evalFile, strings.concatenate(a[:]));
+    // }
 
     // for i := 0; i < len(outputData); i+=1 {
     //     fmt.println(outputData[i], outputData2[i]);
