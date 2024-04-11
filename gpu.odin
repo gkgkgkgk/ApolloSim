@@ -8,7 +8,7 @@ import "core:fmt"
 import "core:strings"
 import "core:strconv"
 
-GPUData :: struct {
+GPUData :: struct { // TODO: rename to GPUAngle
     angleDeg: f32,
     materialId: i32,
     meanIntensity: f32,
