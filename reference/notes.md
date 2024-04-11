@@ -130,3 +130,14 @@ Wood distance: 0.389
 Wall Distance: 0.457
 metal: 0.479
 shiny metal: 0.188
+
+## Testing Notes 4/11
+34 inches across
+15.5 inches away
+
+15 inches from corner
+2ft per square
+
+3ft wood
+3 inches from wood
+34 inches from foam

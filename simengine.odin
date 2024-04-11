@@ -60,13 +60,13 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
         cube := createCube();
         cube.model = identityModel * glm.mat4Translate({-1.0, 0.0, 1.0});
         cube.material = 1;
-        cube = addTexture(cube, "./textures/wood.jpg");
+        // cube = addTexture(cube, "./textures/wood.jpg");
         append(&engine.scene, cube);
 
         cube2 := createCube();
         cube2.model = identityModel * glm.mat4Translate({0.25, 0.0, -1.0});
         cube2.material = 0;
-        cube2 = addTexture(cube2, "./textures/epoxy.jpg");
+        // cube2 = addTexture(cube2, "./textures/epoxy.jpg");
         append(&engine.scene, cube2)
 
         // stopSign := customGeometry("./models/mug.obj")
@@ -96,7 +96,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
         for i := -3; i < 4; i += 1 {
 	        cube := createCube();
             cube.model = identityModel * glm.mat4Translate({calibrationData.distance + (0.5), 0.0, f32(i)});
-            cube = addTexture(cube, "./textures/wood.jpg");
+            // cube = addTexture(cube, "./textures/wood.jpg");
             cube.material = 0;
             append(&engine.scene, cube);
         }
