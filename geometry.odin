@@ -210,25 +210,25 @@ drawGeometryWithIndices :: proc (geometry : Geometry) {
     gl.BindVertexArray(0);
 }
 
-// addTexture :: proc (geometry : Geometry, path : string) -> Geometry {
-//     width, height, nrChannels : i32;
-//     data := stb.load(strings.clone_to_cstring(path), &width, &height, &nrChannels, 0);
-//     texture : u32;
-//     gl.GenTextures(1, &texture);
-//     gl.BindTexture(gl.TEXTURE_2D, texture);
+addTexture :: proc (geometry : Geometry, path : string) -> Geometry {
+    width, height, nrChannels : i32;
+    data := stb.load(strings.clone_to_cstring(path), &width, &height, &nrChannels, 0);
+    texture : u32;
+    gl.GenTextures(1, &texture);
+    gl.BindTexture(gl.TEXTURE_2D, texture);
 
-//     gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-//     gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-//     gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-//     gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+    gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+    gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
-//     gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGB, width, height, 0, gl.RGB, gl.UNSIGNED_BYTE, data);
-//     gl.GenerateMipmap(gl.TEXTURE_2D);
-//     geometry := geometry;
-//     geometry.texture = texture;
+    gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGB, width, height, 0, gl.RGB, gl.UNSIGNED_BYTE, data);
+    gl.GenerateMipmap(gl.TEXTURE_2D);
+    geometry := geometry;
+    geometry.texture = texture;
 
-//     return geometry;
-// }
+    return geometry;
+}
 
 /* CUSTOM GEOMETRY LOADER */
 /* Thank you to https://gist.github.com/vassvik/f4c19c35ba72ad52eaa51d1091d379d8 */

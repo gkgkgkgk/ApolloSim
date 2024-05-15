@@ -28,7 +28,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
     engine.sensor = initializeSensor();
     engine.calibrationData = calibrationData;
 
-    engine.evalFile = createBlankFile("./evaluation/test.txt");
+    engine.evalFile = createBlankFile("./qualitative_test/rawdata/test2_sim.txt");
 
     computeShaderSource, computeShaderError := os.read_entire_file("./shaders/sensor.computeshader.glsl")    
     if !computeShaderError {
@@ -58,16 +58,22 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
     if !viewer {
         // initialize scene
         cube := createCube();
-        cube.model = identityModel * glm.mat4Translate({-1.0, 0.0, 1.0});
-        cube.material = 1;
-        // cube = addTexture(cube, "./textures/wood.jpg");
+        cube.model = identityModel * glm.mat4Translate({-0.75, 0.0, 1.0 + 2.833}) * glm.mat4Scale(glm.vec3{2.0, 2.0, 2.0});
+        cube.material = 0;
+        cube = addTexture(cube, "./textures/foam.jpg")
         append(&engine.scene, cube);
 
         cube2 := createCube();
-        cube2.model = identityModel * glm.mat4Translate({0.25, 0.0, -1.0});
+        cube2.model = identityModel * glm.mat4Translate({1.75, 0.0, 1.5}) * glm.mat4Scale(glm.vec3{3.0, 3.0, 3.0});
         cube2.material = 0;
-        // cube2 = addTexture(cube2, "./textures/epoxy.jpg");
+        cube2 = addTexture(cube2, "./textures/wood.jpg")
         append(&engine.scene, cube2)
+
+        cube3 := createCube();
+        cube3.model = identityModel * glm.mat4Translate({-2.75, 0.0, 1.833}) * glm.mat4Scale(glm.vec3{2.0, 2.0, 2.0});
+        cube3.material = 0;
+        cube3 = addTexture(cube3, "./textures/foam.jpg")
+        append(&engine.scene, cube3)
 
         // stopSign := customGeometry("./models/mug.obj")
         // stopSign.model = identityModel * glm.mat4Translate({2.5, 0, 2.5});
@@ -96,7 +102,7 @@ initializeSimEngine :: proc (calibrationData : CalibrationData, viewer : bool) -
         for i := -3; i < 4; i += 1 {
 	        cube := createCube();
             cube.model = identityModel * glm.mat4Translate({calibrationData.distance + (0.5), 0.0, f32(i)});
-            // cube = addTexture(cube, "./textures/wood.jpg");
+            cube = addTexture(cube, "./textures/foam.jpg");
             cube.material = 0;
             append(&engine.scene, cube);
         }

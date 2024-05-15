@@ -497,7 +497,7 @@ void main()
         }
 
 
-        outputData2[id.x * count + i] = vec4(result.theta_i, result.intensity, result.brdf ? 1.0 : 0.0, 1.0);
+        outputData2[id.x * count + i] = vec4(length(result.point), result.intensity, atan(directions[index].x, directions[index].z), 1.0);
 
         if (result.intersects){
             outputData[id.x * count + i] = vec4(result.point, result.intensity);
